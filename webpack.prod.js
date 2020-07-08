@@ -27,19 +27,29 @@ module.exports = merge(common, {
       {
         test: /\.(css|scss)$/,
         use: [
-          'style-loader',
           MiniCssExtractPlugin.loader,
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
           {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss',
+              sourceMap: true,
               plugins: () => [
                 autoprefixer({})
               ]
             }
           },
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
       },
     ],
