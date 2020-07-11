@@ -1,6 +1,7 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPartialsPlugin = require('html-webpack-partials-plugin');
 
 module.exports = {
   entry: {
@@ -10,6 +11,9 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'webpack',
+    }),
+    new HtmlWebpackPartialsPlugin({
+      path: path.join(__dirname, './partials/body.html')
     }),
   ],
   output: {
