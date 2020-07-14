@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Player from '../Player';
+import SynthCabinet from '../SynthCabinet';
 
 // utilities TODO: extract
 const minMax = (value, min = 0, max = 1) => {
@@ -52,28 +53,10 @@ const Patch1 = (props) => {
   )
 };
 
-// logic TODO: extract
-  // let fibArr = [0, 1];
-  // const fib = (n) => {
-  //   for (let i = 2; i < n + 1; i++) {
-  //     fibArr.push(fibArr[i - 2] + fibArr[i - 1]);
-  //     console.log(fibArr);
-  //   }
-  //  return fibArr[n]
-  // }
-
-  // fib(2);
-
-  // fibArr.map((num, i) => {
-  //   setTimeout(() => {
-  //     osc1.frequency.value = tonic + num;
-  //   }, i * 2000);
-  // });
-
 const SynthAudioContext = () => {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   let audioContext;
-  let initAudioContext = false;
+  let initAudioContext = true;
   initAudioContext ? audioContext = new AudioContext() : null;
 
   if (!audioContext) {
@@ -86,6 +69,7 @@ const SynthAudioContext = () => {
   return (
     <div id="SynthAudioContext">
       <Patch1 audioContext={ audioContext } />
+      <SynthCabinet />
       <Player start={ qux }
               resume={ () => audioContext.resume() }
               suspend={ () => audioContext.suspend() }/>
