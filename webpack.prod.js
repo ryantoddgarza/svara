@@ -19,9 +19,6 @@ module.exports = merge(common, {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['@babel/react'],
-          },
         },
       },
       {
