@@ -1,10 +1,13 @@
 import React from 'react';
 
-const Layout = () => {
+const Layout = (props) => {
   return (
-    <div></div>
+    <div id="wrap">
+      <main id="main">
+        { props.children }
+      </main>
+    </div>
   )
 }
 
 export default Layout;
-
