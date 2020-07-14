@@ -7,6 +7,7 @@ module.exports = merge(common, {
   devtool: 'eval-source-map',
   devServer: {
     contentBase: './dist',
+    historyApiFallback: true,
     compress: true,
     open: true,
   },
