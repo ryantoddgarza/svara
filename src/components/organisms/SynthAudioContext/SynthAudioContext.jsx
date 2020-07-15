@@ -2,6 +2,24 @@ import React, { Component } from 'react';
 import Player from '../Player';
 import SynthCabinet from '../SynthCabinet';
 
+// TODO: move to json
+const notes = {
+  c2: 65.406,
+  e2: 82.407,
+  g2: 97.999,
+  c3: 130.81,
+}
+
+const melody = [notes.c2, notes.g2, notes.e2, notes.c3];
+
+const play = () => {
+  melody.map((item, i) => {
+    console.log(item);
+  });
+}
+
+play();
+
 // utilities TODO: extract
 const minMax = (value, min = 0, max = 1) => {
   return Math.min(max, Math.max(min, value));
@@ -9,7 +27,7 @@ const minMax = (value, min = 0, max = 1) => {
 
 // patches TODO: extract
 const Patch1 = (props) => {
-  let tonic = 55;
+  let tonic = notes.c2;
 
   // master section
   const output = props.audioContext.destination;
@@ -36,7 +54,7 @@ const Patch1 = (props) => {
   osc2.type = 'triangle';
   osc2.frequency.value = 0.051;
   osc2.connect(gain2);
-  osc2.start();
+  // osc2.start();
 
   const gain3 = props.audioContext.createGain();
   gain3.gain.value = 90;
@@ -46,7 +64,7 @@ const Patch1 = (props) => {
   osc3.type = 'triangle';
   osc3.frequency.value = tonic * 2.007;
   osc3.connect(gain3);
-  osc3.start();
+  // osc3.start();
 
   return (
     <div id="patch1"></div>
