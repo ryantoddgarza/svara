@@ -21,6 +21,13 @@ module.exports = merge(common, {
         },
       },
       {
+        test: /worker\.js$/,
+        use: [
+          'worker-loader',
+          'babel-loader',
+        ],
+      },
+      {
         test: /\.(css|scss)$/,
         use: [
           'style-loader',

@@ -1,11 +1,11 @@
 import React from 'react';
 import Layout from '../utils/Layout';
-import SynthAudioContext from '../components/organisms/SynthAudioContext';
+import Patch from '../components/organisms/Patch';
 
 export default () => {
   return (
     <Layout>
-      <SynthAudioContext />
+      <Patch />
     </Layout>
   );
 };
