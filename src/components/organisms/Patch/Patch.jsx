@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
 import VolumeSlider from '../../atoms/VolumeSlider';
+import * as midi from '../../../constants/midi';
+
+let midiNum = midi.makeNotes();
 
 // TODO: move out of file
-
-const midi = {
-  21: {
-    note: 'A0',
-    frequency: 27.500,
-  },
-  22: {
-    note: 'A#0',
-    frequency: 29.135,
-  },
-};
 
 // function ScaleMajor(root){
 //   this.root = root;
@@ -22,14 +14,11 @@ const midi = {
 // }
 
 const scale = [
-  midi['21'].frequency,
-  midi['22'].frequency,
-  220,
-  880,
-  440,
-  110
+  midiNum[60],
+  midiNum[64],
+  midiNum[67],
+  midiNum[72],
 ];
-console.log(scale)
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
