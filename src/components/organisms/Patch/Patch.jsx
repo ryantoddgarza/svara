@@ -1,38 +1,78 @@
-// DEPRECATED: see Patch.jsx
 import React, { Component } from 'react';
-import VolumeSlider from './molecules/VolumeSlider';
+import VolumeSlider from '../../atoms/VolumeSlider';
 
-const Metronome = () => {
+// TODO: move out of file
+
+const midi = {
+  21: {
+    note: 'A0',
+    frequency: 27.500,
+  },
+  22: {
+    note: 'A#0',
+    frequency: 29.135,
+  },
+};
+
+// function ScaleMajor(root){
+//   this.root = root;
+//   this.third = root + 4;
+//   this.fifth = root + 7;
+//   this.octave = root * 2;
+// }
+
+const scale = [
+  midi['21'].frequency,
+  midi['22'].frequency,
+  220,
+  880,
+  440,
+  110
+];
+console.log(scale)
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+// END move out of file
+
+const Patch = () => {
+  // 1. start time of the entire sequence.
+  // 2. what note is currently last scheduled?
+  // 3. how frequently scheduling function is called (in milliseconds).
+  // 4. how far ahead to schedule. This is calculated from lookahead, and overlaps audio (sec) with
+  //    next interval (in case the timer is late).
+  // 5. when the next note is due.
+  // 6. notes that have been put into the web audio, and may or may not have played yet. {note, time}
+  // 7. the Web Worker used to fire timer messages.
   let audioContext = null;
   let isPlaying = false;
-  let startTime;              // The start time of the entire sequence.
-  let currentSubdivision    // What note is currently last scheduled?
-  let tempo = 120.0;
+  let startTime; // 1
+  let currentSubdivision // 2
+  let tempo = 62.0;
   let meter = 4;
   let masterVolume = 0.3;
-  let accentVolume = 1;
   let quarterVolume = 0.75;
-  let eighthVolume = 0;
-  let sixteenthVolume = 0;
-  let tripletVolume = 0;
-  let lookahead = 25.0;       // How frequently scheduling function is called (in milliseconds)
-  let scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
-                              // This is calculated from lookahead, and overlaps
-                              // with next interval (in case the timer is late)
-  let nextNoteTime = 0.0;     // when the next note is due.
-  let notesInQueue = [];      // the notes that have been put into the web audio,
-                              // and may or may not have played yet. {note, time}
-  let timerWorker = null;     // The Web Worker used to fire timer messages
+  let accentVolume = 1;
+  let subdivisions = 4;
+  let lookahead = 25.0; // 3
+  let scheduleAheadTime = 0.1; // 4
+  let nextNoteTime = 0.0; // 5
+  let notesInQueue = []; // 6
+  let timerWorker = null; // 7
 
   const maxBeats = () => {
-    const beats = (meter * 12);
+    const beats = (meter * subdivisions);
     return beats;
   }
 
   const nextSubdivision = () => {
     const secondsPerBeat = 60.0 / tempo;
-    nextNoteTime += (1 / 12) * secondsPerBeat;    // Add beat length to last beat time
-    currentSubdivision++;    // Advance the beat number, wrap to zero
+    nextNoteTime += (1 / subdivisions) * secondsPerBeat; // add beat length to last beat time
+    currentSubdivision++; // advance the beat number, wrap to zero
 
     if (currentSubdivision == maxBeats()) {
       currentSubdivision = 0;
@@ -41,6 +81,11 @@ const Metronome = () => {
 
   const calcVolume = (beatVolume) => {
     return (beatVolume * masterVolume);
+  }
+
+  let currentNote = () => {
+    let note = scale[getRandomInt(0, scale.length)];
+    return note;
   }
 
   const scheduleNote = (beatNumber, time) => {
@@ -55,7 +100,9 @@ const Metronome = () => {
     const vca1 = audioContext.createGain();
     vca1.connect(audioContext.destination);
 
+    osc.frequency.value = currentNote();
     osc.connect(gainNode);
+    gainNode.gain.value = calcVolume(quarterVolume);
     gainNode.connect(vca1);
 
     let attack = 0.1;
@@ -66,26 +113,11 @@ const Metronome = () => {
     vca1.gain.linearRampToValueAtTime(1, audioContext.currentTime + attack);
     vca1.gain.linearRampToValueAtTime(0, audioContext.currentTime + noteLength);
 
+
     if (beatNumber % maxBeats() === 0) {
-      if (accentVolume > 0.25) {
-        osc.frequency.value = 880.0;
-        gainNode.gain.value = calcVolume(accentVolume);
-      } else {
-        osc.frequency.value = 440.0;
-        gainNode.gain.value = calcVolume(quarterVolume);
-      }
-    } else if (beatNumber % 12 === 0) {   // quarter notes = medium pitch
-      osc.frequency.value = 440.0;
+      gainNode.gain.value = calcVolume(accentVolume);
+    } else if (beatNumber % subdivisions === 0) {   // quarter notes = medium pitch
       gainNode.gain.value = calcVolume(quarterVolume);
-    } else if (beatNumber % 6 === 0) {
-      osc.frequency.value = 440.0;
-      gainNode.gain.value = calcVolume(eighthVolume);
-    } else if (beatNumber % 4 === 0) {
-      osc.frequency.value = 329.63;
-      gainNode.gain.value = calcVolume(tripletVolume);
-    } else if (beatNumber % 3 === 0 ) {   // other 16th notes = low pitch
-      osc.frequency.value = 220.0;
-      gainNode.gain.value = calcVolume(sixteenthVolume);
     } else {
       gainNode.gain.value = 0;   // keep the remaining twelvelet notes inaudible
     }
@@ -154,18 +186,6 @@ const Metronome = () => {
     quarterVolume = e.target.value / 100;
   }
 
-  const handleEighthVolumeChange = (e) => {
-    eighthVolume = e.target.value / 100;
-  }
-
-  const handleSixteenthVolumeChange = (e) => {
-    sixteenthVolume = e.target.value / 100;
-  }
-
-  const handleTripletVolumeChange = (e) => {
-    tripletVolume = e.target.value / 100;
-  }
-
   return (
     <div className="metronome">
       <header>
@@ -176,7 +196,6 @@ const Metronome = () => {
       <main>
         <div>
           <div>
-            <h6>Tempo</h6>
               <h2 id="bpm">
               <output name="bpm" id="bpmOutput">{ tempo }</output>
               <span> bpm</span>
@@ -186,39 +205,27 @@ const Metronome = () => {
                 onInput={ handleTempoChange } />
           </div>
           <div>
-            <h6>Meter</h6>
             <h2 id="bpm">
               <output name="count" id="countOutput">{ meter }</output>
               <span> counts</span>
             </h2>
             <input type="range" name="count" id="countInput"
-                defaultValue={ meter } min="1" max="12"
+                defaultValue={ meter } min="1" max={ subdivisions }
                 onInput={ handleMeterChange } />
           </div>
         </div>
         <div>
           <h6>Mixer</h6>
-          <p>Master volume</p>
+          <p>Master Volume</p>
           <VolumeSlider default={ masterVolume } callback={ handleMasterVolumeChange } />
-
           <p>Accent</p>
           <VolumeSlider default={ accentVolume } callback={ handleAccentVolumeChange } />
-
           <p>Quarter Note</p>
           <VolumeSlider default={ quarterVolume } callback={ handleQuarterVolumeChange } />
-
-          <p>Eighth Note</p>
-          <VolumeSlider default={ eighthVolume } callback={ handleEighthVolumeChange } />
-
-          <p>Sixteenth Note</p>
-          <VolumeSlider default={ sixteenthVolume } callback={ handleSixteenthVolumeChange } />
-
-          <p>Triplet</p>
-          <VolumeSlider default={ tripletVolume } callback={ handleTripletVolumeChange } />
         </div>
       </main>
     </div>
   )
 }
 
-export default Metronome;
+export default Patch;
