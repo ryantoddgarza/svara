@@ -9,7 +9,7 @@ import * as midi from '../../../constants/midi';
 const ragaData = {
   major: {
     aaroh: [1, 3, 5, 6, 8, 10, 12],
-    avroh: [1, 3, 5, 6, 8, 10, 12],
+    avroh: [1, 3, 4, 6, 8, 9, 11],
   }
 }
 
@@ -28,12 +28,20 @@ function Raga(raga, root) {
   this.aaroh = aarohArr.map((val) => {
     return midiNum[val];
   });
+
+  let avrohArr = raga.avroh.map((val) => {
+    return root + val
+  });
+
+  this.avroh = avrohArr.map((val) => {
+    return midiNum[val];
+  });
 }
 
 const raga = new Raga(ragaData.major, 50)
 
 let scale = [];
-scale = raga.aaroh;
+scale = raga.avroh;
 
 const Patch = () => {
   // 1. start time of the entire sequence.
