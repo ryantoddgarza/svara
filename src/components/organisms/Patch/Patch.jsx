@@ -1,32 +1,39 @@
 import React, { Component } from 'react';
 import VolumeSlider from '../../atoms/VolumeSlider';
+import * as Random from '../../../constants/randomLogic';
 import * as midi from '../../../constants/midi';
 
-let midiNum = midi.makeNotes();
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 // TODO: move out of file
 
-// function ScaleMajor(root){
-//   this.root = root;
-//   this.third = root + 4;
-//   this.fifth = root + 7;
-//   this.octave = root * 2;
-// }
-
-const scale = [
-  midiNum[60],
-  midiNum[64],
-  midiNum[67],
-  midiNum[72],
-];
-
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+const ragaData = {
+  major: {
+    aaroh: [1, 3, 5, 6, 8, 10, 12],
+    avroh: [1, 3, 5, 6, 8, 10, 12],
+  }
 }
 
-// END move out of file
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// @return [num] frequencies accessible by standard MIDI note numbers
+let midiNum = midi.makeNotes();
+
+// @param {object} raga - Rules
+// @param {number} root - MIDI note value
+function Raga(raga, root) {
+  let aarohArr = raga.aaroh.map((val) => {
+    return root + val
+  });
+
+  this.aaroh = aarohArr.map((val) => {
+    return midiNum[val];
+  });
+}
+
+const raga = new Raga(ragaData.major, 50)
+
+let scale = [];
+scale = raga.aaroh;
 
 const Patch = () => {
   // 1. start time of the entire sequence.
@@ -73,7 +80,7 @@ const Patch = () => {
   }
 
   let currentNote = () => {
-    let note = scale[getRandomInt(0, scale.length)];
+    let note = scale[Random.getRandomInt(0, scale.length)];
     return note;
   }
 
