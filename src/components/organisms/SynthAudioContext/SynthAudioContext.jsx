@@ -4,24 +4,6 @@ import React, { Component } from 'react';
 import Player from '../Player';
 import SynthCabinet from '../SynthCabinet';
 
-// TODO: move to json
-const notes = {
-  c2: 65.406,
-  e2: 82.407,
-  g2: 97.999,
-  c3: 130.81,
-}
-
-const melody = [notes.c2, notes.g2, notes.e2, notes.c3];
-
-const play = () => {
-  melody.map((item, i) => {
-    console.log(item);
-  });
-}
-
-play();
-
 // utilities TODO: extract
 const minMax = (value, min = 0, max = 1) => {
   return Math.min(max, Math.max(min, value));
