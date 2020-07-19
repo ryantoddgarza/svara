@@ -1,158 +1,216 @@
-import React, { Component } from 'react';
-import VolumeSlider from '../../atoms/VolumeSlider';
+import React from 'react';
+import context from '../../../constants/audioContext';
+import Raga from '../../../constants/raga';
+import ragaData from '../../../constants/ragaData.JSON';
 import * as Random from '../../../constants/randomLogic';
 import * as midi from '../../../constants/midi';
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// TODO: move out of file
-
-const ragaData = {
-  major: {
-    aaroh: [1, 3, 5, 6, 8, 10, 12],
-    avroh: [1, 3, 4, 6, 8, 9, 11],
-  }
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// @return [num] frequencies accessible by standard MIDI note numbers
-let midiNum = midi.makeNotes();
-
-// @param {object} raga - Rules
-// @param {number} root - MIDI note value
-function Raga(raga, root) {
-  let aarohArr = raga.aaroh.map((val) => {
-    return root + val
-  });
-
-  this.aaroh = aarohArr.map((val) => {
-    return midiNum[val];
-  });
-
-  let avrohArr = raga.avroh.map((val) => {
-    return root + val
-  });
-
-  this.avroh = avrohArr.map((val) => {
-    return midiNum[val];
-  });
-}
-
-const raga = new Raga(ragaData.major, 50)
-
-let scale = [];
-scale = raga.avroh;
+import VolumeSlider from '../../atoms/VolumeSlider';
 
 const Patch = () => {
-  // 1. start time of the entire sequence.
-  // 2. what note is currently last scheduled?
-  // 3. how frequently scheduling function is called (in milliseconds).
-  // 4. how far ahead to schedule. This is calculated from lookahead, and overlaps audio (sec) with
-  //    next interval (in case the timer is late).
-  // 5. when the next note is due.
-  // 6. notes that have been put into the web audio, and may or may not have played yet. {note, time}
-  // 7. the Web Worker used to fire timer messages.
-  let audioContext = null;
   let isPlaying = false;
-  let startTime; // 1
-  let currentSubdivision // 2
-  let tempo = 62.0;
+  let startTime;
+  let tempo = 45.0;
   let meter = 4;
-  let masterVolume = 0.3;
-  let quarterVolume = 0.75;
-  let accentVolume = 1;
-  let subdivisions = 4;
-  let lookahead = 25.0; // 3
-  let scheduleAheadTime = 0.1; // 4
-  let nextNoteTime = 0.0; // 5
-  let notesInQueue = []; // 6
-  let timerWorker = null; // 7
+  let measure = 0;
+  let subdivision = 1;
+  let currentSubdivision = 0;
+  let masterVolume = 0.1;
+  let lookahead = 25.0;
+  let scheduleAheadTime = 0.1;
+  let nextNoteTime = 0.0;
+  let notesInQueue = [];
+  let timerWorker = null;
+
+  const midiNums = midi.noteNums;
+  let tonic = 62;
+  let scale = [];
+  let scaleIndex = 0;
+
+  const masterGainNode = context.createGain();
+  masterGainNode.connect(context.destination);
+  masterGainNode.gain.value = masterVolume;
+
+  const getRaga = (ragaName) => {
+    const raga = new Raga(midiNums, ragaName, tonic)
+    scale = raga.avroh;
+  }
+
+  const wrapScale = () => {
+    if (scaleIndex === scale.length) {
+      scaleIndex = 0;
+    }
+  }
+
+  const ascendScale = () => {
+    scaleIndex++;
+    wrapScale();
+
+    return scale[scaleIndex];
+  }
+
+  const currentNote = () => {
+    let note;
+    const bool = Random.boolean();
+
+    switch (bool) {
+      case true:
+        note = ascendScale();
+        break;
+      case false:
+        note = scale[Random.integer(0, scale.length)];
+        break;
+    }
+
+    console.log(note)
+    return note;
+  }
 
   const maxBeats = () => {
-    const beats = (meter * subdivisions);
+    const beats = (meter * subdivision);
     return beats;
   }
 
   const nextSubdivision = () => {
     const secondsPerBeat = 60.0 / tempo;
-    nextNoteTime += (1 / subdivisions) * secondsPerBeat; // add beat length to last beat time
-    currentSubdivision++; // advance the beat number, wrap to zero
+    nextNoteTime += (1 / subdivision) * secondsPerBeat; // add beat length to last beat time
+    currentSubdivision++;
 
+    // wrap to zero
     if (currentSubdivision == maxBeats()) {
       currentSubdivision = 0;
     }
   }
 
-  const calcVolume = (beatVolume) => {
-    return (beatVolume * masterVolume);
+  const subdivideSlow = () => {
+    const chance = Random.boolean();
+
+    if (!chance) {
+      subdivision = Random.fraction(4);
+    } else {
+      subdivision = Random.integerInclusive(1, 3);
+    }
+
+    return subdivision;
   }
 
-  let currentNote = () => {
-    let note = scale[Random.getRandomInt(0, scale.length)];
-    return note;
+  const subdivide = () => {
+    switch (true) {
+      case subdivision <= 1:
+        subdivideSlow();
+        break;
+      case subdivision < 4:
+        subdivision = Random.integer(1, 4)
+        break;
+      case subdivision >= 4:
+        subdivision = Random.integer(2, 8)
+        break;
+    }
+
+    return subdivision;
   }
 
   const scheduleNote = (beatNumber, time) => {
     // push the note on the queue, even if we're not playing.
     notesInQueue.push({ note: beatNumber, time: time });
 
-    // carrier oscillator
-    const osc = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-
-    // note length envelope vca
-    const vca1 = audioContext.createGain();
-    vca1.connect(audioContext.destination);
-
-    osc.frequency.value = currentNote();
-    osc.connect(gainNode);
-    gainNode.gain.value = calcVolume(quarterVolume);
-    gainNode.connect(vca1);
-
-    let attack = 0.1;
-    let decay = 0.15;
-    let noteLength = attack + decay;
-
-    vca1.gain.setValueAtTime(0, audioContext.currentTime);
-    vca1.gain.linearRampToValueAtTime(1, audioContext.currentTime + attack);
-    vca1.gain.linearRampToValueAtTime(0, audioContext.currentTime + noteLength);
-
-
-    if (beatNumber % maxBeats() === 0) {
-      gainNode.gain.value = calcVolume(accentVolume);
-    } else if (beatNumber % subdivisions === 0) {   // quarter notes = medium pitch
-      gainNode.gain.value = calcVolume(quarterVolume);
-    } else {
-      gainNode.gain.value = 0;   // keep the remaining twelvelet notes inaudible
+    if (subdivision % 5 || 7 || 9 === 0) {
+      if (beatNumber === 0) {
+        subdivision = subdivide();
+      }
+    } else if (Random.integer(1, 100) % 3 === 0) {
+      subdivision = subdivide();
     }
 
-    osc.start(time);
-    osc.stop(time + noteLength);
+    // patch vca
+    const vca1 = context.createGain();
+    vca1.connect(masterGainNode);
+    vca1.gain.value = 1;
+
+    // carrier oscillator
+    const osc1 = context.createOscillator();
+    osc1.frequency.value = currentNote();
+    osc1.connect(vca1);
+
+    let attack = 0.1;
+    let decay = 2.0;
+
+    if (subdivision > 2) {
+      decay = 0.5;
+    }
+
+    let noteLength = attack + decay;
+
+    vca1.gain.setValueAtTime(0, context.currentTime);
+    vca1.gain.linearRampToValueAtTime(1, context.currentTime + attack);
+    vca1.gain.linearRampToValueAtTime(0, context.currentTime + noteLength);
+
+    osc1.start(time);
+    osc1.stop(time + noteLength);
+
+    subOutput.value = subdivision;
+
+    // increment measure
+    if (beatNumber === 0) {
+      measure++;
+      measureOutput.value = measure;
+    }
   }
 
   const scheduler = () => {
-    while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
+    while (nextNoteTime < context.currentTime + scheduleAheadTime ) {
       scheduleNote( currentSubdivision, nextNoteTime );
       nextSubdivision();
     }
+  }
+
+  const drone = () => {
+    const gain1 = context.createGain();
+    gain1.gain.value = 0.6;
+    gain1.connect(masterGainNode);
+
+    const osc1 = context.createOscillator();
+    osc1.frequency.value = tonic * 2;
+    osc1.connect(gain1);
+    osc1.start();
+
+    // const gain2 = context.createGain();
+    // gain2.gain.value = 0.3;
+    // gain2.connect(gain1.gain);
+
+    // const osc2 = context.createOscillator();
+    // osc2.type = 'triangle';
+    // osc2.frequency.value = 0.051;
+    // osc2.connect(gain2);
+    // osc2.start();
+
+    // const gain3 = context.createGain();
+    // gain3.gain.value = 90;
+    // gain3.connect(osc1.frequency);
+
+    // const osc3 = context.createOscillator();
+    // osc3.type = 'triangle';
+    // osc3.frequency.value = tonic * 2;
+    // osc3.connect(gain3);
+    // osc3.start();
   }
 
   const play = () => {
     isPlaying = !isPlaying;
 
     if (isPlaying) {
-      currentSubdivision = 0;
-      nextNoteTime = audioContext.currentTime;
+      // drone();
+      context.resume();
+      nextNoteTime = context.currentTime;
       timerWorker.postMessage("start");
       document.getElementById("play-icon").innerHTML = "pause";
     } else {
+      context.suspend();
       timerWorker.postMessage("stop");
       document.getElementById("play-icon").innerHTML = "play_arrow";
     }
   }
 
   const init = () => {
-    audioContext = new AudioContext();
     timerWorker = new Worker("/metronome.worker.js");
 
     timerWorker.onmessage = (e) => {
@@ -164,6 +222,8 @@ const Patch = () => {
     };
 
     timerWorker.postMessage({"interval":lookahead});
+
+    getRaga(ragaData['Miyan ki Todi']);
   }
 
   window.addEventListener("load", init );
@@ -173,61 +233,39 @@ const Patch = () => {
     bpmOutput.value = bpmInput.value;
   }
 
-  const handleMeterChange = (e) => {
-    meter = e.target.value;
-    countOutput.value = countInput.value;
-  }
-
   const handleMasterVolumeChange = (e) => {
+    masterGainNode.gain.value = e.target.value / 100;
     masterVolume = e.target.value / 100;
-  }
-
-  const handleAccentVolumeChange = (e) => {
-    accentVolume = e.target.value / 100;
-  }
-
-  const handleQuarterVolumeChange = (e) => {
-    quarterVolume = e.target.value / 100;
   }
 
   return (
     <div className="metronome">
-      <header>
-        <button id="add" onClick={ play }>
-          <i id="play-icon">play_arrow</i>
-        </button>
-      </header>
-      <main>
-        <div>
-          <div>
-              <h2 id="bpm">
-              <output name="bpm" id="bpmOutput">{ tempo }</output>
-              <span> bpm</span>
-              </h2>
-            <input type="range" name="bpm" id="bpmInput"
-                defaultValue={ tempo } min="15" max="250"
-                onInput={ handleTempoChange } />
-          </div>
-          <div>
-            <h2 id="bpm">
-              <output name="count" id="countOutput">{ meter }</output>
-              <span> counts</span>
-            </h2>
-            <input type="range" name="count" id="countInput"
-                defaultValue={ meter } min="1" max={ subdivisions }
-                onInput={ handleMeterChange } />
-          </div>
-        </div>
-        <div>
-          <h6>Mixer</h6>
-          <p>Master Volume</p>
-          <VolumeSlider default={ masterVolume } callback={ handleMasterVolumeChange } />
-          <p>Accent</p>
-          <VolumeSlider default={ accentVolume } callback={ handleAccentVolumeChange } />
-          <p>Quarter Note</p>
-          <VolumeSlider default={ quarterVolume } callback={ handleQuarterVolumeChange } />
-        </div>
-      </main>
+      <button onClick={ play }>
+        <i id="play-icon">play_arrow</i>
+      </button>
+      <div>
+        <output name="bpm" id="bpmOutput">{ tempo }</output>
+        <span> bpm</span>
+        <input type="range" name="bpm" id="bpmInput"
+            defaultValue={ tempo } min="15" max="250"
+            onInput={ handleTempoChange } />
+      </div>
+      <div>
+        <output name="count" id="countOutput">{ meter }</output>
+        <span> meter</span>
+      </div>
+      <div>
+        <output name="measure" id="measureOutput">{ measure }</output>
+        <span> measure</span>
+      </div>
+      <div>
+        <output name="sub" id="subOutput">{ subdivision }</output>
+        <span> subdivision</span>
+      </div>
+      <div>
+        <span>Master Volume</span>
+        <VolumeSlider default={ masterVolume } callback={ handleMasterVolumeChange } />
+      </div>
     </div>
   )
 }

@@ -7,3 +7,6 @@ export const makeNotes = () => {
   }
   return midi;
 }
+
+// @return [num] - array of frequencies accessible by standard MIDI note numbers
+export const noteNums = makeNotes();

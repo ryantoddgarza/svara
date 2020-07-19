@@ -22,4 +22,4 @@ self.onmessage = (e) => {
   }
 };
 
-postMessage('hi there');
+postMessage('metronome worker mounted');
