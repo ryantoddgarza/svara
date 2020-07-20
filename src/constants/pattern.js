@@ -1,38 +1,37 @@
-const wrap = (obj, min, max) => {
-  min = 0;
-  max = obj.pattern.length;
+// returns an integer within the bounds of an array's length.
 
-  if (obj.pos === max) {
-    obj.pos = min;
-  } else if (obj.pos === min) {
-    obj.pos = max;
-  } else return;
-}
+export const wrap = (obj) => {
+  let length = obj.arr.length;
 
-export const testInvalidIndex = (obj) => {
-  const length = obj.pattern.length;
-
-  switch (true) {
-    case obj.pos > length:
-      obj.pos = 0 + (obj.pos % length);
-      break;
-    case obj.pos < 0:
-      obj.pos = length + obj.pos;
-      break;
+  if (obj.pos >= length) {
+    obj.pos = obj.pos % length;
+    return obj.pos;
   }
+
+  if (obj.pos < 0) {
+    obj.pos = length + (obj.pos % length);
+    return obj.pos;
+  }
+
+  return obj.pos;
 }
 
-export const stepThrough = (obj, dir, interval = 1) => {
-  testInvalidIndex(obj);
+// increments or decrements by reference the `pos` value of an object.
+// @ {object} obj - should contain { arr: {array}, pos: {number} }
+// @ {string} direction - increment or decrement the object's `pos` value
+// @ {number} interval - amount to increment/decrement
 
-  if (dir === 'inc') {
+export const stepThrough = (obj, direction, interval = 1) => {
+  if (direction === 'inc') {
     obj.pos += interval;
-    wrap(obj);
-  } else if (dir === 'dec') {
-    wrap(obj);
-    obj.pos -= interval;
-  } else return;
+  }
 
-  return obj.pattern[obj.pos];
+  if (direction === 'dec') {
+    obj.pos -= interval;
+  }
+
+  wrap(obj);
+
+  return obj.pos;
 }
 

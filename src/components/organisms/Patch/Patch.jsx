@@ -1,14 +1,15 @@
 import React from 'react';
 import context from '../../../constants/audio-context';
-import * as Pattern from '../../../constants/pattern';
 import Raga from '../../../constants/raga';
-import ragaData from '../../../constants/raga-data.json';
+import ragas from '../../../constants/ragas.json';
+import * as Pattern from '../../../constants/pattern';
 import * as Random from '../../../constants/random-logic';
-import * as midi from '../../../constants/midi';
+import * as MIDI from '../../../constants/midi';
 import VolumeSlider from '../../atoms/VolumeSlider';
 
 const Patch = () => {
   const inTesting = false;
+  const midiNums = MIDI.noteNums;
   let isPlaying = false;
   let startTime;
   let tempo = 65.0;
@@ -22,64 +23,109 @@ const Patch = () => {
   let nextNoteTime = 0.0;
   let notesInQueue = [];
   let timerWorker = null;
-
-  const midiNums = midi.noteNums;
   let tonic = 62;
-  let melodicObj = {
-    pattern: [],
-    pos: 4,
-  }
+  let aaroh = [];
+  let avroh = [];
+  let melody = {
+    arr: [],
+    pos: 0,
+    improvise: true,
+  };
+  let stepThrough = {
+    direction: undefined,
+    interval: undefined,
+  };
 
   const masterGainNode = context.createGain();
   masterGainNode.connect(context.destination);
   masterGainNode.gain.value = masterVolume;
 
+  const setAaroh = (arr) => {
+    aaroh = arr;
+  };
+
+  const setAvroh = (arr) => {
+    avroh = arr;
+  };
+
+  const setMelodyArr = (arr) => {
+    melody.arr = arr.map((freq, i) => {
+      return avroh[i];
+    });
+  };
+
   const getRaga = (ragaName) => {
     const raga = new Raga(midiNums, ragaName, tonic)
-    melodicObj.pattern = raga.avroh;
-  }
+    setAvroh(raga.avroh);
+    setAaroh(raga.aaroh);
+  };
+
+  getRaga(ragas['major']);
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  setMelodyArr(avroh);
+
+  const improvise = () => {
+    melody.improvise = true;
+    stepThrough.direction = 'dec';
+    stepThrough.interval = 3;
+  };
+
+  const playMotif = (motif) => {
+    if (motif) {
+      setMelodyArr(motif);
+    }
+
+    // melody.pos = 0;
+    melody.improvise = false;
+    stepThrough.direction = 'inc';
+    stepThrough.interval = 1;
+  };
+
+  let idea = [1, 6, 4];
+
+  improvise();
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   const currentNote = () => {
     let note;
 
-    Pattern.testInvalidIndex(melodicObj);
 
     const testFunc = () => {
-      note = melodicObj.pattern[melodicObj.pos];
+      note = melody.arr[Pattern.wrap(melody)];
       nextNote();
-    }
+    };
 
     const liveFunc = () => {
       const bool = Random.boolean();
 
       switch (bool) {
         case true:
-          note = melodicObj.pattern[melodicObj.pos];
+          note = melody.arr[melody.pos];
           nextNote();
         case false:
-          note = melodicObj.pattern[Random.integer(0, melodicObj.pattern.length)];
+          note = melody.arr[Random.integer(0, melody.arr.length)];
           break;
       }
-    }
+    };
 
-    if (inTesting) {
-      testFunc();
-    } else {
-      liveFunc();
-    }
+    melody.improvise ? liveFunc() : testFunc();
 
     return note;
-  }
+  };
 
-  // TODO: make direction and interval generative
   const nextNote = () => {
-    Pattern.stepThrough(melodicObj, 'inc', 3);
-  }
+    Pattern.stepThrough(melody, stepThrough.direction, stepThrough.interval);
+  };
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   const maxBeats = () => {
     const beats = (meter * subdivision);
     return beats;
-  }
+  };
 
   const nextSubdivision = () => {
     const secondsPerBeat = 60.0 / tempo;
@@ -90,7 +136,7 @@ const Patch = () => {
     if (currentSubdivision == maxBeats()) {
       currentSubdivision = 0;
     }
-  }
+  };
 
   const subdivideSlow = () => {
     const chance = Random.boolean();
@@ -102,7 +148,7 @@ const Patch = () => {
     }
 
     return subdivision;
-  }
+  };
 
   const subdivide = () => {
     switch (true) {
@@ -118,7 +164,7 @@ const Patch = () => {
     }
 
     return subdivision;
-  }
+  };
 
   const scheduleNote = (beatNumber, time) => {
     // push the note on the queue, even if we're not playing.
@@ -138,11 +184,7 @@ const Patch = () => {
       }
     }
 
-    if (inTesting) {
-      testFunc();
-    } else {
-      liveFunc();
-    }
+    inTesting ? testFunc() : liveFunc();
 
     // patch vca
     const vca1 = context.createGain();
@@ -177,17 +219,17 @@ const Patch = () => {
       measure++;
       measureOutput.value = measure;
     }
-  }
+  };
 
   const scheduler = () => {
     while (nextNoteTime < context.currentTime + scheduleAheadTime ) {
       scheduleNote( currentSubdivision, nextNoteTime );
       nextSubdivision();
     }
-  }
+  };
 
   const drone = () => {
-    const root = melodicObj.pattern[0] * 0.5;
+    const root = melody.arr[0] * 0.5;
 
     // module vca
     const gain1 = context.createGain();
@@ -227,13 +269,13 @@ const Patch = () => {
     osc3.frequency.value = root * 0.5;
     osc3.connect(gain3);
     osc3.start();
-  }
+  };
 
   const play = () => {
     isPlaying = !isPlaying;
 
     if (isPlaying) {
-      drone();
+      // drone();
       context.resume();
       nextNoteTime = context.currentTime;
       timerWorker.postMessage("start");
@@ -243,7 +285,7 @@ const Patch = () => {
       timerWorker.postMessage("stop");
       document.getElementById("play-icon").innerHTML = "play_arrow";
     }
-  }
+  };
 
   const init = () => {
     timerWorker = new Worker("/metronome.worker.js");
@@ -257,21 +299,19 @@ const Patch = () => {
     };
 
     timerWorker.postMessage({"interval":lookahead});
-
-    getRaga(ragaData['miyan ki todi']);
-  }
+  };
 
   window.addEventListener("load", init );
 
   const handleTempoChange = (e) => {
     tempo = e.target.value;
     bpmOutput.value = bpmInput.value;
-  }
+  };
 
   const handleMasterVolumeChange = (e) => {
     masterGainNode.gain.value = e.target.value / 100;
     masterVolume = e.target.value / 100;
-  }
+  };
 
   return (
     <div className="metronome">
@@ -303,6 +343,6 @@ const Patch = () => {
       </div>
     </div>
   )
-}
+};
 
 export default Patch;
