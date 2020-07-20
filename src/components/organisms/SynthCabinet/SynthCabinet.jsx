@@ -1,5 +1,5 @@
 import React from 'react';
-import * as logic from '../../../constants/generativeLogic';
+import * as logic from '../../../constants/generative-logic';
 
 const SynthCabinet = () => {
   console.log(logic.prahar())

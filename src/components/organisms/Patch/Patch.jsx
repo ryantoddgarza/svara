@@ -1,15 +1,17 @@
 import React from 'react';
-import context from '../../../constants/audioContext';
+import context from '../../../constants/audio-context';
+import * as Pattern from '../../../constants/pattern';
 import Raga from '../../../constants/raga';
-import ragaData from '../../../constants/ragaData.JSON';
-import * as Random from '../../../constants/randomLogic';
+import ragaData from '../../../constants/raga-data.json';
+import * as Random from '../../../constants/random-logic';
 import * as midi from '../../../constants/midi';
 import VolumeSlider from '../../atoms/VolumeSlider';
 
 const Patch = () => {
+  const inTesting = false;
   let isPlaying = false;
   let startTime;
-  let tempo = 45.0;
+  let tempo = 65.0;
   let meter = 4;
   let measure = 0;
   let subdivision = 1;
@@ -23,8 +25,10 @@ const Patch = () => {
 
   const midiNums = midi.noteNums;
   let tonic = 62;
-  let scale = [];
-  let scaleIndex = 0;
+  let melodicObj = {
+    pattern: [],
+    pos: 4,
+  }
 
   const masterGainNode = context.createGain();
   masterGainNode.connect(context.destination);
@@ -32,37 +36,44 @@ const Patch = () => {
 
   const getRaga = (ragaName) => {
     const raga = new Raga(midiNums, ragaName, tonic)
-    scale = raga.avroh;
-  }
-
-  const wrapScale = () => {
-    if (scaleIndex === scale.length) {
-      scaleIndex = 0;
-    }
-  }
-
-  const ascendScale = () => {
-    scaleIndex++;
-    wrapScale();
-
-    return scale[scaleIndex];
+    melodicObj.pattern = raga.avroh;
   }
 
   const currentNote = () => {
     let note;
-    const bool = Random.boolean();
 
-    switch (bool) {
-      case true:
-        note = ascendScale();
-        break;
-      case false:
-        note = scale[Random.integer(0, scale.length)];
-        break;
+    Pattern.testInvalidIndex(melodicObj);
+
+    const testFunc = () => {
+      note = melodicObj.pattern[melodicObj.pos];
+      nextNote();
     }
 
-    console.log(note)
+    const liveFunc = () => {
+      const bool = Random.boolean();
+
+      switch (bool) {
+        case true:
+          note = melodicObj.pattern[melodicObj.pos];
+          nextNote();
+        case false:
+          note = melodicObj.pattern[Random.integer(0, melodicObj.pattern.length)];
+          break;
+      }
+    }
+
+    if (inTesting) {
+      testFunc();
+    } else {
+      liveFunc();
+    }
+
     return note;
+  }
+
+  // TODO: make direction and interval generative
+  const nextNote = () => {
+    Pattern.stepThrough(melodicObj, 'inc', 3);
   }
 
   const maxBeats = () => {
@@ -113,12 +124,24 @@ const Patch = () => {
     // push the note on the queue, even if we're not playing.
     notesInQueue.push({ note: beatNumber, time: time });
 
-    if (subdivision % 5 || 7 || 9 === 0) {
-      if (beatNumber === 0) {
+    const testFunc = () => {
+      return;
+    }
+
+    const liveFunc = () => {
+      if (subdivision % 5 || 7 || 9 === 0) {
+        if (beatNumber === 0) {
+          subdivision = subdivide();
+        }
+      } else if (Random.integer(1, 100) % 3 === 0) {
         subdivision = subdivide();
       }
-    } else if (Random.integer(1, 100) % 3 === 0) {
-      subdivision = subdivide();
+    }
+
+    if (inTesting) {
+      testFunc();
+    } else {
+      liveFunc();
     }
 
     // patch vca
@@ -164,41 +187,53 @@ const Patch = () => {
   }
 
   const drone = () => {
+    const root = melodicObj.pattern[0] * 0.5;
+
+    // module vca
     const gain1 = context.createGain();
-    gain1.gain.value = 0.6;
+    gain1.gain.value = 1;
     gain1.connect(masterGainNode);
 
+    // amplitude mod
+    const amVCA = context.createGain();
+    amVCA.connect(gain1);
+
+    // carrier osc
     const osc1 = context.createOscillator();
-    osc1.frequency.value = tonic * 2;
-    osc1.connect(gain1);
+    osc1.frequency.value = root;
+    osc1.connect(amVCA);
     osc1.start();
 
-    // const gain2 = context.createGain();
-    // gain2.gain.value = 0.3;
-    // gain2.connect(gain1.gain);
+    // slow trem vca
+    const gain2 = context.createGain();
+    gain2.gain.value = 0.4;
+    gain2.connect(gain1.gain);
 
-    // const osc2 = context.createOscillator();
-    // osc2.type = 'triangle';
-    // osc2.frequency.value = 0.051;
-    // osc2.connect(gain2);
-    // osc2.start();
+    // slow trem osc
+    const osc2 = context.createOscillator();
+    osc2.type = 'triangle';
+    osc2.frequency.value = 0.031;
+    osc2.connect(gain2);
+    osc2.start();
 
-    // const gain3 = context.createGain();
-    // gain3.gain.value = 90;
-    // gain3.connect(osc1.frequency);
+    // am vca
+    const gain3 = context.createGain();
+    gain3.gain.value = 0.3;
+    gain3.connect(amVCA.gain);
 
-    // const osc3 = context.createOscillator();
-    // osc3.type = 'triangle';
-    // osc3.frequency.value = tonic * 2;
-    // osc3.connect(gain3);
-    // osc3.start();
+    // am osc
+    const osc3 = context.createOscillator();
+    osc3.type = 'triangle';
+    osc3.frequency.value = root * 0.5;
+    osc3.connect(gain3);
+    osc3.start();
   }
 
   const play = () => {
     isPlaying = !isPlaying;
 
     if (isPlaying) {
-      // drone();
+      drone();
       context.resume();
       nextNoteTime = context.currentTime;
       timerWorker.postMessage("start");
@@ -223,7 +258,7 @@ const Patch = () => {
 
     timerWorker.postMessage({"interval":lookahead});
 
-    getRaga(ragaData['Miyan ki Todi']);
+    getRaga(ragaData['miyan ki todi']);
   }
 
   window.addEventListener("load", init );
