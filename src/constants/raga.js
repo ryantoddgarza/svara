@@ -3,19 +3,22 @@
 // @param {number} root - MIDI note value
 
 export default function Raga(midiNums, raga, root) {
-  let aarohArr = raga.aaroh.map((val) => {
+  this.aarohNum = raga.aaroh;
+  this.avrohNum = raga.avroh;
+
+  let aarohFreq = raga.aaroh.map((val) => {
     return root + val
   });
 
-  this.aaroh = aarohArr.map((val) => {
+  this.aarohFreq = aarohFreq.map((val) => {
     return midiNums[val];
   });
 
-  let avrohArr = raga.avroh.map((val) => {
+  let avrohFreq = raga.avroh.map((val) => {
     return root + val
   });
 
-  this.avroh = avrohArr.map((val) => {
+  this.avrohFreq = avrohFreq.map((val) => {
     return midiNums[val];
   });
 }

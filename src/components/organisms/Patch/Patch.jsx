@@ -7,6 +7,17 @@ import * as Random from '../../../constants/random-logic';
 import * as MIDI from '../../../constants/midi';
 import VolumeSlider from '../../atoms/VolumeSlider';
 
+// const fooObj = {
+//   arr: [0, 1, 2, 3, 4, 5, 6],
+//   pos: 18,
+// }
+
+// const Patch = () => {
+//   return (
+//     <div id="patch"></div>
+//   )
+// };
+
 const Patch = () => {
   const inTesting = false;
   const midiNums = MIDI.noteNums;
@@ -24,68 +35,74 @@ const Patch = () => {
   let notesInQueue = [];
   let timerWorker = null;
   let tonic = 62;
-  let aaroh = [];
-  let avroh = [];
+  let ascendingFreq = [];
+  let ascendingNum = [];
+  let descendingFreq = [];
+  let descendingNum = [];
+  let activeScale = [];
+
   let melody = {
     arr: [],
     pos: 0,
     improvise: true,
   };
+
   let stepThrough = {
-    direction: undefined,
+    direction: Pattern.increment,
     interval: undefined,
   };
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
 
   const masterGainNode = context.createGain();
   masterGainNode.connect(context.destination);
   masterGainNode.gain.value = masterVolume;
 
-  const setAaroh = (arr) => {
-    aaroh = arr;
-  };
-
-  const setAvroh = (arr) => {
-    avroh = arr;
-  };
-
-  const setMelodyArr = (arr) => {
-    melody.arr = arr.map((freq, i) => {
-      return avroh[i];
+  // converts scale steps to array indexes
+  const setMelodyArr = (scaleSteps) => {
+    melody.arr = scaleSteps.map((step, i) => {
+      return step - 1;
     });
   };
 
   const getRaga = (ragaName) => {
     const raga = new Raga(midiNums, ragaName, tonic)
-    setAvroh(raga.avroh);
-    setAaroh(raga.aaroh);
+    ascendingFreq = raga.aarohFreq;
+    ascendingNum = raga.aarohNum;
+    descendingFreq = raga.avrohFreq;
+    descendingNum = raga.avrohNum;
   };
 
   getRaga(ragas['major']);
+  activeScale = descendingFreq;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  setMelodyArr(avroh);
+  const improvise = (scaleSteps) => {
+    if (scaleSteps) {
+      setMelodyArr(scaleSteps);
+    }
 
-  const improvise = () => {
     melody.improvise = true;
-    stepThrough.direction = 'dec';
+    stepThrough.direction = Pattern.increment;
     stepThrough.interval = 3;
   };
 
-  const playMotif = (motif) => {
-    if (motif) {
-      setMelodyArr(motif);
+  improvise(descendingNum);
+
+  const playMotif = (scaleSteps) => {
+    if (scaleSteps) {
+      setMelodyArr(scaleSteps);
     }
 
-    // melody.pos = 0;
     melody.improvise = false;
-    stepThrough.direction = 'inc';
+    stepThrough.direction = Pattern.increment;
     stepThrough.interval = 1;
   };
 
-  let idea = [1, 6, 4];
+  let fooMotif = [1, 2, 3, 4, 5];
+  // playMotif(fooMotif);
 
-  improvise();
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -93,32 +110,38 @@ const Patch = () => {
     let note;
 
 
-    const testFunc = () => {
-      note = melody.arr[Pattern.wrap(melody)];
-      nextNote();
-    };
-
-    const liveFunc = () => {
+    if (melody.improvise) {
       const bool = Random.boolean();
 
       switch (bool) {
         case true:
-          note = melody.arr[melody.pos];
-          nextNote();
+          note = activeScale[melody.pos]
+          nextNote(melody, Pattern.increment);
         case false:
-          note = melody.arr[Random.integer(0, melody.arr.length)];
+          note = activeScale[Random.integer(0, melody.arr.length)];
           break;
       }
-    };
+    }
 
-    melody.improvise ? liveFunc() : testFunc();
+    if (!melody.improvise) {
+      note = activeScale[melody.pos]
+      nextNote(melody, Pattern.increment);
+
+      // if (melody.pos === melody.arr.length - 1) {
+      //   improvise(descendingNum);
+      // }
+    }
 
     return note;
   };
 
-  const nextNote = () => {
-    Pattern.stepThrough(melody, stepThrough.direction, stepThrough.interval);
-  };
+  // sets up the next note in the sequence
+  const nextNote = (obj, callback) => {
+    const setPos = Pattern.stepThrough(obj, callback);
+    const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
+
+    obj.pos = wrappedPos;
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -229,11 +252,11 @@ const Patch = () => {
   };
 
   const drone = () => {
-    const root = melody.arr[0] * 0.5;
+    const root = activeScale[0] * 0.5;
 
     // module vca
     const gain1 = context.createGain();
-    gain1.gain.value = 1;
+    gain1.gain.value = 0.8;
     gain1.connect(masterGainNode);
 
     // amplitude mod
@@ -275,7 +298,7 @@ const Patch = () => {
     isPlaying = !isPlaying;
 
     if (isPlaying) {
-      // drone();
+      drone();
       context.resume();
       nextNoteTime = context.currentTime;
       timerWorker.postMessage("start");
