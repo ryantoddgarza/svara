@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import context from '../../../constants/audio-context';
 import Raga from '../../../constants/raga';
 import ragas from '../../../constants/ragas.json';
@@ -7,7 +7,6 @@ import * as Random from '../../../constants/random-logic';
 import * as MIDI from '../../../constants/midi';
 import VolumeSlider from '../../atoms/VolumeSlider';
 
-const SynthEngine = () => {
   let isPlaying = false;
   let masterVolume = 0.1;
 
@@ -203,7 +202,7 @@ const SynthEngine = () => {
     notesInQueue.push({ note: beatNumber, time: time });
 
     incrementMeasure(beatNumber);
-    updateGUI();
+    // updateGUI();
 
     // if (subdivision % 5 || 7 || 9 === 0) {
     //   if (beatNumber === 0) {
@@ -321,6 +320,7 @@ const SynthEngine = () => {
   };
 
   window.addEventListener("load", init );
+const SynthEngine = () => {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // GUI

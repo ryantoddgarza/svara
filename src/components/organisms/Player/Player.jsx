@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import { useSynthEngine } from '../../../utils/SynthEngine';
-import Controls from './atoms/Controls';
 
 const LocalComponent = (props) => {
   return (
     <React.Fragment>
-      local component props: {props.synthEngine}
+      <p>isPlaying: { props.synthEngine.isPlaying.toString() }</p>
+      <button onClick={ () => props.synthEngine.setIsPlaying(!props.synthEngine.isPlaying) }>toggle</button>
     </React.Fragment>
   )
 }
-const WrappedComponent = useSynthEngine(LocalComponent);
+const UseSynthEngine = useSynthEngine(LocalComponent);
 
 class Player extends Component {
   render() {
     return (
-      <div id="player">
-        <WrappedComponent />
-        <Controls start={ () => this.setState({isPlaying: true}) }
-                  resume={ this.props.resume }
-                  suspend={ this.props.suspend }/>
+      <div className="player">
+        <UseSynthEngine />
       </div>
     )
   }

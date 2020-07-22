@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const SynthEngineContext = React.createContext(null);
 
-// provider component.
+// provider component
 // export const SynthEngineProvider = ({ children }) => {
 //   const fooData = 'foo';
 
@@ -13,22 +13,22 @@ const SynthEngineContext = React.createContext(null);
 //   )
 // };
 
-// custom provider. use by wrapping a component in this HOC.
-// @param {component} - the component that needs access to this context via `props`
+// custom provider
+// @param {component} - the component to gain access to this context
 export const withSynthEngine = (Component) => {
   return function synthEngineContextProvider(props) {
-    const fooData = 'foo';
+    const [isPlaying, setIsPlaying] = useState(false);
 
     return (
-      <SynthEngineContext.Provider value={ fooData }>
+      <SynthEngineContext.Provider value={ { isPlaying, setIsPlaying } }>
         <Component {...props} />
       </SynthEngineContext.Provider>
     );
   };
 };
 
-// custom consumer. use by wrapping a component in this HOC.
-// @param {component} - the component that needs access to this context via `props`
+// custom consumer
+// @param {component} - the component to gain access to this context
 export const useSynthEngine = (Component) => {
   return function synthEngineContextConsumer(props) {
     return (
