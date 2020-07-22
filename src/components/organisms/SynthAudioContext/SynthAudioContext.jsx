@@ -1,4 +1,4 @@
-// DEPRECATED: see Patch.jsx
+// DEPRECATED
 
 import React, { Component } from 'react';
 import Player from '../Player';

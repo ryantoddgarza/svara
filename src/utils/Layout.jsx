@@ -8,6 +8,7 @@ const Layout = (props) => {
       <main id="main">
         { props.children }
       </main>
+      <Player />
     </div>
   )
 }

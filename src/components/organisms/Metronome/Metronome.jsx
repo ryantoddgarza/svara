@@ -1,4 +1,5 @@
-// DEPRECATED: see Patch.jsx
+// DEPRECATED
+
 import React, { Component } from 'react';
 import VolumeSlider from './molecules/VolumeSlider';
 

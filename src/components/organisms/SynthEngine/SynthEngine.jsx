@@ -7,33 +7,24 @@ import * as Random from '../../../constants/random-logic';
 import * as MIDI from '../../../constants/midi';
 import VolumeSlider from '../../atoms/VolumeSlider';
 
-// const fooObj = {
-//   arr: [0, 1, 2, 3, 4, 5, 6],
-//   pos: 18,
-// }
-
-// const Patch = () => {
-//   return (
-//     <div id="patch"></div>
-//   )
-// };
-
-const Patch = () => {
-  const inTesting = false;
-  const midiNums = MIDI.noteNums;
+const SynthEngine = () => {
   let isPlaying = false;
-  let startTime;
-  let tempo = 65.0;
+  let masterVolume = 0.1;
+
+  let tempo = 120.0;
   let meter = 4;
   let measure = 0;
   let subdivision = 1;
   let currentSubdivision = 0;
-  let masterVolume = 0.1;
+
+  let startTime;
   let lookahead = 25.0;
   let scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
   let timerWorker = null;
+
+  const midiNums = MIDI.noteNums;
   let tonic = 62;
   let ascendingFreq = [];
   let ascendingNum = [];
@@ -53,10 +44,14 @@ const Patch = () => {
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+  // global audio context volume
 
   const masterGainNode = context.createGain();
   masterGainNode.connect(context.destination);
   masterGainNode.gain.value = masterVolume;
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // set global variables
 
   // converts scale steps to array indexes
   const setMelodyArr = (scaleSteps) => {
@@ -77,73 +72,87 @@ const Patch = () => {
   activeScale = descendingFreq;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+  // tonal functions
+
+  let fooMotif = [1, 4, 3, 4, 5];
 
   const improvise = (scaleSteps) => {
     if (scaleSteps) {
       setMelodyArr(scaleSteps);
     }
 
-    melody.improvise = true;
     stepThrough.direction = Pattern.increment;
-    stepThrough.interval = 3;
+    stepThrough.interval = 4;
   };
 
-  improvise(descendingNum);
 
   const playMotif = (scaleSteps) => {
     if (scaleSteps) {
       setMelodyArr(scaleSteps);
     }
 
-    melody.improvise = false;
     stepThrough.direction = Pattern.increment;
     stepThrough.interval = 1;
   };
 
-  let fooMotif = [1, 2, 3, 4, 5];
-  // playMotif(fooMotif);
+  const improvisationState = (bool) => {
+    melody.improvise = bool;
 
+    if (melody.improvise === true) {
+      improvise(descendingNum);
+    }
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+    if (melody.improvise === false) {
+      playMotif(fooMotif);
+    }
+  }
+
+  improvisationState(false)
 
   const currentNote = () => {
     let note;
 
+    // if (melody.improvise) {
+    //   const bool = Random.boolean();
 
-    if (melody.improvise) {
-      const bool = Random.boolean();
+    //   switch (bool) {
+    //     case true:
+    //       note = activeScale[melody.pos]
+    //       nextNote(melody, Pattern.increment);
+    //     case false:
+    //       note = activeScale[Random.integer(0, melody.arr.length)];
+    //       break;
+    //   }
+    // }
 
-      switch (bool) {
-        case true:
-          note = activeScale[melody.pos]
-          nextNote(melody, Pattern.increment);
-        case false:
-          note = activeScale[Random.integer(0, melody.arr.length)];
-          break;
-      }
-    }
-
-    if (!melody.improvise) {
+    // if (!melody.improvise) {
       note = activeScale[melody.pos]
-      nextNote(melody, Pattern.increment);
+      nextNote(melody);
 
-      // if (melody.pos === melody.arr.length - 1) {
-      //   improvise(descendingNum);
-      // }
-    }
+    //   // if (melody.pos === melody.arr.length - 1) {
+    //   //   improvise(descendingNum);
+    //   // }
+    // }
 
     return note;
   };
 
   // sets up the next note in the sequence
-  const nextNote = (obj, callback) => {
-    const setPos = Pattern.stepThrough(obj, callback);
+  const nextNote = (obj) => {
+    const setPos = Pattern.stepThrough(obj, stepThrough.direction, stepThrough.interval);
     const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
 
     obj.pos = wrappedPos;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
+  // global timing
+
+  const incrementMeasure = (beatNumber) => {
+    if (beatNumber === 0) {
+      measure++;
+    }
+  }
 
   const maxBeats = () => {
     const beats = (meter * subdivision);
@@ -161,53 +170,48 @@ const Patch = () => {
     }
   };
 
-  const subdivideSlow = () => {
-    const chance = Random.boolean();
+  // const subdivideSlow = () => {
+  //   const chance = Random.boolean();
 
-    if (!chance) {
-      subdivision = Random.fraction(4);
-    } else {
-      subdivision = Random.integerInclusive(1, 3);
-    }
+  //   if (!chance) {
+  //     subdivision = Random.fraction(4);
+  //   } else {
+  //     subdivision = Random.integerInclusive(1, 3);
+  //   }
 
-    return subdivision;
-  };
+  //   return subdivision;
+  // };
 
-  const subdivide = () => {
-    switch (true) {
-      case subdivision <= 1:
-        subdivideSlow();
-        break;
-      case subdivision < 4:
-        subdivision = Random.integer(1, 4)
-        break;
-      case subdivision >= 4:
-        subdivision = Random.integer(2, 8)
-        break;
-    }
+  // const subdivide = () => {
+  //   switch (true) {
+  //     case subdivision <= 1:
+  //       subdivideSlow();
+  //       break;
+  //     case subdivision < 4:
+  //       subdivision = Random.integer(1, 4)
+  //       break;
+  //     case subdivision >= 4:
+  //       subdivision = Random.integer(2, 8)
+  //       break;
+  //   }
 
-    return subdivision;
-  };
+  //   return subdivision;
+  // };
 
   const scheduleNote = (beatNumber, time) => {
     // push the note on the queue, even if we're not playing.
     notesInQueue.push({ note: beatNumber, time: time });
 
-    const testFunc = () => {
-      return;
-    }
+    incrementMeasure(beatNumber);
+    updateGUI();
 
-    const liveFunc = () => {
-      if (subdivision % 5 || 7 || 9 === 0) {
-        if (beatNumber === 0) {
-          subdivision = subdivide();
-        }
-      } else if (Random.integer(1, 100) % 3 === 0) {
-        subdivision = subdivide();
-      }
-    }
-
-    inTesting ? testFunc() : liveFunc();
+    // if (subdivision % 5 || 7 || 9 === 0) {
+    //   if (beatNumber === 0) {
+        // subdivision = subdivide();
+    //   }
+    // } else if (Random.integer(1, 100) % 3 === 0) {
+    //   subdivision = subdivide();
+    // }
 
     // patch vca
     const vca1 = context.createGain();
@@ -222,9 +226,9 @@ const Patch = () => {
     let attack = 0.1;
     let decay = 2.0;
 
-    if (subdivision > 2) {
-      decay = 0.5;
-    }
+    // if (subdivision > 2) {
+    //   decay = 0.5;
+    // }
 
     let noteLength = attack + decay;
 
@@ -234,14 +238,6 @@ const Patch = () => {
 
     osc1.start(time);
     osc1.stop(time + noteLength);
-
-    subOutput.value = subdivision;
-
-    // increment measure
-    if (beatNumber === 0) {
-      measure++;
-      measureOutput.value = measure;
-    }
   };
 
   const scheduler = () => {
@@ -251,54 +247,54 @@ const Patch = () => {
     }
   };
 
-  const drone = () => {
-    const root = activeScale[0] * 0.5;
+  // const drone = () => {
+  //   const root = activeScale[0] * 0.5;
 
-    // module vca
-    const gain1 = context.createGain();
-    gain1.gain.value = 0.8;
-    gain1.connect(masterGainNode);
+  //   // module vca
+  //   const gain1 = context.createGain();
+  //   gain1.gain.value = 0.8;
+  //   gain1.connect(masterGainNode);
 
-    // amplitude mod
-    const amVCA = context.createGain();
-    amVCA.connect(gain1);
+  //   // amplitude mod
+  //   const amVCA = context.createGain();
+  //   amVCA.connect(gain1);
 
-    // carrier osc
-    const osc1 = context.createOscillator();
-    osc1.frequency.value = root;
-    osc1.connect(amVCA);
-    osc1.start();
+  //   // carrier osc
+  //   const osc1 = context.createOscillator();
+  //   osc1.frequency.value = root;
+  //   osc1.connect(amVCA);
+  //   osc1.start();
 
-    // slow trem vca
-    const gain2 = context.createGain();
-    gain2.gain.value = 0.4;
-    gain2.connect(gain1.gain);
+  //   // slow trem vca
+  //   const gain2 = context.createGain();
+  //   gain2.gain.value = 0.4;
+  //   gain2.connect(gain1.gain);
 
-    // slow trem osc
-    const osc2 = context.createOscillator();
-    osc2.type = 'triangle';
-    osc2.frequency.value = 0.031;
-    osc2.connect(gain2);
-    osc2.start();
+  //   // slow trem osc
+  //   const osc2 = context.createOscillator();
+  //   osc2.type = 'triangle';
+  //   osc2.frequency.value = 0.031;
+  //   osc2.connect(gain2);
+  //   osc2.start();
 
-    // am vca
-    const gain3 = context.createGain();
-    gain3.gain.value = 0.3;
-    gain3.connect(amVCA.gain);
+  //   // am vca
+  //   const gain3 = context.createGain();
+  //   gain3.gain.value = 0.3;
+  //   gain3.connect(amVCA.gain);
 
-    // am osc
-    const osc3 = context.createOscillator();
-    osc3.type = 'triangle';
-    osc3.frequency.value = root * 0.5;
-    osc3.connect(gain3);
-    osc3.start();
-  };
+  //   // am osc
+  //   const osc3 = context.createOscillator();
+  //   osc3.type = 'triangle';
+  //   osc3.frequency.value = root * 0.5;
+  //   osc3.connect(gain3);
+  //   osc3.start();
+  // };
 
   const play = () => {
     isPlaying = !isPlaying;
 
     if (isPlaying) {
-      drone();
+      // drone();
       context.resume();
       nextNoteTime = context.currentTime;
       timerWorker.postMessage("start");
@@ -326,6 +322,14 @@ const Patch = () => {
 
   window.addEventListener("load", init );
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // GUI
+
+  const updateGUI = () => {
+    measureOutput.value = measure;
+    subOutput.value = subdivision;
+  }
+
   const handleTempoChange = (e) => {
     tempo = e.target.value;
     bpmOutput.value = bpmInput.value;
@@ -337,7 +341,7 @@ const Patch = () => {
   };
 
   return (
-    <div className="metronome">
+    <div className="patch">
       <button onClick={ play }>
         <i id="play-icon">play_arrow</i>
       </button>
@@ -368,4 +372,4 @@ const Patch = () => {
   )
 };
 
-export default Patch;
+export default SynthEngine;

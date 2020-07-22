@@ -1,3 +1,5 @@
+// DEPRECATED
+
 import React from 'react';
 import * as logic from '../../../constants/generative-logic';
 
