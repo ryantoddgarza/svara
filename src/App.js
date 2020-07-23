@@ -4,9 +4,11 @@ import React, { Component } from 'react';
 // import home from './pages/home';
 // import listen from './pages/listen';
 // import SynthEngine from './components/organisms/SynthEngine';
-// import Player from './components/organisms/Player';
+import Player from './components/organisms/Player';
 // import { withSynthEngine } from './utils/SynthEngine';
-import getSynthEngine from './utils/SynthEngine/synthEngine';
+import getSynthEngine, { SynthEngine } from './utils/SynthEngine/synthEngine';
+
+const synthEngine = () => new SynthEngine();
 
 // const LocalComponent = () => {
 //   const handlePlay = () => {
@@ -27,7 +29,9 @@ class App extends Component {
   render() {
     getSynthEngine();
     return (
-      <div className="app"></div>
+      <div className="app">
+        <Player />
+      </div>
     )
   }
 }

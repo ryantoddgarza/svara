@@ -20,13 +20,11 @@ export const wrapArrayIndex = (index, length) => {
   return index;
 }
 
-// increments a number
 export const increment = (num, interval = 1) => {
   num += interval;
   return num;
 }
 
-// decrements a number
 export const decrement = (num, interval = 1) => {
   num -= interval;
   return num;

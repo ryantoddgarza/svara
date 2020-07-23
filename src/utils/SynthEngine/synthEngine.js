@@ -4,6 +4,12 @@ import * as Pattern from '../../constants/pattern';
 import Raga from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 
+export class SynthEngine {
+  play() {
+    console.log('fooClass');
+  }
+}
+
 const getSynthEngine = () => {
   const midiNums = MIDI.noteNums;
 
