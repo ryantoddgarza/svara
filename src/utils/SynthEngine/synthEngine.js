@@ -10,7 +10,7 @@ export class SynthEngine {
   }
 }
 
-const getSynthEngine = () => {
+const getSynthEngine = (function() {
   const midiNums = MIDI.noteNums;
 
   let timerWorker = null;
@@ -290,9 +290,11 @@ const getSynthEngine = () => {
       context.resume();
       nextNoteTime = context.currentTime;
       timerWorker.postMessage("start");
+      document.getElementById("play-icon").innerHTML = "pause";
     } else {
       context.suspend();
       timerWorker.postMessage("stop");
+      document.getElementById("play-icon").innerHTML = "play";
     }
   };
 
@@ -308,11 +310,15 @@ const getSynthEngine = () => {
     };
 
     timerWorker.postMessage({'interval':lookahead});
-
-    play();
   };
 
   window.addEventListener('load', init );
-}
+
+  return {
+    play: function() {
+      play();
+    }
+  }
+}());
 
 export default getSynthEngine;
