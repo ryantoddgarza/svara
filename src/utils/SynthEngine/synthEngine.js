@@ -294,7 +294,7 @@ const getSynthEngine = (function() {
     } else {
       context.suspend();
       timerWorker.postMessage("stop");
-      document.getElementById("play-icon").innerHTML = "play";
+      document.getElementById("play-icon").innerHTML = "play_arrow";
     }
   };
 
