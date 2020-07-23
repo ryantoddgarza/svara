@@ -1,19 +1,39 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import * as routes from './constants/routes';
-import home from './pages/home';
-import listen from './pages/listen';
+import React, { Component } from 'react';
+// import { Route, Switch } from 'react-router-dom';
+// import * as routes from './constants/routes';
+// import home from './pages/home';
+// import listen from './pages/listen';
+// import SynthEngine from './components/organisms/SynthEngine';
+import Player from './components/organisms/Player';
+// import { withSynthEngine } from './utils/SynthEngine';
+import getSynthEngine, { SynthEngine } from './utils/SynthEngine/synthEngine';
 
-const App = () => {
-  return (
-    <div className="app">
-      <Switch>
-        <Route path={ routes.LANDING } exact component={ home } />
-        <Route path={ routes.HOME } component={ home } />
-        <Route path={ routes.LISTEN } component={ listen } />
-      </Switch>
-    </div>
-  )
+const synthEngine = () => new SynthEngine();
+
+// const LocalComponent = () => {
+//   const handlePlay = () => {
+//     console.log('clicked play')
+//   }
+
+//   return (
+//     <React.Fragment>
+//       <Player />
+//       <SynthEngine />
+//     </React.Fragment>
+//   )
+// };
+
+// const WithSynthEngine = withSynthEngine(LocalComponent);
+
+class App extends Component {
+  render() {
+    getSynthEngine();
+    return (
+      <div className="app">
+        <Player />
+      </div>
+    )
+  }
 }
 
 export default App;
