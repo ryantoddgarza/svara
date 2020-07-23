@@ -27,7 +27,7 @@ const synthEngine = () => new SynthEngine();
 
 class App extends Component {
   render() {
-    getSynthEngine();
+    getSynthEngine;
     return (
       <div className="app">
         <Player />
