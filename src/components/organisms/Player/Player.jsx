@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { useSynthEngine } from '../../../utils/SynthEngine';
 
 const LocalComponent = (props) => {
+  // const toggleIsPlaying = () => {
+  //   props.synthEngine.play();
+  //   props.synthEngine.setIsPlaying(!props.synthEngine.isPlaying);
+  // }
+
   return (
     <React.Fragment>
-      <p>isPlaying: { props.synthEngine.isPlaying.toString() }</p>
-      <button onClick={ () => props.synthEngine.setIsPlaying(!props.synthEngine.isPlaying) }>toggle</button>
+      <button onClick={ props.synthEngine.play }>toggle `isPlaying`</button>
     </React.Fragment>
   )
 }
@@ -15,6 +19,7 @@ class Player extends Component {
   render() {
     return (
       <div className="player">
+        <p>rendered from Player.jsx</p>
         <UseSynthEngine />
       </div>
     )
