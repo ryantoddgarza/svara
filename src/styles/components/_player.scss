@@ -1,8 +1,16 @@
 .player {
-  // position: absolute;
-  // right: 0;
-  // bottom: 0;
-  // left: 0;
-  // height: 98px;
-  border: 1px solid #000;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 98px;
+  border-top: 1px solid #cccccc;
+
+  &__play-button {
+    width: 52px;
+    height: 52px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    cursor: pointer;
+  }
 }
