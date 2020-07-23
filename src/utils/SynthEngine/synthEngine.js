@@ -4,11 +4,11 @@ import * as Pattern from '../../constants/pattern';
 import Raga from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 
-export class SynthEngine {
-  play() {
-    console.log('fooClass');
-  }
-}
+// export class SynthEngine {
+//   play() {
+//     console.log('fooClass');
+//   }
+// }
 
 const getSynthEngine = (function() {
   const midiNums = MIDI.noteNums;
@@ -289,12 +289,12 @@ const getSynthEngine = (function() {
       // drone();
       context.resume();
       nextNoteTime = context.currentTime;
-      timerWorker.postMessage("start");
-      document.getElementById("play-icon").innerHTML = "pause";
-    } else {
+      timerWorker.postMessage('start');
+    }
+
+    if (!isPlaying) {
       context.suspend();
-      timerWorker.postMessage("stop");
-      document.getElementById("play-icon").innerHTML = "play_arrow";
+      timerWorker.postMessage('stop');
     }
   };
 
@@ -309,15 +309,16 @@ const getSynthEngine = (function() {
       }
     };
 
-    timerWorker.postMessage({'interval':lookahead});
+    timerWorker.postMessage({ 'interval': lookahead });
   };
 
   window.addEventListener('load', init );
 
   return {
-    play: function() {
-      play();
-    }
+    status: {
+      isPlaying: () => isPlaying,
+    },
+    play: () => play(),
   }
 }());
 

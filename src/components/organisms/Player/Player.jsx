@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import Controls from './molecules/controls';
+import ControlsCenter from './molecules/ControlsCenter';
 
 const Player = () => {
   return (
     <div className="player">
-      <Controls />
+      <div className="player__bottom-row">
+        <div className="player__start">1</div>
+        <div className="player__center">
+          <ControlsCenter />
+        </div>
+        <div className="player__end">3</div>
+      </div>
     </div>
   )
 }

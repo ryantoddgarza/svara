@@ -3,12 +3,37 @@
   right: 0;
   bottom: 0;
   left: 0;
-  height: 98px;
   border-top: 1px solid #cccccc;
+
+  &__bottom-row {
+    display: flex;
+    height: 96px;
+  }
+
+  &__start,
+  &__center,
+  &__end, {
+    flex: 1 1;
+    display: flex;
+    align-items: center;
+  }
+
+  &__start {
+    justify-content: flex-start;
+  }
+
+  &__center {
+    justify-content: center;
+  }
+
+  &__end {
+    justify-content: flex-end;
+  }
 
   &__play-button {
     width: 52px;
     height: 52px;
+    background: transparent;
     border: 1px solid #000;
     border-radius: 50%;
     cursor: pointer;
