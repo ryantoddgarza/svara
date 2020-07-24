@@ -37,3 +37,15 @@ export const decrement = (num, interval = 1) => {
 export const stepThrough = (obj, callback, interval) => {
   obj.pos = callback(obj.pos, interval);
 }
+
+// fibonacci
+export const fibonacci = (n) => {
+  const fibArr = [0, 1];
+
+  for (let i = 2; i < n + 1; i++) {
+    fibArr.push(fibArr[i - 2] + fibArr[i - 1]);
+  }
+
+ return fibArr[n]
+}
+
