@@ -1,0 +1,71 @@
+// read more at https://css-tricks.com/sliding-nightmare-understanding-range-input/
+
+$track-width: 12.5em;
+$track-height: .25em;
+$thumb-diameter: 0.8em;
+$track-color: #ccc;
+$thumb-color: black;
+
+@mixin track {
+  box-sizing: border-box;
+  width: $track-width;
+  height: $track-height;
+  background: $track-color;
+  border: none;
+  cursor: pointer;
+}
+
+@mixin thumb {
+  box-sizing: border-box;
+  width: $thumb-diameter;
+  height: $thumb-diameter;
+  background: $thumb-color;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+[type='range'] {
+  width: $track-width;
+  height: $thumb-diameter;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-size: 1em;
+  line-height: 1;
+  font-family: arial, sans-serif;
+
+  &, &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    @include track;
+  }
+
+  &::-moz-range-track {
+    @include track;
+  }
+
+  &::-ms-track {
+    @include track;
+  }
+
+  &::-webkit-slider-thumb {
+    margin-top: ($track-height - $thumb-diameter) * 0.5;
+    @include thumb;
+  }
+
+  &::-moz-range-thumb {
+    @include thumb;
+  }
+
+  &::-ms-thumb {
+    margin-top: 0;
+    @include thumb;
+  }
+
+  &::-ms-tooltip {
+    display: none;
+  }
+}

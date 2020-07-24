@@ -1,0 +1,8 @@
+// Evenly space child elements horizontally
+// @param {Unit} $gutter - Margin between `*`
+
+@mixin evenly-space-children($gutter) {
+  & > *:not(:last-child) {
+    margin-right: $gutter;
+  }
+}
