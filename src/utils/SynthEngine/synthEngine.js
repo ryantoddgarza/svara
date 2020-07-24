@@ -1,14 +1,9 @@
 import context from '../WebAudio/audioContext';
+import { random } from '../../constants/random-engine';
 import * as MIDI from '../../constants/midi';
 import * as Pattern from '../../constants/pattern';
 import Raga from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
-
-// export class SynthEngine {
-//   play() {
-//     console.log('fooClass');
-//   }
-// }
 
 const getSynthEngine = (function() {
   const midiNums = MIDI.noteNums;
@@ -41,7 +36,7 @@ const getSynthEngine = (function() {
   let melody = {
     arr: [],
     pos: 0,
-    improvise: true,
+    improvise: undefined,
   };
 
   let stepThrough = {
@@ -78,11 +73,6 @@ const getSynthEngine = (function() {
 
   getRaga(ragas['miyan ki todi']);
 
-  // only for testing
-  setTimeout(() => {
-    getRaga(ragas['major'])
-  }, 10000);
-
   let fooMotif = [1, 4, 3, 4, 5];
 
   const improvise = (scaleSteps) => {
@@ -104,7 +94,7 @@ const getSynthEngine = (function() {
     stepThrough.interval = 1;
   };
 
-  const improvisationState = (bool) => {
+  const setImprovisationState = (bool) => {
     melody.improvise = bool;
 
     if (melody.improvise === true) {
@@ -116,20 +106,20 @@ const getSynthEngine = (function() {
     }
   }
 
-  improvisationState(false)
+  setImprovisationState(false)
 
   const currentNote = () => {
     let note;
 
     // if (melody.improvise) {
-    //   const bool = Random.boolean();
+    //   const bool = random.bool();
 
     //   switch (bool) {
     //     case true:
     //       note = activeScale[melody.pos]
     //       nextNote(melody, Pattern.increment);
     //     case false:
-    //       note = activeScale[Random.integer(0, melody.arr.length)];
+    //       note = activeScale[random.integer(0, melody.arr.length)];
     //       break;
     //   }
     // }
@@ -177,12 +167,12 @@ const getSynthEngine = (function() {
   };
 
   // const subdivideSlow = () => {
-  //   const chance = Random.boolean();
+  //   const chance = random.bool();
 
   //   if (!chance) {
-  //     subdivision = Random.fraction(4);
+  //     subdivision = random.fraction(4);
   //   } else {
-  //     subdivision = Random.integerInclusive(1, 3);
+  //     subdivision = random.integer(1, 3);
   //   }
 
   //   return subdivision;
@@ -194,10 +184,10 @@ const getSynthEngine = (function() {
   //       subdivideSlow();
   //       break;
   //     case subdivision < 4:
-  //       subdivision = Random.integer(1, 4)
+  //       subdivision = random.integer(1, 4)
   //       break;
   //     case subdivision >= 4:
-  //       subdivision = Random.integer(2, 8)
+  //       subdivision = random.integer(2, 8)
   //       break;
   //   }
 
@@ -209,13 +199,12 @@ const getSynthEngine = (function() {
     notesInQueue.push({ note: beatNumber, time: time });
 
     incrementMeasure(beatNumber);
-    // updateGUI();
 
     // if (subdivision % 5 || 7 || 9 === 0) {
     //   if (beatNumber === 0) {
-        // subdivision = subdivide();
+    //     subdivision = subdivide();
     //   }
-    // } else if (Random.integer(1, 100) % 3 === 0) {
+    // } else if (random.integer(1, 100) % 3 === 0) {
     //   subdivision = subdivide();
     // }
 
