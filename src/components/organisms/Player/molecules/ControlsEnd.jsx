@@ -7,7 +7,7 @@ const ControlsEnd = () => {
       <i className="material-icons">volume_up</i>
       <input
         id="volume"
-        className="player__volume-slider"
+        className="playback-controls__volume"
         type="range"
         min="0"
         max="1"

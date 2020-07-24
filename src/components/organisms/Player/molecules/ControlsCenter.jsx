@@ -30,7 +30,7 @@ const Controls = (props) => {
   return (
     <Fragment>
       <button className="player__play-button" onClick={ handlePlayClick }>
-        <i id="play-icon" className="material-icons" aria-labelledby="title"></i>
+        <i id="play-icon" className="material-icons md-48" aria-labelledby="title"></i>
       </button>
     </Fragment>
   )

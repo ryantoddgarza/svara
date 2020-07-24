@@ -29,12 +29,14 @@ const getSynthEngine = (function() {
   let subdivision = 1;
   let currentSubdivision = 0;
 
+  let ragaName = 'miyan ki todi'; // currently non dynamic
   let tonic = 62;
   let ascendingFreq = [];
   let ascendingNum = [];
   let descendingFreq = [];
   let descendingNum = [];
   let activeScale = [];
+
 
   let melody = {
     arr: [],
@@ -66,14 +68,20 @@ const getSynthEngine = (function() {
 
   const getRaga = (ragaName) => {
     const raga = new Raga(midiNums, ragaName, tonic)
+    ragaName = ragaName;
     ascendingFreq = raga.aarohFreq;
     ascendingNum = raga.aarohNum;
     descendingFreq = raga.avrohFreq;
     descendingNum = raga.avrohNum;
+    activeScale = descendingFreq; // move to depend on prev note played
   };
 
-  getRaga(ragas['major']);
-  activeScale = descendingFreq;
+  getRaga(ragas['miyan ki todi']);
+
+  // only for testing
+  setTimeout(() => {
+    getRaga(ragas['major'])
+  }, 10000);
 
   let fooMotif = [1, 4, 3, 4, 5];
 
@@ -216,8 +224,7 @@ const getSynthEngine = (function() {
     vcaOut.connect(masterGainNode);
     vcaOut.gain.value = 0.1;
 
-
-    // envelope vca
+    // note envelope vca
     const vca1 = context.createGain();
     vca1.connect(vcaOut);
     vca1.gain.value = 0;
@@ -333,6 +340,10 @@ const getSynthEngine = (function() {
     },
     play: () => play(),
     setMasterVolume: (e) => handleMasterVolumeChange(e),
+    getMetadata: () => ({
+      ragaName: ragaName,
+      prahar: undefined,
+    })
   }
 }());
 
