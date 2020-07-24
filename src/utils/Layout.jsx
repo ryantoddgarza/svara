@@ -3,9 +3,9 @@ import Player from '../components/organisms/Player';
 
 const Layout = (props) => {
   return (
-    <div id="wrap">
+    <div className="wrap">
       <nav>navbar</nav>
-      <main id="main">
+      <main>
         { props.children }
       </main>
       <Player />
