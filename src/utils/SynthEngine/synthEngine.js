@@ -4,11 +4,11 @@ import * as Pattern from '../../constants/pattern';
 import Raga from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 
-export class SynthEngine {
-  play() {
-    console.log('fooClass');
-  }
-}
+// export class SynthEngine {
+//   play() {
+//     console.log('fooClass');
+//   }
+// }
 
 const getSynthEngine = (function() {
   const midiNums = MIDI.noteNums;
@@ -21,7 +21,7 @@ const getSynthEngine = (function() {
   let notesInQueue = [];
 
   let isPlaying = false;
-  let masterVolume = 0.1;
+  let masterVolume = 1;
 
   let tempo = 120.0;
   let meter = 4;
@@ -29,12 +29,14 @@ const getSynthEngine = (function() {
   let subdivision = 1;
   let currentSubdivision = 0;
 
+  let ragaName = 'miyan ki todi'; // currently non dynamic
   let tonic = 62;
   let ascendingFreq = [];
   let ascendingNum = [];
   let descendingFreq = [];
   let descendingNum = [];
   let activeScale = [];
+
 
   let melody = {
     arr: [],
@@ -51,6 +53,12 @@ const getSynthEngine = (function() {
   masterGainNode.connect(context.destination);
   masterGainNode.gain.value = masterVolume;
 
+
+  const handleMasterVolumeChange = (e) => {
+    masterVolume = e.target.value;
+    masterGainNode.gain.value = e.target.value;
+  };
+
   // converts scale steps to array indexes
   const setMelodyArr = (scaleSteps) => {
     melody.arr = scaleSteps.map((step, i) => {
@@ -60,14 +68,20 @@ const getSynthEngine = (function() {
 
   const getRaga = (ragaName) => {
     const raga = new Raga(midiNums, ragaName, tonic)
+    ragaName = ragaName;
     ascendingFreq = raga.aarohFreq;
     ascendingNum = raga.aarohNum;
     descendingFreq = raga.avrohFreq;
     descendingNum = raga.avrohNum;
+    activeScale = descendingFreq; // move to depend on prev note played
   };
 
-  getRaga(ragas['major']);
-  activeScale = descendingFreq;
+  getRaga(ragas['miyan ki todi']);
+
+  // only for testing
+  setTimeout(() => {
+    getRaga(ragas['major'])
+  }, 10000);
 
   let fooMotif = [1, 4, 3, 4, 5];
 
@@ -206,9 +220,14 @@ const getSynthEngine = (function() {
     // }
 
     // patch vca
+    const vcaOut = context.createGain();
+    vcaOut.connect(masterGainNode);
+    vcaOut.gain.value = 0.1;
+
+    // note envelope vca
     const vca1 = context.createGain();
-    vca1.connect(masterGainNode);
-    vca1.gain.value = 1;
+    vca1.connect(vcaOut);
+    vca1.gain.value = 0;
 
     // carrier oscillator
     const osc1 = context.createOscillator();
@@ -289,12 +308,12 @@ const getSynthEngine = (function() {
       // drone();
       context.resume();
       nextNoteTime = context.currentTime;
-      timerWorker.postMessage("start");
-      document.getElementById("play-icon").innerHTML = "pause";
-    } else {
+      timerWorker.postMessage('start');
+    }
+
+    if (!isPlaying) {
       context.suspend();
-      timerWorker.postMessage("stop");
-      document.getElementById("play-icon").innerHTML = "play";
+      timerWorker.postMessage('stop');
     }
   };
 
@@ -309,15 +328,22 @@ const getSynthEngine = (function() {
       }
     };
 
-    timerWorker.postMessage({'interval':lookahead});
+    timerWorker.postMessage({ 'interval': lookahead });
   };
 
   window.addEventListener('load', init );
 
   return {
-    play: function() {
-      play();
-    }
+    status: {
+      isPlaying: () => isPlaying,
+      masterVolume: () => masterVolume,
+    },
+    play: () => play(),
+    setMasterVolume: (e) => handleMasterVolumeChange(e),
+    getMetadata: () => ({
+      ragaName: ragaName,
+      prahar: undefined,
+    })
   }
 }());
 
