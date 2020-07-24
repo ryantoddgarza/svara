@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ControlsCenter from './molecules/ControlsCenter';
+import ControlsEnd from './molecules/ControlsEnd';
 
 const Player = () => {
   return (
@@ -9,7 +10,9 @@ const Player = () => {
         <div className="player__center">
           <ControlsCenter />
         </div>
-        <div className="player__end">3</div>
+        <div className="player__end">
+          <ControlsEnd />
+        </div>
       </div>
     </div>
   )

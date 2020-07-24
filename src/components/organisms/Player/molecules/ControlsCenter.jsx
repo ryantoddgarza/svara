@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import getSynthEngine from '../../../../utils/SynthEngine/synthEngine';
 
 const Controls = (props) => {
@@ -28,11 +28,11 @@ const Controls = (props) => {
   });
 
   return (
-    <div className="player__controls">
+    <Fragment>
       <button className="player__play-button" onClick={ handlePlayClick }>
-        <i id="play-icon" className="material-icons"></i>
+        <i id="play-icon" className="material-icons" aria-labelledby="title"></i>
       </button>
-    </div>
+    </Fragment>
   )
 };
 

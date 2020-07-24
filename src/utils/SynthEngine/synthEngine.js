@@ -21,7 +21,7 @@ const getSynthEngine = (function() {
   let notesInQueue = [];
 
   let isPlaying = false;
-  let masterVolume = 0.1;
+  let masterVolume = 1;
 
   let tempo = 120.0;
   let meter = 4;
@@ -50,6 +50,12 @@ const getSynthEngine = (function() {
   const masterGainNode = context.createGain();
   masterGainNode.connect(context.destination);
   masterGainNode.gain.value = masterVolume;
+
+
+  const handleMasterVolumeChange = (e) => {
+    masterVolume = e.target.value;
+    masterGainNode.gain.value = e.target.value;
+  };
 
   // converts scale steps to array indexes
   const setMelodyArr = (scaleSteps) => {
@@ -206,9 +212,15 @@ const getSynthEngine = (function() {
     // }
 
     // patch vca
+    const vcaOut = context.createGain();
+    vcaOut.connect(masterGainNode);
+    vcaOut.gain.value = 0.1;
+
+
+    // envelope vca
     const vca1 = context.createGain();
-    vca1.connect(masterGainNode);
-    vca1.gain.value = 1;
+    vca1.connect(vcaOut);
+    vca1.gain.value = 0;
 
     // carrier oscillator
     const osc1 = context.createOscillator();
@@ -317,8 +329,10 @@ const getSynthEngine = (function() {
   return {
     status: {
       isPlaying: () => isPlaying,
+      masterVolume: () => masterVolume,
     },
     play: () => play(),
+    setMasterVolume: (e) => handleMasterVolumeChange(e),
   }
 }());
 
