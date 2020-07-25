@@ -6,7 +6,7 @@ import * as Pattern from '../../constants/pattern';
 import Raga from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 
-export const synthEngine = (function() {
+export const bloom = (function() {
   const midiNums = MIDI.noteNums;
 
   let timerWorker = null;
@@ -15,8 +15,6 @@ export const synthEngine = (function() {
   let scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
-
-  let isPlaying = false;
 
   let tempo = 120.0;
   let meter = 4;
@@ -280,16 +278,14 @@ export const synthEngine = (function() {
   // };
 
   const play = () => {
-    isPlaying = !isPlaying;
-
-    if (isPlaying) {
+    if (synthEngine.isPlaying) {
       // drone();
       context.resume();
       nextNoteTime = context.currentTime;
       timerWorker.postMessage('start');
     }
 
-    if (!isPlaying) {
+    if (!synthEngine.isPlaying) {
       context.suspend();
       timerWorker.postMessage('stop');
     }
@@ -312,9 +308,6 @@ export const synthEngine = (function() {
   window.addEventListener('load', init );
 
   return {
-    status: {
-      isPlaying: () => isPlaying,
-    },
     play: () => play(),
     getMetadata: () => ({
       ragaName: ragaName,
@@ -323,3 +316,11 @@ export const synthEngine = (function() {
   }
 }());
 
+export const synthEngine = {
+  isPlaying: false,
+
+  play: function() {
+    this.isPlaying = !this.isPlaying;
+    bloom.play()
+  },
+}

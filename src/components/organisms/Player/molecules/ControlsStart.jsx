@@ -5,7 +5,7 @@ const ControlsStart = () => {
   const [ragaName, setRagaName] = useState('')
 
   useEffect(() => {
-    const ragaName = synthEngine.getMetadata().ragaName;
+    const ragaName = 'miyan ki todi'; // TODO: make dynamic
 
     setRagaName(ragaName);
   });
