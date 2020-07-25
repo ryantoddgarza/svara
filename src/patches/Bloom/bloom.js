@@ -1,6 +1,5 @@
-import context from '../WebAudio/audioContext';
-import { synthEngine } from './synthEngine';
-import { systemOutput } from '../WebAudio/audioContext';
+import context, { systemOutput } from '../../utils/WebAudio/audioContext';
+import { synthEngine } from '../../utils/SynthEngine';
 import { random } from '../../constants/random-engine';
 import * as MIDI from '../../constants/midi';
 import * as Pattern from '../../constants/pattern';
@@ -94,7 +93,6 @@ export const bloom = (function() {
   setImprovisationState(false) // add to random gen
 
   const currentNote = () => {
-    console.log(melody.improvise)
     let note;
 
     if (melody.improvise) {
