@@ -1,4 +1,5 @@
 import context from '../WebAudio/audioContext';
+import { systemOutput } from '../WebAudio/audioContext';
 import { random } from '../../constants/random-engine';
 import * as MIDI from '../../constants/midi';
 import * as Pattern from '../../constants/pattern';
@@ -16,7 +17,6 @@ const getSynthEngine = (function() {
   let notesInQueue = [];
 
   let isPlaying = false;
-  let masterVolume = 1;
 
   let tempo = 120.0;
   let meter = 4;
@@ -32,7 +32,6 @@ const getSynthEngine = (function() {
   let descendingNum = [];
   let activeScale = [];
 
-
   let melody = {
     arr: [],
     pos: 0,
@@ -42,16 +41,6 @@ const getSynthEngine = (function() {
   let stepThrough = {
     direction: Pattern.increment,
     interval: undefined,
-  };
-
-  const masterGainNode = context.createGain();
-  masterGainNode.connect(context.destination);
-  masterGainNode.gain.value = masterVolume;
-
-
-  const handleMasterVolumeChange = (e) => {
-    masterVolume = e.target.value;
-    masterGainNode.gain.value = e.target.value;
   };
 
   // converts scale steps to array indexes
@@ -198,7 +187,7 @@ const getSynthEngine = (function() {
     // push the note on the queue, even if we're not playing.
     notesInQueue.push({ note: beatNumber, time: time });
 
-    incrementMeasure(beatNumber);
+    // incrementMeasure(beatNumber);
 
     // if (subdivision % 5 || 7 || 9 === 0) {
     //   if (beatNumber === 0) {
@@ -210,7 +199,7 @@ const getSynthEngine = (function() {
 
     // patch vca
     const vcaOut = context.createGain();
-    vcaOut.connect(masterGainNode);
+    vcaOut.connect(systemOutput.gainNode);
     vcaOut.gain.value = 0.1;
 
     // note envelope vca
@@ -253,7 +242,7 @@ const getSynthEngine = (function() {
   //   // module vca
   //   const gain1 = context.createGain();
   //   gain1.gain.value = 0.8;
-  //   gain1.connect(masterGainNode);
+  //   gain1.connect(systemOutput.gainNode);
 
   //   // amplitude mod
   //   const amVCA = context.createGain();
