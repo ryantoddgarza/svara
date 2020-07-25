@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const SynthEngineContext = React.createContext(null);
 
 export const withSynthEngine = (Component) => {
   return function synthEngineContextProvider(props) {
-    const [isPlaying, setIsPlaying] = useState(false);
-
-    const play = () => {
-      setIsPlaying(!isPlaying)
-    };
+    const fooData = {
+      bar: 'bar',
+      baz: 'baz',
+    },
 
     return (
-      <SynthEngineContext.Provider value={ { isPlaying, setIsPlaying, play } }>
+      <SynthEngineContext.Provider value={ { fooData } }>
         <Component {...props} />
       </SynthEngineContext.Provider>
     );

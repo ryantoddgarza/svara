@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import getSynthEngine from '../../../../utils/SynthEngine/synthEngine';
+import { synthEngine } from '../../../../utils/SynthEngine';
 
 const Controls = (props) => {
-  const [isPlaying, setIsPlaying] = useState(getSynthEngine.status.isPlaying());
+  const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
 
   const setPlayIcon = () => {
     const playIcon = document.getElementById('play-icon');
@@ -19,8 +19,8 @@ const Controls = (props) => {
   };
 
   const handlePlayClick = () => {
-    getSynthEngine.play();
-    setIsPlaying(getSynthEngine.status.isPlaying());
+    synthEngine.play();
+    setIsPlaying(synthEngine.isPlaying);
   };
 
   useEffect(() => {

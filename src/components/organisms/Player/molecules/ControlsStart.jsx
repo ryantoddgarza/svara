@@ -1,11 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import getSynthEngine from '../../../../utils/SynthEngine/synthEngine';
+import { nucleus } from '../../../../patches/nucleus';
 
 const ControlsStart = () => {
   const [ragaName, setRagaName] = useState('')
 
   useEffect(() => {
-    const ragaName = getSynthEngine.getMetadata().ragaName;
+    const ragaName = nucleus.ragaName; // TODO: make dynamic
 
     setRagaName(ragaName);
   });

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import getSynthEngine from '../../../../utils/SynthEngine/synthEngine';
+import { systemOutput } from '../../../../utils/WebAudio/audioContext';
 
 const ControlsEnd = () => {
   return (
@@ -9,10 +9,11 @@ const ControlsEnd = () => {
         id="volume"
         className="playback-controls__volume"
         type="range"
+        defaultValue={ systemOutput.initVolume }
         min="0"
         max="1"
         step="0.01"
-        onChange={ (e) => getSynthEngine.setMasterVolume(e) }
+        onChange={ (e) => systemOutput.setGain(e) }
         aria-labelledby="id"
       />
     </Fragment>
