@@ -1,3 +1,4 @@
-import { withSynthEngine, useSynthEngine } from './context';
+import { synthEngine } from './synthEngine';
+// import { withSynthEngine, useSynthEngine } from './context';
 
-export { withSynthEngine, useSynthEngine };
+export { synthEngine };

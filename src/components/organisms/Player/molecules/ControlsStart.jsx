@@ -1,11 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import getSynthEngine from '../../../../utils/SynthEngine/synthEngine';
+import { synthEngine } from '../../../../utils/SynthEngine';
 
 const ControlsStart = () => {
   const [ragaName, setRagaName] = useState('')
 
   useEffect(() => {
-    const ragaName = getSynthEngine.getMetadata().ragaName;
+    const ragaName = synthEngine.getMetadata().ragaName;
 
     setRagaName(ragaName);
   });

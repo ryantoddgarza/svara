@@ -6,7 +6,7 @@ import * as Pattern from '../../constants/pattern';
 import Raga from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 
-const getSynthEngine = (function() {
+export const synthEngine = (function() {
   const midiNums = MIDI.noteNums;
 
   let timerWorker = null;
@@ -314,10 +314,8 @@ const getSynthEngine = (function() {
   return {
     status: {
       isPlaying: () => isPlaying,
-      masterVolume: () => masterVolume,
     },
     play: () => play(),
-    setMasterVolume: (e) => handleMasterVolumeChange(e),
     getMetadata: () => ({
       ragaName: ragaName,
       prahar: undefined,
@@ -325,4 +323,3 @@ const getSynthEngine = (function() {
   }
 }());
 
-export default getSynthEngine;

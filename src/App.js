@@ -3,16 +3,16 @@ import React, { Component } from 'react';
 // import * as routes from './constants/routes';
 import include from './utils/include';
 import Layout from './utils/Layout';
-import getSynthEngine from './utils/SynthEngine/synthEngine';
+import { synthEngine } from './utils/SynthEngine';
 
 class App extends Component {
   componentDidMount() {
     include.sheet('https://fonts.googleapis.com/icon?family=Material+Icons');
     include.script('/a11y.js');
+    synthEngine;
   }
 
   render() {
-    getSynthEngine;
     return (
       <div className="app">
         <Layout>
