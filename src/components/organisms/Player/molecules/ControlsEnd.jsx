@@ -9,6 +9,7 @@ const ControlsEnd = () => {
         id="volume"
         className="playback-controls__volume"
         type="range"
+        defaultValue={ systemOutput.initVolume }
         min="0"
         max="1"
         step="0.01"
