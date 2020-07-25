@@ -9,7 +9,7 @@ class App extends Component {
   componentDidMount() {
     include.sheet('https://fonts.googleapis.com/icon?family=Material+Icons');
     include.script('/a11y.js');
-    synthEngine;
+    synthEngine.init();
   }
 
   render() {

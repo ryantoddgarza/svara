@@ -9,9 +9,6 @@ import ragas from '../../constants/ragas.json';
 export const bloom = (function() {
   const midiNums = MIDI.noteNums;
 
-  let timerWorker = null;
-  let lookahead = 25.0;
-  let startTime;
   let scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
@@ -282,45 +279,76 @@ export const bloom = (function() {
       // drone();
       context.resume();
       nextNoteTime = context.currentTime;
-      timerWorker.postMessage('start');
+      synthEngine.timerWorker.postMessage('start');
     }
 
     if (!synthEngine.isPlaying) {
       context.suspend();
-      timerWorker.postMessage('stop');
+      synthEngine.timerWorker.postMessage('stop');
     }
   };
 
-  const init = () => {
-    timerWorker = new Worker('/metronome.worker.js');
+  // const init = () => {
+  //   timerWorker = new Worker('/metronome.worker.js');
 
-    timerWorker.onmessage = (e) => {
-      if (e.data == 'tick') {
-        scheduler();
-      } else {
-        console.log('message: ' + e.data);
-      }
-    };
+  //   timerWorker.onmessage = (e) => {
+  //     if (e.data == 'tick') {
+  //       scheduler();
+  //     } else {
+  //       console.log('message: ' + e.data);
+  //     }
+  //   };
 
-    timerWorker.postMessage({ 'interval': lookahead });
-  };
+  //   timerWorker.postMessage({ 'interval': lookahead });
+  // };
 
-  window.addEventListener('load', init );
+  // window.addEventListener('load', init );
 
   return {
-    play: () => play(),
-    getMetadata: () => ({
-      ragaName: ragaName,
-      prahar: undefined,
-    })
+    play: function() {
+      play()
+    },
+
+    scheduler: function() {
+      scheduler()
+    },
+
+    getMetadata: function() {
+      return ({
+        ragaName: ragaName,
+        prahar: undefined,
+      })
+    },
   }
 }());
 
 export const synthEngine = {
   isPlaying: false,
 
+  timerWorker: null,
+
+  lookahead: 25.0,
+
+  scheduler: function() {
+    bloom.scheduler();
+  },
+
   play: function() {
     this.isPlaying = !this.isPlaying;
-    bloom.play()
+    bloom.play();
   },
-}
+
+  init: function() {
+    this.timerWorker = new Worker('/metronome.worker.js');
+
+    this.timerWorker.onmessage = (e) => {
+      if (e.data == 'tick') {
+        this.scheduler();
+      } else {
+        console.log('message: ' + e.data);
+      }
+    };
+
+    this.timerWorker.postMessage({ 'interval': this.lookahead });
+  },
+};
