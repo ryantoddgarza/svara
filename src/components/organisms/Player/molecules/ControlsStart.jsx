@@ -1,11 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { synthEngine } from '../../../../utils/SynthEngine';
+import { nucleus } from '../../../../patches/nucleus';
 
 const ControlsStart = () => {
   const [ragaName, setRagaName] = useState('')
 
   useEffect(() => {
-    const ragaName = 'miyan ki todi'; // TODO: make dynamic
+    const ragaName = nucleus.ragaName; // TODO: make dynamic
 
     setRagaName(ragaName);
   });

@@ -9,6 +9,6 @@
     "vadi": 9,
     "samvadi": 5,
     "prahar": 2,
-    "pakad": [2, 5, 0, 2, 1]
+    "pakad": [2, 5, null, 2, 1]
   }
 }

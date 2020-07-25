@@ -2,7 +2,7 @@
 // @param {object} raga - Rules
 // @param {number} root - MIDI note value
 
-export default function Raga(midiNums, raga, root) {
+export function RagaScales(midiNums, raga, root) {
   this.aarohNum = raga.aaroh;
   this.avrohNum = raga.avroh;
 

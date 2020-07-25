@@ -1,31 +1,36 @@
 import context, { systemOutput } from '../../utils/WebAudio/audioContext';
 import { synthEngine } from '../../utils/SynthEngine';
+import { nucleus } from '../nucleus';
 import { random } from '../../constants/random-engine';
 import * as MIDI from '../../constants/midi';
 import * as Pattern from '../../constants/pattern';
-import Raga from '../../constants/raga';
+import { RagaScales } from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 
 export const bloom = (function() {
+  const Nucleus = new Proxy(nucleus, {
+    set: function(target, key, value) {
+      targe[key] = value;
+    }
+  });
+
   const midiNums = MIDI.noteNums;
 
   let scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
 
-  let tempo = 120.0; // add to random gen. limit range
-  let meter = 4; // add to random gen
   let measure = 0;
-  let subdivision = 1; // add to random ge. limit range
+  let subdivision;
   let currentSubdivision = 0;
 
-  let ragaName = 'miyan ki todi'; // currently non dynamic
-  let tonic = 62; // add to random gen. limit to one octave
+  const root = Nucleus.tonicToFreq() * 0.5;
   let ascendingFreq = [];
   let ascendingNum = [];
   let descendingFreq = [];
   let descendingNum = [];
   let activeScale = [];
+  let motif = [1, 4, 3, 4, 5]; // add to init random gen
 
   let melody = {
     arr: [],
@@ -45,31 +50,21 @@ export const bloom = (function() {
     });
   };
 
-  const getRaga = (ragaName) => {
-    const raga = new Raga(midiNums, ragaName, tonic)
-    ragaName = ragaName;
-    ascendingFreq = raga.aarohFreq;
-    ascendingNum = raga.aarohNum;
-    descendingFreq = raga.avrohFreq;
-    descendingNum = raga.avrohNum;
-    activeScale = descendingFreq; // move to depend on prev note played
-  };
-
-  getRaga(ragas['miyan ki todi']); // gen based on prahar
-
-  let fooMotif = [1, 4, 3, 4, 5]; // add to random gen
-
   const improvise = (scaleSteps) => {
+    melody.improvise = true;
+
     if (scaleSteps) {
       setMelodyArr(scaleSteps);
     }
 
-    stepThrough.direction = Pattern.increment; // add to random gen
-    stepThrough.interval = 4; // add to random gen
+    stepThrough.direction = Pattern.increment; // add to init random gen
+    stepThrough.interval = 4; // add to init random gen
   };
 
 
   const playMotif = (scaleSteps) => {
+    melody.improvise = false;
+
     if (scaleSteps) {
       setMelodyArr(scaleSteps);
     }
@@ -78,19 +73,19 @@ export const bloom = (function() {
     stepThrough.interval = 1;
   };
 
+  const exitMotif = () => {
+    improvise(descendingNum);
+  };
+
   const setImprovisationState = (bool) => {
     if (bool === true) {
-      melody.improvise = true;
       improvise(descendingNum);
     }
 
     if (bool === false) {
-      melody.improvise = false;
-      playMotif(fooMotif);
+      playMotif(motif);
     }
-  }
-
-  setImprovisationState(false) // add to random gen
+  };
 
   const currentNote = () => {
     let note;
@@ -113,15 +108,13 @@ export const bloom = (function() {
       nextNote(melody);
 
       if (melody.pos === melody.arr.length - 1) {
-        setImprovisationState(true);
-        improvise(descendingNum);
+        exitMotif();
       }
     }
 
     return note;
   };
 
-  // sets up the next note in the sequence
   const nextNote = (obj) => {
     const setPos = Pattern.stepThrough(obj, stepThrough.direction, stepThrough.interval);
     const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
@@ -136,50 +129,49 @@ export const bloom = (function() {
   }
 
   const maxBeats = () => {
-    const beats = (meter * subdivision);
+    const beats = (Nucleus.meter * subdivision);
     return beats;
   };
 
   const nextSubdivision = () => {
-    const secondsPerBeat = 60.0 / tempo;
-    nextNoteTime += (1 / subdivision) * secondsPerBeat; // add beat length to last beat time
+    const secondsPerBeat = 60.0 / Nucleus.tempo;
+    nextNoteTime += (1 / subdivision) * secondsPerBeat;
     currentSubdivision++;
 
-    // wrap to zero
     if (currentSubdivision == maxBeats()) {
       currentSubdivision = 0;
     }
   };
 
-  // const subdivideSlow = () => {
-  //   const chance = random.bool();
+  const subdivideSlow = () => {
+    const chance = random.bool();
 
-  //   if (chance) {
-  //     subdivision = random.integer(1, 3);
-  //   }
+    if (chance) {
+      subdivision = random.integer(1, 3);
+    }
 
-  //   if (!chance) {
-  //     subdivision = random.fraction(4);
-  //   }
+    if (!chance) {
+      subdivision = random.fraction(4);
+    }
 
-  //   return subdivision;
-  // };
+    return subdivision;
+  };
 
-  // const subdivide = () => {
-  //   switch (true) {
-  //     case subdivision <= 1:
-  //       subdivideSlow();
-  //       break;
-  //     case subdivision < 4:
-  //       subdivision = random.integer(1, 4)
-  //       break;
-  //     case subdivision >= 4:
-  //       subdivision = random.integer(2, 8)
-  //       break;
-  //   }
+  const subdivide = () => {
+    switch (true) {
+      case subdivision <= 1:
+        subdivideSlow();
+        break;
+      case subdivision < 4:
+        subdivision = random.integer(1, 4)
+        break;
+      case subdivision >= 4:
+        subdivision = random.integer(2, 8)
+        break;
+    }
 
-  //   return subdivision;
-  // };
+    return subdivision;
+  };
 
   const scheduleNote = (beatNumber, time) => {
     // push the note on the queue, even if we're not playing.
@@ -189,13 +181,13 @@ export const bloom = (function() {
     nextSubdivision();
     incrementMeasure(beatNumber);
 
-    // if (subdivision % 5 || 7 || 9 === 0) {
-    //   if (beatNumber === 0) {
-    //     subdivision = subdivide();
-    //   }
-    // } else if (random.integer(1, 100) % 3 === 0) {
-    //   subdivision = subdivide();
-    // }
+    if (subdivision % 5 || 7 || 9 === 0) {
+      if (beatNumber === 0) {
+        subdivision = subdivide();
+      }
+    } else if (random.integer(1, 100) % 3 === 0) {
+      subdivision = subdivide();
+    }
   };
 
   const scheduler = () => {
@@ -204,10 +196,10 @@ export const bloom = (function() {
     }
   };
 
-  const voiceMelody = (time) => { // get
+  const voiceMelody = (time) => {
     // patch vca
     const vcaOut = context.createGain();
-    vcaOut.connect(systemOutput.gainNode); // get
+    vcaOut.connect(systemOutput.gainNode);
     vcaOut.gain.value = 0.1;
 
     // note envelope vca
@@ -217,11 +209,11 @@ export const bloom = (function() {
 
     // carrier oscillator
     const osc1 = context.createOscillator();
-    osc1.frequency.value = currentNote(); // get
+    osc1.frequency.value = currentNote();
     osc1.connect(vca1);
 
     let attack = 0.1;
-    let decay = (60 / tempo) / subdivision;
+    let decay = (60 / Nucleus.tempo) / subdivision;
 
     let noteLength = attack + decay;
 
@@ -234,12 +226,10 @@ export const bloom = (function() {
   }
 
   const voiceDrone = () => {
-    const root = activeScale[0] * 0.5; // get
-
     // module vca
     const gain1 = context.createGain();
     gain1.gain.value = 0.05;
-    gain1.connect(systemOutput.gainNode); // get
+    gain1.connect(systemOutput.gainNode);
 
     // amplitude mod
     const amVCA = context.createGain();
@@ -276,6 +266,19 @@ export const bloom = (function() {
     osc3.start();
   };
 
+  const setMelodicVariables = (ragaObj) => {
+    const ragaScale = new RagaScales(midiNums, ragaObj, Nucleus.tonic)
+    ascendingFreq = ragaScale.aarohFreq;
+    ascendingNum = ragaScale.aarohNum;
+    descendingFreq = ragaScale.avrohFreq;
+    descendingNum = ragaScale.avrohNum;
+    activeScale = descendingFreq; // move to depend on prev note played
+  };
+
+  const setRhythmicVariables = () => {
+    subdivision = 1; // randomly gen. limit range
+  };
+
   const play = () => {
     if (synthEngine.isPlaying) {
       voiceDrone();
@@ -290,6 +293,15 @@ export const bloom = (function() {
     }
   };
 
+  const init = () => {
+    console.log('bloom init')
+    setMelodicVariables(ragas[Nucleus.ragaName]);
+    setRhythmicVariables();
+    setImprovisationState(false) // randomly gen
+  };
+
+  window.addEventListener('load', init);
+
   return {
     play: function() {
       play()
@@ -297,13 +309,6 @@ export const bloom = (function() {
 
     scheduler: function() {
       scheduler()
-    },
-
-    getMetadata: function() {
-      return ({
-        ragaName: ragaName,
-        prahar: undefined,
-      })
     },
   }
 }());
