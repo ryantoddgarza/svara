@@ -1,9 +1,10 @@
-import React from 'react';
-import Layout from '../utils/Layout';
+import React, { Fragment } from 'react';
+import Listen from '../components/scenes/Listen';
 
 export default () => {
   return (
-    <Layout>
-    </Layout>
+    <Fragment>
+      <Listen />
+    </Fragment>
   );
 };
