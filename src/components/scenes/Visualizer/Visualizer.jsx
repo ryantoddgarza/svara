@@ -1,13 +1,13 @@
 import React from 'react';
 import PatchWallpaper from '../../organisms/PatchWallpaper';
 
-const Listen = () => {
+const Visualizer = () => {
   return (
     <div className="listen">
-      <p>rendered from Listen.jsx</p>
+      <p>rendered from Visualizer.jsx</p>
       <PatchWallpaper />
     </div>
   )
 };
 
-export default Listen;
+export default Visualizer;

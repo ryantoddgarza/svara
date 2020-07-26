@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
-import Listen from '../components/scenes/Listen';
+import Visualizer from '../components/scenes/Visualizer';
 
 export default () => {
   return (
     <Fragment>
-      <Listen />
+      <Visualizer />
     </Fragment>
   );
 };

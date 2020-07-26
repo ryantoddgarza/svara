@@ -6,7 +6,7 @@ import lazyLoad from './utils/lazyLoad';
 import { synthEngine } from './utils/SynthEngine';
 
 import * as routes from './constants/routes';
-import Listen from './pages/listen';
+import Visualizer from './pages/visualizer';
 
 class App extends Component {
   componentDidMount() {
@@ -20,9 +20,9 @@ class App extends Component {
       <div className="app">
         <Layout>
           <Switch>
-            <Route path={ routes.LANDING } exact component={ Listen } />
-            <Route path={ routes.HOME } component={ Listen } />
-            <Route path={ routes.LISTEN } component={ Listen } />
+            <Route path={ routes.LANDING } exact component={ Visualizer } />
+            <Route path={ routes.HOME } component={ Visualizer } />
+            <Route path={ routes.VISUALIZER } component={ Visualizer } />
           </Switch>
         </Layout>
       </div>
