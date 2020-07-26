@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import { Route, Switch } from 'react-router-dom';
 // import * as routes from './constants/routes';
 import include from './utils/include';
+import lazyLoad from './utils/lazyLoad';
 import Layout from './utils/Layout';
 import { synthEngine } from './utils/SynthEngine';
 
