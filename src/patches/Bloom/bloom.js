@@ -1,7 +1,7 @@
 import context, { systemOutput } from '../../utils/WebAudio/audioContext';
 import { synthEngine } from '../../utils/SynthEngine';
 import { nucleus } from '../nucleus';
-import { random } from '../../constants/random-engine';
+import { random } from '../../constants/randomEngine';
 import * as MIDI from '../../constants/midi';
 import * as Pattern from '../../constants/pattern';
 import { RagaScales } from '../../constants/raga';
