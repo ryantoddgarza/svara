@@ -28,22 +28,22 @@ export const prahar = () => {
   const hour = new Date().getHours();
 
   switch (true) {
-    case hour >= 4 && hour < 7 :
-      return 0
-    case hour >= 7 && hour < 10 :
+    case hour >= 6 && hour < 9:
       return 1
-    case hour >= 10 && hour < 13 :
+    case hour >= 9 && hour < 12:
       return 2
-    case hour >= 13 && hour < 16 :
+    case hour >= 12 && hour < 15:
       return 3
-    case hour >= 16 && hour < 19 :
+    case hour >= 15 && hour < 18:
       return 4
-    case hour >= 19 && hour < 22 :
+    case hour >= 18 && hour < 21:
       return 5
-    case hour >= 22 || hour < 1 :
+    case hour >= 21:
       return 6
-    case hour >= 1 && hour < 4 :
+    case hour >= 0 && hour < 3:
       return 7
+    case hour >= 3 && hour < 6:
+      return 8
     default:
       return null;
   }

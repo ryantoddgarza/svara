@@ -143,30 +143,30 @@ export const bloom = (function() {
     }
   };
 
-  const subdivideSlow = () => {
-    const chance = random.bool();
+  // const subdivideSlow = () => {
+  //   const chance = random.bool();
 
-    if (chance) {
-      subdivision = random.integer(1, 3);
-    }
+  //   if (chance) {
+  //     subdivision = random.integer(1, 3);
+  //   }
 
-    if (!chance) {
-      subdivision = random.fraction(4);
-    }
+  //   if (!chance) {
+  //     subdivision = random.fraction(4);
+  //   }
 
-    return subdivision;
-  };
+  //   return subdivision;
+  // };
 
   const subdivide = () => {
     switch (true) {
-      case subdivision <= 1:
-        subdivideSlow();
-        break;
+      // case subdivision <= 1:
+      //   subdivideSlow();
+      //   break;
       case subdivision < 4:
         subdivision = random.integer(1, 4)
         break;
       case subdivision >= 4:
-        subdivision = random.integer(2, 8)
+        subdivision = random.integer(2, 6)
         break;
     }
 
@@ -228,7 +228,7 @@ export const bloom = (function() {
   const voiceDrone = () => {
     // module vca
     const gain1 = context.createGain();
-    gain1.gain.value = 0.05;
+    gain1.gain.value = 0.07;
     gain1.connect(systemOutput.gainNode);
 
     // amplitude mod
@@ -243,7 +243,7 @@ export const bloom = (function() {
 
     // slow trem vca
     const gain2 = context.createGain();
-    gain2.gain.value = 0.025;
+    gain2.gain.value = 0.03;
     gain2.connect(gain1.gain);
 
     // slow trem osc
@@ -294,7 +294,6 @@ export const bloom = (function() {
   };
 
   const init = () => {
-    console.log('bloom init')
     setMelodicVariables(ragas[Nucleus.ragaName]);
     setRhythmicVariables();
     setImprovisationState(false) // randomly gen
