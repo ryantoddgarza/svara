@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { selectedRaga } from '../../../../patches/nucleus';
 
 class DynamicPrahar extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class DynamicPrahar extends Component {
   render() {
     return (
       <div className="visualizer__prahar">
-        <div className="visualizer__prahar-numeral">2</div>
+        <div className="visualizer__prahar-numeral">{ selectedRaga.prahar }</div>
         <div className="visualizer__prahar-clock">{ this.state.time }</div>
       </div>
     )

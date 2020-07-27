@@ -1,6 +1,8 @@
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const context = new AudioContext();
 
+context.suspend && context.suspend();
+
 export default context;
 
 export const systemOutput = (function() {

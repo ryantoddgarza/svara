@@ -3,7 +3,7 @@ import { prahar } from '../constants/raga';
 import { random } from '../constants/randomEngine';
 
 const availableRagas = prahar.getRagas();
-const selectedRaga = availableRagas[0]; // randomly gen
+export const selectedRaga = availableRagas[0]; // randomly gen
 
 const generate = {
   tempo: function() {

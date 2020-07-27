@@ -6,6 +6,7 @@ import * as MIDI from '../../constants/midi';
 import * as Pattern from '../../constants/pattern';
 import { RagaScales } from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
+import { Analyser } from '../../components/scenes/Visualizer/molecules/Analyzer';
 
 export const bloom = (function() {
   const Nucleus = new Proxy(nucleus, {
@@ -93,13 +94,13 @@ export const bloom = (function() {
     if (melody.improvise) {
       const bool = random.bool();
 
-      switch (bool) {
-        case true:
-          note = activeScale[melody.pos]
-          nextNote(melody, Pattern.increment);
-        case false:
-          note = activeScale[random.integer(0, melody.arr.length - 1)];
-          break;
+      if (bool === true) {
+        note = activeScale[melody.pos]
+        nextNote(melody, Pattern.increment);
+      }
+
+      if (!bool === false) {
+        note = activeScale[random.integer(0, melody.arr.length - 1)];
       }
     }
 
@@ -143,31 +144,31 @@ export const bloom = (function() {
     }
   };
 
-  // const subdivideSlow = () => {
-  //   const chance = random.bool();
+  const subdivideSlow = () => {
+    const chance = random.bool();
 
-  //   if (chance) {
-  //     subdivision = random.integer(1, 3);
-  //   }
+    if (chance) {
+      subdivision = random.integer(1, 3);
+    }
 
-  //   if (!chance) {
-  //     subdivision = random.fraction(4);
-  //   }
+    if (!chance) {
+      subdivision = random.fraction(4);
+    }
 
-  //   return subdivision;
-  // };
+    return subdivision;
+  };
 
   const subdivide = () => {
-    switch (true) {
-      // case subdivision <= 1:
-      //   subdivideSlow();
-      //   break;
-      case subdivision < 4:
-        subdivision = random.integer(1, 4)
-        break;
-      case subdivision >= 4:
-        subdivision = random.integer(2, 6)
-        break;
+    if (subdivision <= 1) {
+      subdivideSlow();
+    }
+
+    if (subdivision < 4) {
+      subdivision = random.integer(1, 4)
+    }
+
+    if (subdivision >= 4) {
+      subdivision = random.integer(2, 6)
     }
 
     return subdivision;
@@ -185,7 +186,9 @@ export const bloom = (function() {
       if (beatNumber === 0) {
         subdivision = subdivide();
       }
-    } else if (random.integer(1, 100) % 3 === 0) {
+    }
+
+    if (random.integer(1, 100) % 2 === 0) {
       subdivision = subdivide();
     }
   };
@@ -200,6 +203,7 @@ export const bloom = (function() {
     // patch vca
     const vcaOut = context.createGain();
     vcaOut.connect(systemOutput.gainNode);
+    vcaOut.connect(Analyser.analyser);
     vcaOut.gain.value = 0.1;
 
     // note envelope vca
@@ -230,6 +234,7 @@ export const bloom = (function() {
     const gain1 = context.createGain();
     gain1.gain.value = 0.07;
     gain1.connect(systemOutput.gainNode);
+    gain1.connect(Analyser.analyser);
 
     // amplitude mod
     const amVCA = context.createGain();
