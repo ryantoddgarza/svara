@@ -10,6 +10,8 @@ html {
 
 body {
   margin: 0;
+  font-size: 15px;
+  color: $theme-color-base-ink;
 }
 
 ul,
@@ -28,6 +30,7 @@ img {
 }
 
 button {
+  color: inherit;
   background: none;
   border: none;
   cursor: pointer;

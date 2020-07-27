@@ -3,6 +3,12 @@
 @import 'helpers/mixins';
 @import 'helpers/functions';
 
+// core
+@import 'core';
+
+// theme
+@import 'theme';
+
 // base
 @import 'base/normalize';
 @import 'base/typography';

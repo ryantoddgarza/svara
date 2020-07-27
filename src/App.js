@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-// import { Route, Switch } from 'react-router-dom';
-// import * as routes from './constants/routes';
+import { Route, Switch } from 'react-router-dom';
+import Layout from './utils/Layout';
 import include from './utils/include';
 import lazyLoad from './utils/lazyLoad';
-import Layout from './utils/Layout';
 import { synthEngine } from './utils/SynthEngine';
+
+import * as routes from './constants/routes';
+import Visualizer from './pages/visualizer';
 
 class App extends Component {
   componentDidMount() {
@@ -17,6 +19,11 @@ class App extends Component {
     return (
       <div className="app">
         <Layout>
+          <Switch>
+            <Route path={ routes.LANDING } exact component={ Visualizer } />
+            <Route path={ routes.HOME } component={ Visualizer } />
+            <Route path={ routes.VISUALIZER } component={ Visualizer } />
+          </Switch>
         </Layout>
       </div>
     )

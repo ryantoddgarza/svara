@@ -3,8 +3,8 @@
 $track-width: 12.5em;
 $track-height: .25em;
 $thumb-diameter: 0.8em;
-$track-color: #ccc;
-$thumb-color: black;
+$track-color: $theme-color-base-lighter;
+$thumb-color: $theme-color-base-ink;
 
 @mixin track {
   box-sizing: border-box;
