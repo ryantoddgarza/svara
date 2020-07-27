@@ -1,11 +1,10 @@
 import React from 'react';
-import PatchWallpaper from '../../organisms/PatchWallpaper';
+import DynamicPrahar from './molecules/DynamicPrahar';
 
 const Visualizer = () => {
   return (
-    <div className="listen">
-      <p>rendered from Visualizer.jsx</p>
-      <PatchWallpaper />
+    <div className="visualizer">
+      <DynamicPrahar />
     </div>
   )
 };

@@ -1,0 +1,25 @@
+.visualizer {
+  position: relative;
+
+  &__prahar {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+
+    &-numeral {
+      position: relative;
+      font-size: 252px;
+      line-height: 0.75;
+    }
+
+    &-clock {
+      position: absolute;
+      bottom: 24px;
+      font-size: 32px;
+      letter-spacing: 2px;
+      color: $theme-color-base-lighter;
+      opacity: 60%;
+    }
+  }
+
+}
