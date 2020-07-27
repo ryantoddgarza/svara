@@ -6,7 +6,7 @@ import ControlsEnd from './molecules/ControlsEnd';
 const Player = () => {
   return (
     <div className="player">
-      <div className="player__bottom-row">
+      <div className="container player__bottom-row">
         <div className="player__start">
           <ControlsStart />
         </div>
