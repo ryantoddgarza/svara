@@ -1,7 +1,7 @@
 {
-  "name": "webpack-demo",
+  "name": "svara",
   "version": "1.0.0",
-  "description": "",
+  "description": "generative music",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",
