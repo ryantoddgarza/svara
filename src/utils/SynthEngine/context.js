@@ -3,12 +3,12 @@ import React from 'react';
 const SynthEngineContext = React.createContext(null);
 
 export const withSynthEngine = (Component) => {
-  return function synthEngineContextProvider(props) {
-    const fooData = {
-      bar: 'bar',
-      baz: 'baz',
-    },
+  const fooData = {
+    bar: 'bar',
+    baz: 'baz',
+  };
 
+  return function synthEngineContextProvider(props) {
     return (
       <SynthEngineContext.Provider value={ { fooData } }>
         <Component {...props} />
@@ -26,4 +26,3 @@ export const useSynthEngine = (Component) => {
     );
   };
 };
-

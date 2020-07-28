@@ -8,16 +8,18 @@ import { RagaScales } from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 import { Analyser } from '../../components/scenes/Visualizer/molecules/Analyzer';
 
+export const foo = () => null;
+
 export const bloom = (function() {
   const Nucleus = new Proxy(nucleus, {
-    set: function(target, key, value) {
-      targe[key] = value;
-    }
+    set(target, key, value) {
+      target[key] = value;
+    },
   });
 
   const midiNums = MIDI.noteNums;
 
-  let scheduleAheadTime = 0.1;
+  const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
 
@@ -33,22 +35,20 @@ export const bloom = (function() {
   let activeScale = [];
   let motif = [1, 4, 3, 4, 5]; // add to init random gen
 
-  let melody = {
+  const melody = {
     arr: [],
     pos: 0,
     improvise: undefined,
   };
 
-  let stepThrough = {
+  const stepThrough = {
     direction: Pattern.increment,
     interval: undefined,
   };
 
   // converts scale steps to array indexes
   const setMelodyArr = (scaleSteps) => {
-    melody.arr = scaleSteps.map((step, i) => {
-      return step - 1;
-    });
+    melody.arr = scaleSteps.map((step) => step - 1);
   };
 
   const improvise = (scaleSteps) => {
@@ -61,7 +61,6 @@ export const bloom = (function() {
     stepThrough.direction = Pattern.increment; // add to init random gen
     stepThrough.interval = 4; // add to init random gen
   };
-
 
   const playMotif = (scaleSteps) => {
     melody.improvise = false;
@@ -88,6 +87,13 @@ export const bloom = (function() {
     }
   };
 
+  const nextNote = (obj) => {
+    const setPos = Pattern.stepThrough(obj, stepThrough.direction, stepThrough.interval);
+    const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
+
+    obj.pos = wrappedPos;
+  };
+
   const currentNote = () => {
     let note;
 
@@ -95,17 +101,17 @@ export const bloom = (function() {
       const bool = random.bool();
 
       if (bool === true) {
-        note = activeScale[melody.pos]
+        note = activeScale[melody.pos];
         nextNote(melody, Pattern.increment);
       }
 
-      if (!bool === false) {
+      if (bool === false) {
         note = activeScale[random.integer(0, melody.arr.length - 1)];
       }
     }
 
     if (!melody.improvise) {
-      note = activeScale[melody.pos]
+      note = activeScale[melody.pos];
       nextNote(melody);
 
       if (melody.pos === melody.arr.length - 1) {
@@ -116,18 +122,11 @@ export const bloom = (function() {
     return note;
   };
 
-  const nextNote = (obj) => {
-    const setPos = Pattern.stepThrough(obj, stepThrough.direction, stepThrough.interval);
-    const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
-
-    obj.pos = wrappedPos;
-  }
-
   const incrementMeasure = (beatNumber) => {
     if (beatNumber === 0) {
-      measure++;
+      measure += 1;
     }
-  }
+  };
 
   const maxBeats = () => {
     const beats = (Nucleus.meter * subdivision);
@@ -137,9 +136,9 @@ export const bloom = (function() {
   const nextSubdivision = () => {
     const secondsPerBeat = 60.0 / Nucleus.tempo;
     nextNoteTime += (1 / subdivision) * secondsPerBeat;
-    currentSubdivision++;
+    currentSubdivision += 1;
 
-    if (currentSubdivision == maxBeats()) {
+    if (currentSubdivision === maxBeats()) {
       currentSubdivision = 0;
     }
   };
@@ -164,11 +163,11 @@ export const bloom = (function() {
     }
 
     if (subdivision < 4) {
-      subdivision = random.integer(1, 4)
+      subdivision = random.integer(1, 4);
     }
 
     if (subdivision >= 4) {
-      subdivision = random.integer(2, 6)
+      subdivision = random.integer(2, 6);
     }
 
     return subdivision;
@@ -176,7 +175,7 @@ export const bloom = (function() {
 
   const scheduleNote = (beatNumber, time) => {
     // push the note on the queue, even if we're not playing.
-    notesInQueue.push({ note: beatNumber, time: time });
+    notesInQueue.push({ note: beatNumber, time });
 
     voiceMelody(time);
     nextSubdivision();
@@ -194,8 +193,8 @@ export const bloom = (function() {
   };
 
   const scheduler = () => {
-    while (nextNoteTime < context.currentTime + scheduleAheadTime ) {
-      scheduleNote( currentSubdivision, nextNoteTime );
+    while (nextNoteTime < context.currentTime + scheduleAheadTime) {
+      scheduleNote(currentSubdivision, nextNoteTime);
     }
   };
 
@@ -227,7 +226,7 @@ export const bloom = (function() {
 
     osc1.start(time);
     osc1.stop(time + noteLength);
-  }
+  };
 
   const voiceDrone = () => {
     // module vca
@@ -301,19 +300,18 @@ export const bloom = (function() {
   const init = () => {
     setMelodicVariables(ragas[Nucleus.ragaName]);
     setRhythmicVariables();
-    setImprovisationState(false) // randomly gen
+    setImprovisationState(false); // randomly gen
   };
 
   window.addEventListener('load', init);
 
   return {
-    play: function() {
-      play()
+    play() {
+      play();
     },
 
-    scheduler: function() {
-      scheduler()
+    scheduler() {
+      scheduler();
     },
-  }
+  };
 }());
-

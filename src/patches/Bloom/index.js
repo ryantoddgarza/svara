@@ -1,3 +1,1 @@
-import { bloom } from './bloom';
-
-export { bloom };
+export { bloom } from './bloom';

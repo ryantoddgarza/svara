@@ -18,17 +18,17 @@ export const wrapArrayIndex = (index, length) => {
   }
 
   return index;
-}
+};
 
 export const increment = (num, interval = 1) => {
   num += interval;
   return num;
-}
+};
 
 export const decrement = (num, interval = 1) => {
   num -= interval;
   return num;
-}
+};
 
 // modifies and object by reference.
 // @param {object} - requires { pos: {num} }
@@ -36,7 +36,7 @@ export const decrement = (num, interval = 1) => {
 // @param {number} interval - amount to inc/dec. passed to callback
 export const stepThrough = (obj, callback, interval) => {
   obj.pos = callback(obj.pos, interval);
-}
+};
 
 // fibonacci
 export const fibonacci = (n) => {
@@ -47,5 +47,4 @@ export const fibonacci = (n) => {
   }
 
  return fibArr[n]
-}
-
+};

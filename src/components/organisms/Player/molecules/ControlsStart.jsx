@@ -2,12 +2,12 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { nucleus } from '../../../../patches/nucleus';
 
 const ControlsStart = () => {
-  const [ragaName, setRagaName] = useState('')
+  const [ragaName, setRagaName] = useState('');
 
   useEffect(() => {
-    const ragaName = nucleus.ragaName; // TODO: make dynamic
+    const selectedRagaName = nucleus.ragaName; // TODO: make dynamic
 
-    setRagaName(ragaName);
+    setRagaName(selectedRagaName);
   });
 
   return (
@@ -16,8 +16,7 @@ const ControlsStart = () => {
         <span>{ ragaName }</span>
       </div>
     </Fragment>
-  )
-}
+  );
+};
 
 export default ControlsStart;
-

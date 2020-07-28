@@ -5,4 +5,3 @@ window.onload = () => {
     el.style.opacity = 1;
   });
 };
-

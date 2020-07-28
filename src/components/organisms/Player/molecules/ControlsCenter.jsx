@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { synthEngine } from '../../../../utils/SynthEngine';
 
-const Controls = (props) => {
+const Controls = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
 
   const setPlayIcon = () => {
@@ -29,11 +29,11 @@ const Controls = (props) => {
 
   return (
     <Fragment>
-      <button className="player__play-button" onClick={ handlePlayClick }>
-        <i id="play-icon" className="material-icons md-48" aria-labelledby="title"></i>
+      <button className="player__play-button" type="button" onClick={handlePlayClick}>
+        <i id="play-icon" className="material-icons md-48" aria-labelledby="title" />
       </button>
     </Fragment>
-  )
+  );
 };
 
 export default Controls;

@@ -13,9 +13,9 @@ export const systemOutput = (function() {
   gainNode.gain.value = initVolume;
 
   return {
-    initVolume: initVolume,
-    gainNode: gainNode,
-    setGain: function(e) {
+    initVolume,
+    gainNode,
+    setGain(e) {
       gainNode.gain.value = e.target.value;
     },
   };

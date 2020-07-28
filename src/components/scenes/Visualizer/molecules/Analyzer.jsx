@@ -329,16 +329,14 @@ export const Analyser = {
   }
 };
 
-window.addEventListener('DOMContentLoaded', (event) => {
+window.addEventListener('DOMContentLoaded', () => {
   Analyser.init();
 });
 
-const Analyzer = () => {
-  return (
-    <div className="Analyzer">
-      <canvas />
-    </div>
-  )
-};
+const Analyzer = () => (
+  <div className="Analyzer">
+    <canvas />
+  </div>
+);
 
 export default Analyzer;
