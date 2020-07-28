@@ -17,11 +17,11 @@ module.exports = {
       title: 'jae',
     }),
     new HtmlWebpackPartialsPlugin({
-      path: path.join(__dirname, './partials/body.html')
+      path: path.join(__dirname, './partials/body.html'),
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from:'static' }
+        { from: 'static' },
       ],
     }),
   ],
@@ -31,4 +31,3 @@ module.exports = {
     publicPath: '/',
   },
 };
-
