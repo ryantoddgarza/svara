@@ -12,3 +12,10 @@ export const makeNotes = () => {
 
 // @return [num] - array of frequencies accessible by standard MIDI note numbers
 export const noteNums = makeNotes();
+
+// TODO: name more clearly that this takes an array and not a single note value.
+export const midiToFreq = (midiNumArr) => {
+  const freqArr = midiNumArr.map((val) => noteNums[val]);
+
+  return freqArr;
+};

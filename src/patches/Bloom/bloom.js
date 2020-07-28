@@ -18,6 +18,7 @@ export const bloom = (function() {
   });
 
   const midiNums = MIDI.noteNums;
+  const ragaPitchData = new RagaScales(midiNums, ragas[Nucleus.ragaName], Nucleus.tonic)
 
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
@@ -33,7 +34,7 @@ export const bloom = (function() {
   let descendingFreq = [];
   let descendingNum = [];
   let activeScale = [];
-  let motif = [1, 4, 3, 4, 5]; // add to init random gen
+  let motif = [0, 3, 2, 3, 4]; // add to init random gen
 
   const melody = {
     arr: [],
@@ -44,82 +45,6 @@ export const bloom = (function() {
   const stepThrough = {
     direction: Pattern.increment,
     interval: undefined,
-  };
-
-  // converts scale steps to array indexes
-  const setMelodyArr = (scaleSteps) => {
-    melody.arr = scaleSteps.map((step) => step - 1);
-  };
-
-  const improvise = (scaleSteps) => {
-    melody.improvise = true;
-
-    if (scaleSteps) {
-      setMelodyArr(scaleSteps);
-    }
-
-    stepThrough.direction = Pattern.increment; // add to init random gen
-    stepThrough.interval = 4; // add to init random gen
-  };
-
-  const playMotif = (scaleSteps) => {
-    melody.improvise = false;
-
-    if (scaleSteps) {
-      setMelodyArr(scaleSteps);
-    }
-
-    stepThrough.direction = Pattern.increment;
-    stepThrough.interval = 1;
-  };
-
-  const exitMotif = () => {
-    improvise(descendingNum);
-  };
-
-  const setImprovisationState = (bool) => {
-    if (bool === true) {
-      improvise(descendingNum);
-    }
-
-    if (bool === false) {
-      playMotif(motif);
-    }
-  };
-
-  const nextNote = (obj) => {
-    const setPos = Pattern.stepThrough(obj, stepThrough.direction, stepThrough.interval);
-    const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
-
-    obj.pos = wrappedPos;
-  };
-
-  const currentNote = () => {
-    let note;
-
-    if (melody.improvise) {
-      const bool = random.bool();
-
-      if (bool === true) {
-        note = activeScale[melody.pos];
-        nextNote(melody, Pattern.increment);
-      }
-
-      if (bool === false) {
-        note = activeScale[random.integer(0, melody.arr.length - 1)];
-      }
-    }
-
-    if (!melody.improvise) {
-      note = activeScale[melody.pos];
-      nextNote(melody);
-
-      if (melody.pos === melody.arr.length - 1) {
-        exitMotif();
-      }
-    }
-
-    return note;
   };
 
   const incrementMeasure = (beatNumber) => {
@@ -177,7 +102,7 @@ export const bloom = (function() {
     // push the note on the queue, even if we're not playing.
     notesInQueue.push({ note: beatNumber, time });
 
-    voiceMelody(time);
+    melodyVoice.patch(time);
     nextSubdivision();
     incrementMeasure(beatNumber);
 
@@ -198,34 +123,137 @@ export const bloom = (function() {
     }
   };
 
-  const voiceMelody = (time) => {
-    // patch vca
-    const vcaOut = context.createGain();
-    vcaOut.connect(systemOutput.gainNode);
-    vcaOut.connect(Analyser.analyser);
-    vcaOut.gain.value = 0.1;
+  // converts scale steps to array indexes
+  const setMelodyArr = (scaleSteps) => {
+    melody.arr = scaleSteps.map((step) => step);
+    console.log(melody.arr);
+  };
 
-    // note envelope vca
-    const vca1 = context.createGain();
-    vca1.connect(vcaOut);
-    vca1.gain.value = 0;
+  const improvise = (scaleSteps) => {
+    melody.improvise = true;
 
-    // carrier oscillator
-    const osc1 = context.createOscillator();
-    osc1.frequency.value = currentNote();
-    osc1.connect(vca1);
+    if (scaleSteps) {
+      setMelodyArr(scaleSteps);
+    }
 
-    let attack = 0.1;
-    let decay = (60 / Nucleus.tempo) / subdivision;
+    stepThrough.direction = Pattern.increment; // add to init random gen
+    stepThrough.interval = 4; // add to init random gen
+  };
 
-    let noteLength = attack + decay;
+  const playMotif = (scaleSteps) => {
+    melody.improvise = false;
 
-    vca1.gain.setValueAtTime(0, context.currentTime);
-    vca1.gain.linearRampToValueAtTime(1, context.currentTime + attack);
-    vca1.gain.linearRampToValueAtTime(0, context.currentTime + noteLength);
+    if (scaleSteps) {
+      setMelodyArr(scaleSteps);
+    }
 
-    osc1.start(time);
-    osc1.stop(time + noteLength);
+    stepThrough.direction = Pattern.increment;
+    stepThrough.interval = 1;
+  };
+
+  const exitMotif = () => {
+    improvise(melodyVoice.range);
+  };
+
+  const setImprovisationState = (bool) => {
+    if (bool === true) {
+      improvise(melodyVoice.range);
+    }
+
+    if (bool === false) {
+      playMotif(motif);
+    }
+  };
+
+  const nextNote = (obj) => {
+    const setPos = Pattern.stepThrough(obj, stepThrough.direction, stepThrough.interval);
+    const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
+
+    obj.pos = wrappedPos;
+  };
+
+  const currentNote = () => {
+    let note;
+
+    if (melody.improvise) {
+      const bool = random.bool();
+
+      if (bool === true) {
+        note = activeScale[melody.pos];
+        nextNote(melody, Pattern.increment);
+      }
+
+      if (bool === false) {
+        note = activeScale[random.integer(0, melody.arr.length - 1)];
+      }
+    }
+
+    if (!melody.improvise) {
+      note = activeScale[melody.pos];
+      nextNote(melody);
+
+      if (melody.pos === melody.arr.length - 1) {
+        exitMotif();
+      }
+    }
+
+    return note;
+  };
+
+  const melodyVoice = {
+    range: [],
+
+    setRange(rootNum, numberOfOctaves) {
+      const scaleSteps = ragaPitchData.avrohNum;
+      const rangeNums = [];
+
+      const scaleStepsWithRoot = scaleSteps.map((midiNum) => {
+        return midiNum + rootNum
+      });
+
+      for (let i = 0; i < numberOfOctaves; i += 1) {
+        scaleStepsWithRoot.forEach((midiNum) => {
+          rangeNums.push(midiNum + (12 * i));
+        });
+      };
+
+      this.range = rangeNums;
+      activeScale = MIDI.midiToFreq(rangeNums);
+    },
+
+    patch(time) {
+      // patch vca
+      const vcaOut = context.createGain();
+      vcaOut.connect(systemOutput.gainNode);
+      vcaOut.connect(Analyser.analyser);
+      vcaOut.gain.value = 0.2;
+
+      // note envelope vca
+      const vca1 = context.createGain();
+      vca1.connect(vcaOut);
+      vca1.gain.value = 0;
+
+      // carrier oscillator
+      const osc1 = context.createOscillator();
+      osc1.frequency.value = currentNote();
+      osc1.connect(vca1);
+
+      let attack = 0.1;
+      let decay = (60 / Nucleus.tempo) / subdivision;
+
+      let noteLength = attack + decay;
+
+      vca1.gain.setValueAtTime(0, context.currentTime);
+      vca1.gain.linearRampToValueAtTime(1, context.currentTime + attack);
+      vca1.gain.linearRampToValueAtTime(0, context.currentTime + noteLength);
+
+      osc1.start(time);
+      osc1.stop(time + noteLength);
+    },
+
+    init() {
+      this.setRange(Nucleus.tonic, 2);
+    },
   };
 
   const voiceDrone = () => {
@@ -270,13 +298,11 @@ export const bloom = (function() {
     osc3.start();
   };
 
-  const setMelodicVariables = (ragaObj) => {
-    const ragaScale = new RagaScales(midiNums, ragaObj, Nucleus.tonic)
-    ascendingFreq = ragaScale.aarohFreq;
-    ascendingNum = ragaScale.aarohNum;
-    descendingFreq = ragaScale.avrohFreq;
-    descendingNum = ragaScale.avrohNum;
-    activeScale = descendingFreq; // move to depend on prev note played
+  const setMelodicVariables = () => {
+    ascendingFreq = ragaPitchData.aarohFreq;
+    ascendingNum = ragaPitchData.aarohNum;
+    descendingFreq = ragaPitchData.avrohFreq;
+    descendingNum = ragaPitchData.avrohNum;
   };
 
   const setRhythmicVariables = () => {
@@ -298,9 +324,11 @@ export const bloom = (function() {
   };
 
   const init = () => {
-    setMelodicVariables(ragas[Nucleus.ragaName]);
+    setMelodicVariables();
     setRhythmicVariables();
     setImprovisationState(false); // randomly gen
+    melodyVoice.init();
+    console.log(melody.arr)
   };
 
   window.addEventListener('load', init);
