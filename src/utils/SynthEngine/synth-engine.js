@@ -1,4 +1,4 @@
-import { Bloom } from '../../patches/bloom';
+import { Bloom } from '../../patches/Bloom';
 
 const synthEngine = {
   isPlaying: false,
