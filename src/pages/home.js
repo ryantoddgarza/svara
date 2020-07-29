@@ -1,5 +1,6 @@
 import React from 'react';
+import Home from '../components/scenes/Home';
 
 export default () => (
-  <div className="home"></div>
+  <Home />
 );

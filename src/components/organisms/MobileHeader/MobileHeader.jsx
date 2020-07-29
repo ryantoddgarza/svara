@@ -11,7 +11,7 @@ const MobileHeader = () => (
       <nav className="mobile-header__nav">
         <ul className="mobile-header__nav-list">
           <li className="mobile-header__nav-item">
-            <NavLink to={routes.HOME}>home</NavLink>
+            <NavLink to={routes.HOME}>about</NavLink>
           </li>
           <li className="mobile-header__nav-item">
             <NavLink to={routes.VISUALIZER}>visualizer</NavLink>
