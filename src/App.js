@@ -3,8 +3,13 @@ import { Route, Switch } from 'react-router-dom';
 import Layout from './utils/Layout';
 import include from './utils/include';
 import { synthEngine } from './utils/SynthEngine';
+<<<<<<< HEAD
 import './utils/a11y';
 import './utils/lazy-load';
+=======
+import './utils/lazyLoad';
+import './utils/a11y';
+>>>>>>> jae-31
 
 import * as routes from './constants/routes';
 import Visualizer from './pages/visualizer';
