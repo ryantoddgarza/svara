@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { systemOutput } from '../../../../utils/WebAudio/audioContext';
+import { systemOutput } from '../../../../utils/WebAudio/audio-context';
 
 const ControlsEnd = () => (
   <Fragment>

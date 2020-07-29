@@ -15,5 +15,3 @@ self.onmessage = (e) => {
     timerID = null;
   }
 };
-
-postMessage('metronome worker mounted');

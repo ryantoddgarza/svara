@@ -18,5 +18,6 @@
         "react"
     ],
     "rules": {
+      "react/jsx-fragments": ["off"]
     }
 }

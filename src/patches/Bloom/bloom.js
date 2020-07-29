@@ -1,4 +1,4 @@
-import context, { systemOutput } from '../../utils/WebAudio/audioContext';
+import context, { systemOutput } from '../../utils/WebAudio/audio-context';
 import { synthEngine } from '../../utils/SynthEngine';
 import { nucleus } from '../nucleus';
 import { random } from '../../constants/randomEngine';
@@ -229,7 +229,7 @@ const Bloom = (function() {
       vcaOut.connect(systemOutput.gainNode);
       vcaOut.connect(reverb.input);
       vcaOut.connect(Analyser.analyser);
-      vcaOut.gain.value = 0.3;
+      vcaOut.gain.value = 0.2;
 
       // note envelope vca
       const vca1 = context.createGain();
@@ -264,7 +264,7 @@ const Bloom = (function() {
 
     // module vca
     const gain1 = context.createGain();
-    gain1.gain.value = 0.15;
+    gain1.gain.value = 0.1;
     gain1.connect(systemOutput.gainNode);
     gain1.connect(Analyser.analyser);
 

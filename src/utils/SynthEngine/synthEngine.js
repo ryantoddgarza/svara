@@ -1,4 +1,4 @@
-import { Bloom } from '../../patches/Bloom';
+import { Bloom } from '../../patches/bloom';
 
 const synthEngine = {
   isPlaying: false,
@@ -19,11 +19,11 @@ const synthEngine = {
   init() {
     this.timerWorker = new Worker('/metronome.worker.js');
 
-    this.timerWorker.onmessage = function(e) {
+    this.timerWorker.onmessage = (e) => {
       if (e.data === 'tick') {
         this.scheduler();
       }
-    }.bind(this);
+    };
 
     this.timerWorker.postMessage({ interval: this.lookahead });
   },

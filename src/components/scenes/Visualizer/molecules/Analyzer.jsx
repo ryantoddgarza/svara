@@ -1,6 +1,6 @@
 // analyzer adapted from: https://codepen.io/alexdevp/pen/RNELPV?editors=0100
 import React from 'react';
-import context from '../../../../utils/WebAudio/audioContext';
+import context from '../../../../utils/WebAudio/audio-context';
 
 var Framer = {
 

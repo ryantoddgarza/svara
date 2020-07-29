@@ -2,19 +2,21 @@
 // @param {number} index - num to test
 // @param {number} length - wrap to this length. passed in as `arr.length`
 export const wrapArrayIndex = (index, length) => {
+  let wrappedIndex;
+
   if (index % length === 0) {
-    index = 0;
-    return index;
+    wrappedIndex = 0;
+    return wrappedIndex;
   }
 
   if (index < 0) {
-    index = length + (index % length);
-    return index;
+    wrappedIndex = length + (index % length);
+    return wrappedIndex;
   }
 
   if (index > length) {
-    index = index % length;
-    return index;
+    wrappedIndex = index % length;
+    return wrappedIndex;
   }
 
   return index;
@@ -46,5 +48,5 @@ export const fibonacci = (n) => {
     fibArr.push(fibArr[i - 2] + fibArr[i - 1]);
   }
 
- return fibArr[n]
+  return fibArr[n];
 };
