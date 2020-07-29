@@ -7,7 +7,7 @@ export const selectedRaga = availableRagas[0]; // randomly gen
 
 const generate = {
   tempo() {
-    return random.integer(15, 30);
+    return random.integer(8, 15);
   },
 
   meter() {

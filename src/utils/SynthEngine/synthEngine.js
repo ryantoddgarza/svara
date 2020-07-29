@@ -1,4 +1,4 @@
-import { bloom } from '../../patches/Bloom';
+import { Bloom } from '../../patches/Bloom';
 
 const synthEngine = {
   isPlaying: false,
@@ -8,12 +8,12 @@ const synthEngine = {
   lookahead: 25.0,
 
   scheduler() {
-    bloom.scheduler();
+    Bloom.scheduler();
   },
 
   play() {
     this.isPlaying = !this.isPlaying;
-    bloom.play();
+    Bloom.play();
   },
 
   init() {

@@ -1,1 +1,1 @@
-export { bloom } from './bloom';
+export { Bloom } from './bloom';

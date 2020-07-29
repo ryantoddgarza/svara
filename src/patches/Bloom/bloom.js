@@ -6,11 +6,10 @@ import * as MIDI from '../../constants/midi';
 import * as Pattern from '../../constants/pattern';
 import { RagaScales } from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
+import { SimpleReverb } from '../synth-modules';
 import { Analyser } from '../../components/scenes/Visualizer/molecules/Analyzer';
 
-export const foo = () => null;
-
-export const bloom = (function() {
+const Bloom = (function() {
   const Nucleus = new Proxy(nucleus, {
     set(target, key, value) {
       target[key] = value;
@@ -28,7 +27,6 @@ export const bloom = (function() {
   let subdivision;
   let currentSubdivision = 0;
 
-  const root = Nucleus.tonicToFreq() * 0.5;
   let ascendingFreq = [];
   let ascendingNum = [];
   let descendingFreq = [];
@@ -126,7 +124,6 @@ export const bloom = (function() {
   // converts scale steps to array indexes
   const setMelodyArr = (scaleSteps) => {
     melody.arr = scaleSteps.map((step) => step);
-    console.log(melody.arr);
   };
 
   const improvise = (scaleSteps) => {
@@ -180,11 +177,12 @@ export const bloom = (function() {
 
       if (bool === true) {
         note = activeScale[melody.pos];
-        nextNote(melody, Pattern.increment);
+        nextNote(melody);
       }
 
       if (bool === false) {
-        note = activeScale[random.integer(0, melody.arr.length - 1)];
+        note = activeScale[random.integer(0, 4)];
+        nextNote(melody);
       }
     }
 
@@ -207,26 +205,31 @@ export const bloom = (function() {
       const scaleSteps = ragaPitchData.avrohNum;
       const rangeNums = [];
 
-      const scaleStepsWithRoot = scaleSteps.map((midiNum) => {
-        return midiNum + rootNum
-      });
+      const scaleStepsWithRoot = scaleSteps.map((midiNum) => midiNum + rootNum);
 
       for (let i = 0; i < numberOfOctaves; i += 1) {
         scaleStepsWithRoot.forEach((midiNum) => {
           rangeNums.push(midiNum + (12 * i));
         });
-      };
+      }
 
       this.range = rangeNums;
       activeScale = MIDI.midiToFreq(rangeNums);
     },
 
     patch(time) {
+      const reverb = new SimpleReverb(context, {
+        seconds: 3,
+        decay: 2,
+      });
+      reverb.connect(systemOutput.gainNode);
+
       // patch vca
       const vcaOut = context.createGain();
       vcaOut.connect(systemOutput.gainNode);
+      vcaOut.connect(reverb.input);
       vcaOut.connect(Analyser.analyser);
-      vcaOut.gain.value = 0.2;
+      vcaOut.gain.value = 0.3;
 
       // note envelope vca
       const vca1 = context.createGain();
@@ -257,38 +260,34 @@ export const bloom = (function() {
   };
 
   const voiceDrone = () => {
+    const root = Nucleus.tonicToFreq();
+
     // module vca
     const gain1 = context.createGain();
-    gain1.gain.value = 0.07;
+    gain1.gain.value = 0.15;
     gain1.connect(systemOutput.gainNode);
     gain1.connect(Analyser.analyser);
 
     // amplitude mod
-    const amVCA = context.createGain();
-    amVCA.connect(gain1);
+    const amMod = context.createGain();
+    amMod.connect(gain1);
 
     // carrier osc
     const osc1 = context.createOscillator();
     osc1.frequency.value = root;
-    osc1.connect(amVCA);
+    osc1.connect(amMod);
     osc1.start();
 
-    // slow trem vca
-    const gain2 = context.createGain();
-    gain2.gain.value = 0.03;
-    gain2.connect(gain1.gain);
-
-    // slow trem osc
-    const osc2 = context.createOscillator();
-    osc2.type = 'triangle';
-    osc2.frequency.value = 0.031;
-    osc2.connect(gain2);
-    osc2.start();
+    // sub osc
+    const subOsc = context.createOscillator();
+    subOsc.frequency.value = root * 0.50001;
+    subOsc.connect(amMod);
+    subOsc.start();
 
     // am vca
     const gain3 = context.createGain();
-    gain3.gain.value = 0.3;
-    gain3.connect(amVCA.gain);
+    gain3.gain.value = 0.5;
+    gain3.connect(amMod.gain);
 
     // am osc
     const osc3 = context.createOscillator();
@@ -296,6 +295,18 @@ export const bloom = (function() {
     osc3.frequency.value = root * 0.5;
     osc3.connect(gain3);
     osc3.start();
+
+    // slow trem vca
+    const gain2 = context.createGain();
+    gain2.gain.value = 0.06;
+    gain2.connect(gain1.gain);
+
+    // slow trem osc
+    const osc2 = context.createOscillator();
+    osc2.type = 'triangle';
+    osc2.frequency.value = 0.02;
+    osc2.connect(gain2);
+    osc2.start();
   };
 
   const setMelodicVariables = () => {
@@ -328,7 +339,6 @@ export const bloom = (function() {
     setRhythmicVariables();
     setImprovisationState(false); // randomly gen
     melodyVoice.init();
-    console.log(melody.arr)
   };
 
   window.addEventListener('load', init);
@@ -343,3 +353,5 @@ export const bloom = (function() {
     },
   };
 }());
+
+export { Bloom };
