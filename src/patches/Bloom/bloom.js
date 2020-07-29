@@ -7,7 +7,7 @@ import * as Pattern from '../../constants/pattern';
 import { RagaScales } from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 import { SimpleReverb } from '../synth-modules';
-import { Analyser } from '../../components/scenes/Visualizer/molecules/Analyzer';
+import Analyser from '../../components/scenes/Visualizer/molecules/analyser';
 
 const Bloom = (function() {
   const Nucleus = new Proxy(nucleus, {
