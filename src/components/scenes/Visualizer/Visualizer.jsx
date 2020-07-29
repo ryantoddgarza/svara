@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
 import DynamicPrahar from './molecules/DynamicPrahar';
-import Analyzer from './molecules/Analyzer';
+import AnalyzerCanvas from './molecules/AnalyzerCanvas';
 import RagaInfo from './molecules/RagaInfo';
+import { Analyser } from '../../../constants/analyser';
 
-const Visualizer = () => (
-  <div className="visualizer">
-    <DynamicPrahar />
-    <RagaInfo />
-    <Analyzer />
-  </div>
-);
+class Visualizer extends Component {
+  componentDidMount() {
+    Analyser.init();
+  }
+
+  // TODO: ticket #35 - unmount analyser
+
+  render() {
+    return (
+      <div className="visualizer">
+        <DynamicPrahar />
+        <RagaInfo />
+        <AnalyzerCanvas />
+      </div>
+    );
+  }
+}
 
 export default Visualizer;

@@ -8,6 +8,7 @@ import './utils/lazy-load';
 
 import * as routes from './constants/routes';
 import Visualizer from './pages/visualizer';
+import Home from './pages/home';
 
 class App extends Component {
   componentDidMount() {
@@ -21,7 +22,7 @@ class App extends Component {
         <Layout>
           <Switch>
             <Route path={routes.LANDING} exact component={Visualizer} />
-            <Route path={routes.HOME} component={Visualizer} />
+            <Route path={routes.HOME} component={Home} />
             <Route path={routes.VISUALIZER} component={Visualizer} />
           </Switch>
         </Layout>

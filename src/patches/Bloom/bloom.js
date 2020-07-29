@@ -7,7 +7,7 @@ import * as Pattern from '../../constants/pattern';
 import { RagaScales } from '../../constants/raga';
 import ragas from '../../constants/ragas.json';
 import { SimpleReverb } from '../synth-modules';
-import Analyser from '../../components/scenes/Visualizer/molecules/analyser';
+import { Analyser } from '../../constants/analyser';
 
 const Bloom = (function() {
   const Nucleus = new Proxy(nucleus, {
@@ -228,7 +228,11 @@ const Bloom = (function() {
       const vcaOut = context.createGain();
       vcaOut.connect(systemOutput.gainNode);
       vcaOut.connect(reverb.input);
-      vcaOut.connect(Analyser.analyser);
+
+      if (Analyser.analyser) {
+        vcaOut.connect(Analyser.analyser);
+      }
+
       vcaOut.gain.value = 0.2;
 
       // note envelope vca
@@ -266,7 +270,10 @@ const Bloom = (function() {
     const gain1 = context.createGain();
     gain1.gain.value = 0.1;
     gain1.connect(systemOutput.gainNode);
-    gain1.connect(Analyser.analyser);
+
+    if (Analyser.analyser) {
+      gain1.connect(Analyser.analyser);
+    }
 
     // amplitude mod
     const amMod = context.createGain();
