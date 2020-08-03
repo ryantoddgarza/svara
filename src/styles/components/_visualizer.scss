@@ -1,0 +1,57 @@
+.visualizer {
+  position: relative;
+
+  &__analyzer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  canvas {
+    display: block;
+    margin: 0 auto;
+  }
+
+  &__prahar {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    z-index: -1;
+
+    &-numeral {
+      position: relative;
+      font-size: 252px;
+      line-height: 0.75;
+    }
+
+    &-clock {
+      position: absolute;
+      bottom: 24px;
+      font-size: 32px;
+      letter-spacing: 2px;
+      color: $theme-color-base-lighter;
+      opacity: 60%;
+    }
+  }
+
+  &__raga-info {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    text-align: right;
+  }
+
+  &__raga-name {
+    font-size: 120px;
+    line-height: 120px
+  }
+
+  &__raga-detail {
+    font-size: 32px;
+    line-height: 42px;
+    font-weight: 200;
+    color: $theme-color-base;
+  }
+}

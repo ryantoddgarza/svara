@@ -1,0 +1,32 @@
+.mobile-header {
+  background: white;
+  border-bottom: 1px solid $theme-color-base-lighter;
+
+  &__contents {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+  }
+
+  &__site-header {
+    padding-right: 16px;
+  }
+
+  &__site-logo {
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: $theme-color-base-ink;
+  }
+
+  & ul,
+  & li {
+    margin: 0;
+    padding: 0;
+  }
+
+  &__nav-list {
+    display: flex;
+    @include evenly-space-children (16px);
+  }
+}

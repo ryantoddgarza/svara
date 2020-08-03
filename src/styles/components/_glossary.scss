@@ -1,0 +1,52 @@
+.glossary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: $theme-color-base-darkest;
+  min-height: 50vh;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+
+  &__content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  &__row-top {
+    padding-bottom: 48px;
+  }
+
+  &__row-bottom {
+    @include row (48px);
+  }
+
+  &__terms-col {
+    width: 33.3333%;
+    margin: 0;
+    font-size: 32px;
+  }
+
+  &__item {
+    margin-bottom: 12px;
+    color: $theme-color-base-light;
+    transition: color 0.4s;
+    cursor: pointer;
+
+    &--active {
+      color: white;
+    }
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  &__definition-col {
+    width: 66.6666%;
+  }
+
+  &__definition {
+    font-size: 18px;
+    line-height: 1.75rem;;
+  }
+}
