@@ -7,8 +7,7 @@
     "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Ryan Todd Garza",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.10.3",
