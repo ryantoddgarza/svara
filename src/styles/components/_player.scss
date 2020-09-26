@@ -1,23 +1,22 @@
 .player {
   position: fixed;
-  right: 0;
   bottom: 0;
-  left: 0;
+  width: 100%;
   background: white;
   border-top: 1px solid $theme-color-base-lighter;
 
   &__bottom-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
     height: 96px;
   }
 
   &__start,
   &__center,
-  &__end, {
-    flex: 1 1;
+  &__end {
     display: flex;
     align-items: center;
-    @include evenly-space-children (16px);
+    @include evenly-space-children(16px);
   }
 
   &__start {
@@ -30,5 +29,70 @@
 
   &__end {
     justify-content: flex-end;
+  }
+
+  .controls {
+    &__volume {
+      // read more at https://css-tricks.com/sliding-nightmare-understanding-range-input/
+      $track-width: 130px;
+      $track-height: 4px;
+      $thumb-diameter: 12px;
+      $track-color: $theme-color-base-lighter;
+      $thumb-color: $theme-color-base-ink;
+
+      @mixin track {
+        box-sizing: border-box;
+        max-width: $track-width;
+        height: $track-height;
+        background: $track-color;
+        border: none;
+        border-radius: $track-height * 0.5;
+        cursor: pointer;
+      }
+
+      @mixin thumb {
+        box-sizing: border-box;
+        width: $thumb-diameter;
+        height: $thumb-diameter;
+        background: $thumb-color;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      width: $track-width;
+      height: $thumb-diameter;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+
+      &,
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+      }
+      &::-webkit-slider-runnable-track {
+        @include track;
+      }
+      &::-moz-range-track {
+        @include track;
+      }
+      &::-ms-track {
+        @include track;
+      }
+      &::-webkit-slider-thumb {
+        margin-top: ($track-height - $thumb-diameter) * 0.5;
+        @include thumb;
+      }
+      &::-moz-range-thumb {
+        @include thumb;
+      }
+      &::-ms-thumb {
+        margin-top: 0;
+        @include thumb;
+      }
+      &::-ms-tooltip {
+        display: none;
+      }
+    }
   }
 }

@@ -5,8 +5,10 @@ context.suspend && context.suspend();
 
 export default context;
 
-export const systemOutput = (function() {
-  const initVolume = 1;
+export const systemOutput = (function () {
+  const initVolume = localStorage.getItem('volume')
+    ? localStorage.getItem('volume')
+    : 1;
 
   const gainNode = context.createGain();
   gainNode.connect(context.destination);
@@ -19,4 +21,4 @@ export const systemOutput = (function() {
       gainNode.gain.value = e.target.value;
     },
   };
-}());
+})();

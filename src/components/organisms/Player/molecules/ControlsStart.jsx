@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { nucleus } from '../../../../patches/nucleus';
 
 const ControlsStart = () => {
@@ -6,16 +6,15 @@ const ControlsStart = () => {
 
   useEffect(() => {
     const selectedRagaName = nucleus.ragaName; // TODO: make dynamic
-
     setRagaName(selectedRagaName);
   });
 
   return (
-    <Fragment>
-      <div className="Player__media-information">
-        <span>{ ragaName }</span>
+    <div className="player__start">
+      <div className="player__media-info">
+        <span>{ragaName}</span>
       </div>
-    </Fragment>
+    </div>
   );
 };
 
