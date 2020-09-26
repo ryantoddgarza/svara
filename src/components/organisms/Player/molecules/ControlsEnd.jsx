@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { systemOutput } from '../../../../utils/WebAudio/audio-context';
 
 const ControlsEnd = () => {
@@ -8,20 +8,20 @@ const ControlsEnd = () => {
   };
 
   return (
-    <Fragment>
+    <div className="player__end">
       <i className="material-icons">volume_up</i>
       <input
         onChange={onVolumeChange}
         defaultValue={systemOutput.initVolume}
         title="volume"
-        className="playback-controls__volume"
+        className="controls__volume"
         type="range"
         min="0"
         max="1"
         step="0.01"
         aria-labelledby="title"
       />
-    </Fragment>
+    </div>
   );
 };
 

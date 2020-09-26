@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { synthEngine } from '../../../../utils/SynthEngine';
 
 const Controls = () => {
@@ -18,7 +18,7 @@ const Controls = () => {
     }
   };
 
-  const handlePlayClick = () => {
+  const onPlay = () => {
     synthEngine.play();
     setIsPlaying(synthEngine.isPlaying);
   };
@@ -28,11 +28,18 @@ const Controls = () => {
   });
 
   return (
-    <Fragment>
-      <button className="player__play-button" type="button" onClick={handlePlayClick}>
-        <i id="play-icon" className="material-icons md-48" aria-labelledby="title" />
+    <div className="player__center">
+      <button
+        onClick={onPlay}
+        type="button"
+      >
+        <i
+          id="play-icon"
+          className="material-icons md-48"
+          aria-labelledby="id"
+        />
       </button>
-    </Fragment>
+    </div>
   );
 };
 
