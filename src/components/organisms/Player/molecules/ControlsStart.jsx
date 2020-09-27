@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { nucleus } from '../../../../patches/nucleus';
+import { nucleus } from '~/patches/nucleus';
 
 const ControlsStart = () => {
   const [ragaName, setRagaName] = useState('');

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import DynamicPrahar from './molecules/DynamicPrahar';
 import AnalyzerCanvas from './molecules/AnalyzerCanvas';
 import RagaInfo from './molecules/RagaInfo';
-import { Analyser } from '../../../constants/analyser';
+import { Analyser } from '~/constants/analyser';
 
 class Visualizer extends Component {
   componentDidMount() {

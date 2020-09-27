@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { synthEngine } from '../../../../utils/SynthEngine';
+import { synthEngine } from '~/utils/SynthEngine';
 
 const Controls = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
@@ -29,10 +29,7 @@ const Controls = () => {
 
   return (
     <div className="player__center">
-      <button
-        onClick={onPlay}
-        type="button"
-      >
+      <button onClick={onPlay} type="button">
         <i
           id="play-icon"
           className="material-icons md-48"

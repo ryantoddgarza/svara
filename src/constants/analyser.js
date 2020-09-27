@@ -1,4 +1,4 @@
-import context from '../utils/WebAudio/audio-context';
+import context from '~/utils/WebAudio/audio-context';
 
 // analyser adapted from: https://codepen.io/alexdevp/pen/RNELPV?editors=0100
 

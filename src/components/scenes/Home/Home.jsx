@@ -1,5 +1,5 @@
 import React from 'react';
-import Glossary from '../../organisms/Glossary';
+import Glossary from '~/components/organisms/Glossary';
 import about from './about.json';
 
 const Home = () => (

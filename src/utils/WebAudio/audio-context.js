@@ -19,4 +19,4 @@ export const systemOutput = (function () {
       gainNode.gain.value = value;
     },
   };
-})();
+}());

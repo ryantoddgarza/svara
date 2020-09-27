@@ -1,13 +1,13 @@
-import context, { systemOutput } from '../../utils/WebAudio/audio-context';
-import { synthEngine } from '../../utils/SynthEngine';
-import { nucleus } from '../nucleus';
-import { random } from '../../constants/randomEngine';
-import * as MIDI from '../../constants/midi';
-import * as Pattern from '../../constants/pattern';
-import { RagaScales } from '../../constants/raga';
-import ragas from '../../constants/ragas.json';
-import { SimpleReverb } from '../synth-modules';
-import { Analyser } from '../../constants/analyser';
+import context, { systemOutput } from '~/utils/WebAudio/audio-context';
+import { synthEngine } from '~/utils/SynthEngine';
+import { random } from '~/constants/randomEngine';
+import * as MIDI from '~/constants/midi';
+import * as Pattern from '~/constants/pattern';
+import { RagaScales } from '~/constants/raga';
+import ragas from '~/constants/ragas.json';
+import { Analyser } from '~/constants/analyser';
+import { nucleus } from '~/patches/nucleus';
+import { SimpleReverb } from '~/patches/synth-modules';
 
 const Bloom = (function() {
   const Nucleus = new Proxy(nucleus, {

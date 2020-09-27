@@ -6,7 +6,7 @@ import { synthEngine } from './utils/SynthEngine';
 import './utils/lazy-load';
 import './utils/a11y';
 
-import * as routes from './constants/routes';
+import { LANDING, HOME, VISUALIZER } from './constants/routes';
 import Visualizer from './pages/visualizer';
 import Home from './pages/home';
 
@@ -21,9 +21,9 @@ class App extends Component {
       <div className="app">
         <Layout>
           <Switch>
-            <Route path={routes.LANDING} exact component={Visualizer} />
-            <Route path={routes.HOME} component={Home} />
-            <Route path={routes.VISUALIZER} component={Visualizer} />
+            <Route path={LANDING} exact component={Visualizer} />
+            <Route path={HOME} component={Home} />
+            <Route path={VISUALIZER} component={Visualizer} />
           </Switch>
         </Layout>
       </div>

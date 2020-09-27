@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { selectedRaga } from '../../../../patches/nucleus';
+import { selectedRaga } from '~/patches/nucleus';
 
 class DynamicPrahar extends Component {
   constructor(props) {
@@ -10,10 +10,7 @@ class DynamicPrahar extends Component {
   }
 
   componentDidMount() {
-    this.intervalID = setInterval(
-      () => this.tick(),
-      1000,
-    );
+    this.intervalID = setInterval(() => this.tick(), 1000);
   }
 
   componentWillUnmount() {
@@ -29,8 +26,8 @@ class DynamicPrahar extends Component {
   render() {
     return (
       <div className="visualizer__prahar">
-        <div className="visualizer__prahar-numeral">{ selectedRaga.prahar }</div>
-        <div className="visualizer__prahar-clock">{ this.state.time }</div>
+        <div className="visualizer__prahar-numeral">{selectedRaga.prahar}</div>
+        <div className="visualizer__prahar-clock">{this.state.time}</div>
       </div>
     );
   }

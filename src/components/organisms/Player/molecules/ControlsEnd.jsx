@@ -1,5 +1,5 @@
 import React from 'react';
-import { systemOutput } from '../../../../utils/WebAudio/audio-context';
+import { systemOutput } from '~/utils/WebAudio/audio-context';
 
 const ControlsEnd = () => {
   const onVolumeChange = (e) => {
