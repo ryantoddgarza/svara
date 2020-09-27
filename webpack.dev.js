@@ -9,7 +9,6 @@ module.exports = merge(common, {
     contentBase: './dist',
     historyApiFallback: true,
     compress: true,
-    open: true,
   },
   module: {
     rules: [
