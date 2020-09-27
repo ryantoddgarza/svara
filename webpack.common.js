@@ -9,6 +9,9 @@ module.exports = {
     app: './src/index.js',
   },
   resolve: {
+    alias: {
+      '~': path.resolve(__dirname, 'src'),
+    },
     extensions: ['.js', '.jsx'],
   },
   plugins: [
