@@ -1,4 +1,4 @@
 import React from 'react';
-import Visualizer from '~/components/scenes/Visualizer';
+import Visualizer from '~/components/Visualizer';
 
 export default () => <Visualizer />;

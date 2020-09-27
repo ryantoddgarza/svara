@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { selectedRaga } from '~/patches/nucleus';
 
-class DynamicPrahar extends Component {
+class PraharClock extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,4 +33,4 @@ class DynamicPrahar extends Component {
   }
 }
 
-export default DynamicPrahar;
+export default PraharClock;
