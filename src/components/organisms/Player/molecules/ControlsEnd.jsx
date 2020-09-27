@@ -3,8 +3,11 @@ import { systemOutput } from '../../../../utils/WebAudio/audio-context';
 
 const ControlsEnd = () => {
   const onVolumeChange = (e) => {
+    systemOutput.setGain(e.target.value);
+  };
+
+  const onVolumeMouseUp = (e) => {
     localStorage.setItem('volume', e.target.value);
-    systemOutput.setGain(e);
   };
 
   return (
@@ -12,6 +15,7 @@ const ControlsEnd = () => {
       <i className="material-icons">volume_up</i>
       <input
         onChange={onVolumeChange}
+        onMouseUp={onVolumeMouseUp}
         defaultValue={systemOutput.initVolume}
         title="volume"
         className="controls__volume"
