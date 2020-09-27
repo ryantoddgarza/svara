@@ -4,7 +4,7 @@ import { random } from '~/constants/randomEngine';
 import * as MIDI from '~/constants/midi';
 import * as Pattern from '~/constants/pattern';
 import { RagaScales } from '~/constants/raga';
-import ragas from '~/constants/ragas.json';
+import ragas from '~/data/ragas.json';
 import { Analyser } from '~/constants/analyser';
 import { nucleus } from '~/patches/nucleus';
 import { SimpleReverb } from '~/patches/synth-modules';

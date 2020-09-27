@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import glossary from './glossary.json';
+import glossary from '~/data/glossary.json';
 
 const Glossary = () => {
   const [activeDefinition, setActiveDefinition] = useState(undefined);

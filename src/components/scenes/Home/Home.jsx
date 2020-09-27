@@ -1,6 +1,6 @@
 import React from 'react';
 import Glossary from '~/components/organisms/Glossary';
-import about from './about.json';
+import about from '~/data/about.json';
 
 const Home = () => (
   <div className="home">
