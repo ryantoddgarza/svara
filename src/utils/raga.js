@@ -3,7 +3,7 @@ import ragas from '~/data/ragas.json';
 // @param {array} midiNums - Standard MIDI note numbers
 // @param {object} raga - Rules
 // @param {number} rootNum - MIDI note value
-export function RagaScales(midiNums, raga, rootNum) {
+function RagaScales(midiNums, raga, rootNum) {
   this.aarohNum = raga.aaroh;
   this.avrohNum = raga.avroh;
 
@@ -16,7 +16,7 @@ export function RagaScales(midiNums, raga, rootNum) {
   this.avrohFreq = avrohFreq.map((val) => midiNums[val]);
 }
 
-export const prahar = {
+const prahar = {
   ragaData: ragas,
 
   getRagas() {
@@ -66,4 +66,9 @@ export const prahar = {
         return null;
     }
   },
+};
+
+export {
+  RagaScales,
+  prahar,
 };

@@ -19,4 +19,7 @@ const systemOutput = (function () {
   };
 }());
 
-export { context, systemOutput };
+export {
+  context,
+  systemOutput,
+};
