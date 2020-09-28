@@ -4,6 +4,7 @@
   width: 100%;
   background: white;
   border-top: 1px solid $theme-color-base-lighter;
+  z-index: 80;
 
   &__bottom-row {
     display: grid;
