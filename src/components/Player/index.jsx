@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { systemOutput, synthEngine } from '~/synth';
-import { nucleus } from '~/synth/modules/nucleus';
+import { systemOutput } from '~/synth/modules/audioContext';
+import synthEngine from '~/synth/modules/synthEngine';
+import nucleus from '~/synth/modules/nucleus';
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);

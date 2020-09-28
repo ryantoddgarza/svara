@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
-import { synthEngine } from '~/synth';
+import synthEngine from '~/synth/modules/synthEngine';
 import include from '~/scripts/include';
 
 import '~/scripts/lazyLoad';

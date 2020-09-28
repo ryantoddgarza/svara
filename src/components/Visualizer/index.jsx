@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { nucleus } from '~/synth/modules/nucleus';
+import nucleus from '~/synth/modules/nucleus';
 import Analyser from './analyser';
 import PraharClock from '~/components/PraharClock';
 

@@ -1,4 +1,4 @@
-import { Bloom } from '~/synth/patches/Bloom';
+import Bloom from '~/synth/patches/Bloom';
 
 const synthEngine = {
   isPlaying: false,
@@ -29,4 +29,4 @@ const synthEngine = {
   },
 };
 
-export { synthEngine };
+export default synthEngine;
