@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { synthEngine } from '~/utils/SynthEngine';
-import { nucleus } from '~/patches/nucleus';
-import { systemOutput } from '~/utils/WebAudio/audio-context';
+import { systemOutput, synthEngine } from '~/synth';
+import { nucleus } from '~/synth/modules/nucleus';
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
   const [ragaName, setRagaName] = useState('');
 
   useEffect(() => {
-    setRagaName(nucleus.ragaName); // TODO: Make dynamic
+    setRagaName(nucleus.raga.name); // TODO: Make dynamic
   });
 
   const setPlayIcon = () => {

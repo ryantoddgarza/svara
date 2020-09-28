@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { selectedRaga } from '~/patches/nucleus';
+import { nucleus } from '~/synth/modules/nucleus';
 
 class PraharClock extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class PraharClock extends Component {
   render() {
     return (
       <div className="visualizer__prahar">
-        <div className="visualizer__prahar-numeral">{selectedRaga.prahar}</div>
+        <div className="visualizer__prahar-numeral">{nucleus.raga.prahar}</div>
         <div className="visualizer__prahar-clock">{this.state.time}</div>
       </div>
     );

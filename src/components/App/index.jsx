@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Layout from './utils/Layout';
-import include from './utils/include';
-import { synthEngine } from './utils/SynthEngine';
-import './utils/lazy-load';
-import './utils/a11y';
+import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
+import { synthEngine } from '~/synth';
+import include from '~/scripts/include';
 
-import { LANDING, HOME, VISUALIZER } from './constants/routes';
-import Visualizer from './pages/visualizer';
-import Home from './pages/home';
+import '~/scripts/lazyLoad';
+import '~/scripts/a11y';
+
+import Layout from '~/components/Layout';
+import Visualizer from '~/pages/visualizer';
+import Home from '~/pages/home';
 
 class App extends Component {
   componentDidMount() {

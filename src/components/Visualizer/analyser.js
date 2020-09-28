@@ -1,4 +1,4 @@
-import context from '~/utils/WebAudio/audio-context';
+import { context } from '~/synth';
 
 // analyser adapted from: https://codepen.io/alexdevp/pen/RNELPV?editors=0100
 
@@ -321,4 +321,4 @@ const Analyser = {
   },
 };
 
-export { Analyser };
+export default Analyser;

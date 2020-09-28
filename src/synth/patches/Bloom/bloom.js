@@ -1,13 +1,13 @@
-import context, { systemOutput } from '~/utils/WebAudio/audio-context';
-import { synthEngine } from '~/utils/SynthEngine';
-import { random } from '~/constants/randomEngine';
-import * as MIDI from '~/constants/midi';
-import * as Pattern from '~/constants/pattern';
-import { RagaScales } from '~/constants/raga';
+import { context, systemOutput, synthEngine } from '~/synth';
+import { nucleus } from '~/synth/modules/nucleus';
+import { random } from '~/synth/modules/randomEngine';
+import * as MIDI from '~/synth/modules/midi';
+import * as Pattern from '~/synth/modules/pattern';
+import { RagaScales } from '~/utils/raga';
+import Analyser from '~/components/Visualizer/analyser';
 import ragas from '~/data/ragas.json';
-import { Analyser } from '~/constants/analyser';
-import { nucleus } from '~/patches/nucleus';
-import { SimpleReverb } from '~/patches/synth-modules';
+
+const SimpleReverb = require('~/synth/modules/simpleReverb');
 
 const Bloom = (function() {
   const Nucleus = new Proxy(nucleus, {
@@ -17,7 +17,7 @@ const Bloom = (function() {
   });
 
   const midiNums = MIDI.noteNums;
-  const ragaPitchData = new RagaScales(midiNums, ragas[Nucleus.ragaName], Nucleus.tonic)
+  const ragaPitchData = new RagaScales(midiNums, ragas[Nucleus.raga.name], Nucleus.tonic);
 
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { selectedRaga } from '~/patches/nucleus';
-import { Analyser } from '~/constants/analyser';
+import { nucleus } from '~/synth/modules/nucleus';
+import Analyser from './analyser';
 import PraharClock from '~/components/PraharClock';
 
 const svaraNames = [
@@ -31,19 +31,19 @@ class Visualizer extends Component {
         <PraharClock />
         <div className="visualizer__raga-info">
           <div className="visualizer__raga-name">
-            {`raga ${selectedRaga.name}`}
+            {`raga ${nucleus.raga.name}`}
           </div>
           <div className="visualizer__raga-detail">
-            {`thaat · ${selectedRaga.thaat}`}
+            {`thaat · ${nucleus.raga.thaat}`}
           </div>
           <div className="visualizer__raga-detail">
-            {`vadi · ${indexToSvara(selectedRaga.vadi)}`}
+            {`vadi · ${indexToSvara(nucleus.raga.vadi)}`}
           </div>
           <div className="visualizer__raga-detail">
-            {`samvadi · ${indexToSvara(selectedRaga.samvadi)}`}
+            {`samvadi · ${indexToSvara(nucleus.raga.samvadi)}`}
           </div>
           <div className="visualizer__raga-detail">
-            {`prahar · ${selectedRaga.prahar}`}
+            {`prahar · ${nucleus.raga.prahar}`}
           </div>
         </div>
         <canvas />
