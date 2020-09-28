@@ -1,15 +1,15 @@
-import { context, systemOutput, synthEngine } from '~/synth';
-import { nucleus } from '~/synth/modules/nucleus';
-import { random } from '~/synth/modules/randomEngine';
+import synthEngine from '~/synth/modules/synthEngine';
+import { context, systemOutput } from '~/synth/modules/audioContext';
+import nucleus from '~/synth/modules/nucleus';
+import random from '~/synth/modules/random';
 import * as MIDI from '~/synth/modules/midi';
 import * as Pattern from '~/synth/modules/pattern';
+import SimpleReverb from '~/synth/modules/simpleReverb';
 import { RagaScales } from '~/utils/raga';
 import Analyser from '~/components/Visualizer/analyser';
 import ragas from '~/data/ragas.json';
 
-const SimpleReverb = require('~/synth/modules/simpleReverb');
-
-const Bloom = (function() {
+const patch = (function() {
   const Nucleus = new Proxy(nucleus, {
     set(target, key, value) {
       target[key] = value;
@@ -361,4 +361,4 @@ const Bloom = (function() {
   };
 }());
 
-export { Bloom };
+export default patch;

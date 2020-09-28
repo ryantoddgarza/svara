@@ -5,11 +5,11 @@ const Glossary = () => {
   const [activeDefinition, setActiveDefinition] = useState(undefined);
   const [activeId, setActiveId] = useState(Object.keys(glossary)[0]);
 
-  const toggleActiveTerm = (key) => {
+  const toggleActiveTerm = (id) => {
     document.getElementById(`${activeId}`).classList.remove('glossary__item--active');
-    document.getElementById(`${key}`).classList.add('glossary__item--active');
-    setActiveDefinition(Object.values(glossary[key]));
-    setActiveId(key);
+    document.getElementById(`${id}`).classList.add('glossary__item--active');
+    setActiveDefinition(Object.values(glossary[id]));
+    setActiveId(id);
   };
 
   const handleTermClick = (e) => {
@@ -20,7 +20,14 @@ const Glossary = () => {
     const termsArray = Object.keys(glossary);
 
     const els = termsArray.map((term) => (
-      <li key={term} id={term} className="glossary__item" onClick={(e) => handleTermClick(e)}>{ term }</li>
+      <li
+        onClick={handleTermClick}
+        key={term}
+        id={term}
+        className="glossary__item"
+      >
+        {term}
+      </li>
     ));
 
     return els;
@@ -38,11 +45,9 @@ const Glossary = () => {
           <div className="glossary__title">glossary</div>
         </div>
         <div className="glossary__row-bottom">
-          <ul className="glossary__terms-col">{ createHtmlTermEls() }</ul>
+          <ul className="glossary__terms-col">{createHtmlTermEls()}</ul>
           <div className="glossary__definition-col">
-            <div className="glossary__definition">
-              { activeDefinition }
-            </div>
+            <div className="glossary__definition">{activeDefinition}</div>
           </div>
         </div>
       </div>

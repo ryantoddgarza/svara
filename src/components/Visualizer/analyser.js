@@ -1,4 +1,4 @@
-import { context } from '~/synth';
+import { context } from '~/synth/modules/audioContext';
 
 // analyser adapted from: https://codepen.io/alexdevp/pen/RNELPV?editors=0100
 

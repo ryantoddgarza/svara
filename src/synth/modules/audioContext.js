@@ -1,9 +1,9 @@
 const AudioContext = window.AudioContext || window.webkitAudioContext;
-export const context = new AudioContext();
+const context = new AudioContext();
 
 context.suspend && context.suspend();
 
-export const systemOutput = (function () {
+const systemOutput = (function () {
   const initVolume = localStorage.getItem('volume') || 1;
 
   const gainNode = context.createGain();
@@ -18,3 +18,8 @@ export const systemOutput = (function () {
     },
   };
 }());
+
+export {
+  context,
+  systemOutput,
+};

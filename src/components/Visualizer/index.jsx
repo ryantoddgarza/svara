@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { nucleus } from '~/synth/modules/nucleus';
+import nucleus from '~/synth/modules/nucleus';
 import Analyser from './analyser';
 import PraharClock from '~/components/PraharClock';
 
@@ -28,7 +28,7 @@ class Visualizer extends Component {
   render() {
     return (
       <div className="visualizer">
-        <PraharClock />
+        <PraharClock prahar={nucleus.raga.prahar} />
         <div className="visualizer__raga-info">
           <div className="visualizer__raga-name">
             {`raga ${nucleus.raga.name}`}

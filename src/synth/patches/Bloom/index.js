@@ -1,1 +1,3 @@
-export { Bloom } from './bloom';
+import patch from './patch';
+
+export default patch;

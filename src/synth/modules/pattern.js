@@ -1,7 +1,9 @@
+/* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
+//
 // returns a number within the range of an array's length
 // @param {number} index - num to test
 // @param {number} length - wrap to this length. passed in as `arr.length`
-export const wrapArrayIndex = (index, length) => {
+const wrapArrayIndex = (index, length) => {
   let wrappedIndex;
 
   if (index % length === 0) {
@@ -22,12 +24,12 @@ export const wrapArrayIndex = (index, length) => {
   return index;
 };
 
-export const increment = (num, interval = 1) => {
+const increment = (num, interval = 1) => {
   num += interval;
   return num;
 };
 
-export const decrement = (num, interval = 1) => {
+const decrement = (num, interval = 1) => {
   num -= interval;
   return num;
 };
@@ -36,12 +38,11 @@ export const decrement = (num, interval = 1) => {
 // @param {object} - requires { pos: {num} }
 // @param {function} callback - imcrement or decrement
 // @param {number} interval - amount to inc/dec. passed to callback
-export const stepThrough = (obj, callback, interval) => {
+const stepThrough = (obj, callback, interval) => {
   obj.pos = callback(obj.pos, interval);
 };
 
-// fibonacci
-export const fibonacci = (n) => {
+const fibonacci = (n) => {
   const fibArr = [0, 1];
 
   for (let i = 2; i < n + 1; i++) {
@@ -49,4 +50,12 @@ export const fibonacci = (n) => {
   }
 
   return fibArr[n];
+};
+
+export {
+  wrapArrayIndex,
+  increment,
+  decrement,
+  stepThrough,
+  fibonacci,
 };

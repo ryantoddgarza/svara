@@ -1,36 +1,32 @@
-import React, { Component } from 'react';
-import { nucleus } from '~/synth/modules/nucleus';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-class PraharClock extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      time: new Date().toLocaleTimeString('it-IT'),
+const PraharClock = ({ prahar }) => {
+  const getCurrentTime = () => new Date().toLocaleTimeString('it-IT');
+
+  const [clock, setclock] = useState(getCurrentTime);
+  let timer;
+  useEffect(() => {
+    timer = setInterval(() => {
+      setclock(getCurrentTime);
+    }, 1000);
+
+    return function cleanup() {
+      clearInterval(timer);
+      timer = null;
     };
-  }
+  });
 
-  componentDidMount() {
-    this.intervalID = setInterval(() => this.tick(), 1000);
-  }
+  return (
+    <div className="visualizer__prahar">
+      <div className="visualizer__prahar-numeral">{prahar}</div>
+      <div className="visualizer__prahar-clock">{clock}</div>
+    </div>
+  );
+};
 
-  componentWillUnmount() {
-    clearInterval(this.intervalID);
-  }
-
-  tick() {
-    this.setState({
-      time: new Date().toLocaleTimeString('it-IT'),
-    });
-  }
-
-  render() {
-    return (
-      <div className="visualizer__prahar">
-        <div className="visualizer__prahar-numeral">{nucleus.raga.prahar}</div>
-        <div className="visualizer__prahar-clock">{this.state.time}</div>
-      </div>
-    );
-  }
-}
+PraharClock.propTypes = {
+  prahar: PropTypes.number.isRequired,
+};
 
 export default PraharClock;

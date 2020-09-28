@@ -1,6 +1,6 @@
 import { noteNums } from '~/synth/modules/midi';
 import { prahar } from '~/utils/raga';
-import { random } from '~/synth/modules/randomEngine';
+import random from '~/synth/modules/random';
 
 const generate = {
   tempo() {
@@ -12,7 +12,7 @@ const generate = {
   },
 };
 
-export const nucleus = {
+const nucleus = {
   tempo: generate.tempo(),
   meter: generate.meter(),
   tonic: 62,
@@ -21,3 +21,5 @@ export const nucleus = {
   },
   raga: prahar.getRagas()[0],
 };
+
+export default nucleus;
