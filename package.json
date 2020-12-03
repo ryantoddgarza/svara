@@ -44,6 +44,7 @@
     "random-js": "^2.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-icons": "^4.1.0",
     "react-router-dom": "^5.2.0",
     "webpack-merge": "^4.2.2"
   }
