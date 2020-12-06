@@ -198,6 +198,38 @@ const patch = (function() {
     return note;
   };
 
+  const master = {
+    vca: context.createGain(),
+
+    connectToAnalyzer() {
+      if (Analyser.analyser) {
+        this.vca.connect(Analyser.analyser);
+      }
+    },
+
+    pollForAnalyzer() {
+      setInterval(() => {
+        this.connectToAnalyzer();
+      }, 1000);
+    },
+
+    init() {
+      this.vca.connect(systemOutput.gainNode);
+      this.vca.gain.value = 1;
+      this.pollForAnalyzer();
+    },
+  };
+
+  const effects = {
+    reverb: new SimpleReverb(context, {
+      seconds: 3,
+      decay: 2,
+    }),
+    init() {
+      this.reverb.connect(master.vca);
+    },
+  };
+
   const melodyVoice = {
     range: [],
 
@@ -218,21 +250,10 @@ const patch = (function() {
     },
 
     patch(time) {
-      const reverb = new SimpleReverb(context, {
-        seconds: 3,
-        decay: 2,
-      });
-      reverb.connect(systemOutput.gainNode);
-
-      // patch vca
+      // sub-patch vca
       const vcaOut = context.createGain();
-      vcaOut.connect(systemOutput.gainNode);
-      vcaOut.connect(reverb.input);
-
-      if (Analyser.analyser) {
-        vcaOut.connect(Analyser.analyser);
-      }
-
+      vcaOut.connect(master.vca);
+      vcaOut.connect(effects.reverb.input);
       vcaOut.gain.value = 0.2;
 
       // note envelope vca
@@ -245,15 +266,14 @@ const patch = (function() {
       osc1.frequency.value = currentNote();
       osc1.connect(vca1);
 
-      let attack = 0.1;
-      let decay = (60 / Nucleus.tempo) / subdivision;
+      const attack = 0.1;
+      const decay = (60 / Nucleus.tempo) / subdivision;
+      const noteLength = attack + decay;
 
-      let noteLength = attack + decay;
-
-      vca1.gain.setValueAtTime(0, context.currentTime);
-      vca1.gain.linearRampToValueAtTime(1, context.currentTime + attack);
-      vca1.gain.linearRampToValueAtTime(0, context.currentTime + noteLength);
-
+      // envelope
+      vca1.gain.setValueAtTime(0, time);
+      vca1.gain.linearRampToValueAtTime(1, time + attack);
+      vca1.gain.linearRampToValueAtTime(0, time + noteLength);
       osc1.start(time);
       osc1.stop(time + noteLength);
     },
@@ -264,20 +284,17 @@ const patch = (function() {
   };
 
   const voiceDrone = () => {
-    const root = Nucleus.tonicToFreq();
-
-    // module vca
+    // sub-patch vca
     const gain1 = context.createGain();
     gain1.gain.value = 0.1;
-    gain1.connect(systemOutput.gainNode);
-
-    if (Analyser.analyser) {
-      gain1.connect(Analyser.analyser);
-    }
+    gain1.connect(master.vca);
+    gain1.connect(effects.reverb.input);
 
     // amplitude mod
     const amMod = context.createGain();
     amMod.connect(gain1);
+
+    const root = Nucleus.tonicToFreq();
 
     // carrier osc
     const osc1 = context.createOscillator();
@@ -345,6 +362,8 @@ const patch = (function() {
     setMelodicVariables();
     setRhythmicVariables();
     setImprovisationState(false); // randomly gen
+    effects.init();
+    master.init();
     melodyVoice.init();
   };
 

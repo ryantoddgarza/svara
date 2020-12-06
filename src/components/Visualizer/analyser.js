@@ -319,6 +319,11 @@ const Analyser = {
       this.analyser.getByteFrequencyData(Framer.frequencyData);
     };
   },
+
+  stop() {
+    this.javascriptNode.onaudioprocess = () => {};
+    Scene.stopRender();
+  },
 };
 
 export default Analyser;

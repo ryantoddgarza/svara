@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import nucleus from '~/synth/modules/nucleus';
 import Analyser from './analyser';
 import PraharClock from '~/components/PraharClock';
@@ -20,36 +20,37 @@ const svaraNames = [
 
 const indexToSvara = (i) => svaraNames[i];
 
-class Visualizer extends Component {
-  componentDidMount() {
+const Visualizer = () => {
+  useEffect(() => {
     Analyser.init();
-  }
+    return function cleanup() {
+      Analyser.stop();
+    };
+  }, []);
 
-  render() {
-    return (
-      <div className="visualizer">
-        <PraharClock prahar={nucleus.raga.prahar} />
-        <div className="visualizer__raga-info">
-          <div className="visualizer__raga-name">
-            {`raga ${nucleus.raga.name}`}
-          </div>
-          <div className="visualizer__raga-detail">
-            {`thaat · ${nucleus.raga.thaat}`}
-          </div>
-          <div className="visualizer__raga-detail">
-            {`vadi · ${indexToSvara(nucleus.raga.vadi)}`}
-          </div>
-          <div className="visualizer__raga-detail">
-            {`samvadi · ${indexToSvara(nucleus.raga.samvadi)}`}
-          </div>
-          <div className="visualizer__raga-detail">
-            {`prahar · ${nucleus.raga.prahar}`}
-          </div>
+  return (
+    <div className="visualizer">
+      <PraharClock prahar={nucleus.raga.prahar} />
+      <div className="visualizer__raga-info">
+        <div className="visualizer__raga-name">
+          {`raga ${nucleus.raga.name}`}
         </div>
-        <canvas />
+        <div className="visualizer__raga-detail">
+          {`thaat · ${nucleus.raga.thaat}`}
+        </div>
+        <div className="visualizer__raga-detail">
+          {`vadi · ${indexToSvara(nucleus.raga.vadi)}`}
+        </div>
+        <div className="visualizer__raga-detail">
+          {`samvadi · ${indexToSvara(nucleus.raga.samvadi)}`}
+        </div>
+        <div className="visualizer__raga-detail">
+          {`prahar · ${nucleus.raga.prahar}`}
+        </div>
       </div>
-    );
-  }
-}
+      <canvas />
+    </div>
+  );
+};
 
 export default Visualizer;
