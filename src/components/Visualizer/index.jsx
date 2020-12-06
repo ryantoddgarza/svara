@@ -23,6 +23,9 @@ const indexToSvara = (i) => svaraNames[i];
 const Visualizer = () => {
   useEffect(() => {
     Analyser.init();
+    return function cleanup() {
+      Analyser.stop();
+    };
   }, []);
 
   return (
