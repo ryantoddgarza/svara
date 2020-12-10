@@ -1,0 +1,102 @@
+.grid-module {
+  margin: 2rem 0;
+
+  &__card {
+    font-size: 1.5rem;
+    margin: 0 2px 2px 0;
+    background: $theme-color-base;
+    border: 1px solid $theme-color-base-ink;
+  }
+
+  &__row {
+    @include row(0);
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  &__col {
+    &--auto {
+      @include col(auto);
+    }
+    &--1 {
+      @include col(100%);
+    }
+    &--2 {
+      @include col(50%);
+    }
+    &--3 {
+      @include col(33.33333%);
+    }
+    &--4 {
+      @include col(25%);
+    }
+  }
+
+  &__aspect-ratio {
+    position: relative;
+    overflow: hidden;
+    height: 0;
+
+    &--1x1 {
+      @extend .grid-module__aspect-ratio;
+      padding-bottom: 100%;
+    }
+
+    &--1x2 {
+      @extend .grid-module__aspect-ratio;
+      padding-bottom: 200%;
+    }
+
+    &--2x1 {
+      @extend .grid-module__aspect-ratio;
+      padding-bottom: 50%;
+    }
+
+    &--object {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__tile {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    background: white;
+
+    &--interactive {
+      opacity: 0.95;
+
+      &:hover {
+      opacity: 0.98;
+      }
+
+      .tile--clickable {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+    }
+
+    .id-icon {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      width: 2em;
+      height: 2em;
+    }
+
+    .action-icon {
+      position: absolute;
+      right: 1rem;
+      bottom: 1rem;
+    }
+  }
+}
