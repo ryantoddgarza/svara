@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import glossary from '~/data/glossary.json';
 
-const Glossary = () => {
+const Glossary = forwardRef((props, ref) => {
   const [activeDefinition, setActiveDefinition] = useState(undefined);
   const [activeId, setActiveId] = useState(Object.keys(glossary)[0]);
 
@@ -39,7 +39,7 @@ const Glossary = () => {
   }, []);
 
   return (
-    <section className="glossary">
+    <section className="glossary" ref={ref}>
       <div className="glossary__content">
         <div className="glossary__row-top">
           <div className="glossary__title">glossary</div>
@@ -53,6 +53,6 @@ const Glossary = () => {
       </div>
     </section>
   );
-};
+});
 
 export default Glossary;
