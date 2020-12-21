@@ -6,8 +6,8 @@ const Glossary = forwardRef((props, ref) => {
   const [activeId, setActiveId] = useState(Object.keys(glossary)[0]);
 
   const toggleActiveTerm = (id) => {
-    document.getElementById(`${activeId}`).classList.remove('glossary__item--active');
-    document.getElementById(`${id}`).classList.add('glossary__item--active');
+    document.getElementById(`${activeId}`).classList.remove('glossary__term--active');
+    document.getElementById(`${id}`).classList.add('glossary__term--active');
     setActiveDefinition(Object.values(glossary[id]));
     setActiveId(id);
   };
@@ -24,7 +24,7 @@ const Glossary = forwardRef((props, ref) => {
         onClick={handleTermClick}
         key={term}
         id={term}
-        className="glossary__item"
+        className="glossary__term"
       >
         {term}
       </li>
@@ -45,8 +45,8 @@ const Glossary = forwardRef((props, ref) => {
           <div className="glossary__title">glossary</div>
         </div>
         <div className="glossary__row-bottom">
-          <ul className="glossary__terms-col">{createHtmlTermEls()}</ul>
-          <div className="glossary__definition-col">
+          <ul className="glossary__col glossary__col--terms">{createHtmlTermEls()}</ul>
+          <div className="glossary__col glossary__col--definition">
             <div className="glossary__definition">{activeDefinition}</div>
           </div>
         </div>

@@ -4,12 +4,17 @@
   width: 100%;
   background: white;
   border-top: 1px solid $theme-color-base-lighter;
-  z-index: 80;
+  z-index: 6000;
 
   &__bottom-row {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    height: 96px;
+    grid-template-columns: 5fr 1fr;
+    grid-template-areas: 'start center';
+    height: $player-height;
+    @include breakpoint('from-tablet') {
+      grid-template-columns: 1fr 2fr 1fr;
+      grid-template-areas: 'start center end';
+    }
   }
 
   &__start,
@@ -17,23 +22,30 @@
   &__end {
     display: flex;
     align-items: center;
-    @include evenly-space-children(16px);
+    @include evenly-space-children(1rem);
   }
 
   &__start {
+    grid-area: start;
     justify-content: flex-start;
   }
 
   &__center {
+    grid-area: center;
     justify-content: center;
   }
 
   &__end {
-    justify-content: flex-end;
+    grid-area: end;
+    display: none;
+    @include breakpoint('from-tablet') {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 
-  .controls {
-    &__volume {
+  .control {
+    &--volume {
       // read more at https://css-tricks.com/sliding-nightmare-understanding-range-input/
       $track-width: 130px;
       $track-height: 4px;

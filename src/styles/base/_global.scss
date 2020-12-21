@@ -6,11 +6,11 @@ html {
 *::before,
 *::after {
   box-sizing: inherit;
+  font-weight: normal;
 }
 
 body {
   margin: 0;
-  font-size: 15px;
   color: $theme-color-base-ink;
 }
 
