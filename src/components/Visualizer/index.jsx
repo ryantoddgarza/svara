@@ -48,7 +48,9 @@ const Visualizer = () => {
           {`prahar · ${nucleus.raga.prahar}`}
         </div>
       </div>
-      <canvas />
+      <div className="visualizer__analyzer">
+        <canvas />
+      </div>
     </div>
   );
 };

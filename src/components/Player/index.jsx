@@ -66,7 +66,7 @@ const Player = () => {
             onMouseUp={onVolumeMouseUp}
             defaultValue={systemOutput.initVolume}
             title="volume"
-            className="controls__volume"
+            className="control--volume"
             type="range"
             min="0"
             max="1"

@@ -13,16 +13,16 @@ const Home = () => {
     <div className="home">
       <section className="grid-module">
         <div className="grid-module grid-module__row">
-          <div className="grid-module__col--auto">
+          <div className="grid-module__col--8">
             <div className="grid-module__card grid-module__aspect-ratio--2x1">
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile">
-                  <div className="about__tagline">{tagline}</div>
+                  <h5>{tagline}</h5>
                 </div>
               </div>
             </div>
           </div>
-          <div className="grid-module__col--3">
+          <div className="grid-module__col--4">
             <div className="grid-module__card grid-module__aspect-ratio--1x1">
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile grid-module__tile--interactive">
@@ -40,9 +40,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="grid-module__row">
-          <div className="grid-module__col--3">
+          <div className="grid-module__col--4">
             <div className="grid-module__card grid-module__aspect-ratio--1x1">
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile grid-module__tile--interactive">
@@ -58,7 +56,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="grid-module__col--auto">
+          <div className="grid-module__col--8">
             <div className="grid-module__card grid-module__aspect-ratio--2x1">
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile grid-module__tile--interactive">

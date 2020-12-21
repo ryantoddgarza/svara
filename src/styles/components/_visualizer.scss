@@ -1,56 +1,61 @@
 .visualizer {
   position: relative;
+  display: flex;
+  height: calc(100vh - #{$navbar-height} - #{$player-height});
 
   &__analyzer {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    width: fit-content;
+    max-height: 100%;
+    overflow: hidden;
+    margin: auto;
   }
-
   canvas {
     display: block;
-    margin: 0 auto;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   &__prahar {
     position: absolute;
-    top: 24px;
-    left: 24px;
+    top: 1rem;
+    left: 1rem;
     z-index: -1;
+    line-height: 0.8;
 
     &-numeral {
       position: relative;
-      font-size: 252px;
-      line-height: 0.75;
+      font-size: calc(6rem + 10vw);
     }
 
     &-clock {
       position: absolute;
-      bottom: 24px;
-      font-size: 32px;
-      letter-spacing: 2px;
+      top: 1.25rem;
+      left: 1.25rem;
+      font-size: calc(1rem + 6vw);
+      letter-spacing: 0.1em;
       color: $theme-color-base-lighter;
-      opacity: 60%;
+      opacity: 0.4;
     }
   }
 
   &__raga-info {
     position: absolute;
-    top: 50%;
-    right: 24px;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
     text-align: right;
   }
 
   &__raga-name {
-    font-size: 120px;
-    line-height: 120px
+    font-size: calc(2rem + 4vw);
+    margin: 0 0 1rem;
   }
 
   &__raga-detail {
-    font-size: 32px;
-    line-height: 42px;
+    font-size: calc(1rem + 1vw);
+    margin: 0 0 0.5rem;
+    // font-size: 32px;
+    // line-height: 42px;
     font-weight: 200;
     color: $theme-color-base;
   }
