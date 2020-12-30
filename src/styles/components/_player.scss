@@ -45,6 +45,13 @@
     }
   }
 
+  &__icon {
+    &--play,
+    &--pause {
+      font-size: 3rem;
+    }
+  }
+
   .control {
     &--volume {
       // read more at https://css-tricks.com/sliding-nightmare-understanding-range-input/

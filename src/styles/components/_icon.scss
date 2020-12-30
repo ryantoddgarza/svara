@@ -1,0 +1,19 @@
+.icon {
+  font-size: 1.25rem;
+  &--responsive {
+    font-size: 1.175rem;
+    @include breakpoint('from-tablet') {
+      font-size: 1.25rem;
+    }
+  }
+
+  &__lg {
+    font-size: 2rem;
+    &--responsive {
+      font-size: 1.875rem;
+      @include breakpoint('from-tablet') {
+        font-size: 2rem;
+      }
+    }
+  }
+}
