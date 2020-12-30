@@ -1,7 +1,10 @@
 .visualizer {
   position: relative;
   display: flex;
-  height: calc(100vh - #{$navbar-height} - #{$player-height});
+  height: calc(100vh - #{$navbar-height} - #{$player-height--mobile});
+  @include breakpoint('from-tablet') {
+    height: calc(100vh - #{$navbar-height} - #{$player-height--desktop});
+  }
 
   &__analyzer {
     width: fit-content;

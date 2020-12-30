@@ -10,10 +10,11 @@
     display: grid;
     grid-template-columns: 5fr 1fr;
     grid-template-areas: 'start center';
-    height: $player-height;
+    height: $player-height--mobile;
     @include breakpoint('from-tablet') {
       grid-template-columns: 1fr 2fr 1fr;
       grid-template-areas: 'start center end';
+      height: $player-height--desktop;
     }
   }
 
