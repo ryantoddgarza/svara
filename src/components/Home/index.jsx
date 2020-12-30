@@ -32,7 +32,7 @@ const Home = () => {
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile grid-module__tile--interactive">
                   <a
-                    className="tile--clickable"
+                    className="tile__clickable"
                     href="https://github.com/ryantoddgarza/svara"
                     target="_blank"
                     rel="noreferrer"
@@ -50,7 +50,7 @@ const Home = () => {
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile grid-module__tile--interactive">
                   <span
-                    className="tile--clickable"
+                    className="tile__clickable"
                     onClick={scrollGlossaryIntoView}
                   >
                     Glossary
@@ -65,7 +65,7 @@ const Home = () => {
             <div className="grid-module__card grid-module__aspect-ratio--2x1">
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile grid-module__tile--interactive">
-                  <Link className="tile--clickable" to={VISUALIZER}>
+                  <Link className="tile__clickable" to={VISUALIZER}>
                     Visualizer
                   </Link>
                   <FaArrowRight className="tile__action-icon icon" />
