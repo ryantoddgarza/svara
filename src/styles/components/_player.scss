@@ -10,10 +10,11 @@
     display: grid;
     grid-template-columns: 5fr 1fr;
     grid-template-areas: 'start center';
-    height: $player-height;
+    height: $player-height--mobile;
     @include breakpoint('from-tablet') {
       grid-template-columns: 1fr 2fr 1fr;
       grid-template-areas: 'start center end';
+      height: $player-height--desktop;
     }
   }
 
@@ -41,6 +42,13 @@
     @include breakpoint('from-tablet') {
       display: flex;
       justify-content: flex-end;
+    }
+  }
+
+  &__icon {
+    &--play,
+    &--pause {
+      font-size: 3rem;
     }
   }
 

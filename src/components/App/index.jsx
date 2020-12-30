@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
 import synthEngine from '~/synth/modules/synthEngine';
-import include from '~/scripts/include';
 
-import '~/scripts/lazyLoad';
 import '~/scripts/a11y';
 
 import Layout from '~/components/Layout';
@@ -13,7 +11,6 @@ import Home from '~/pages/home';
 
 class App extends Component {
   componentDidMount() {
-    include.sheet('https://fonts.googleapis.com/icon?family=Material+Icons');
     synthEngine.init();
   }
 

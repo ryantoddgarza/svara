@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
 import { systemOutput } from '~/synth/modules/audioContext';
 import synthEngine from '~/synth/modules/synthEngine';
 import nucleus from '~/synth/modules/nucleus';
@@ -9,24 +10,6 @@ const Player = () => {
 
   useEffect(() => {
     setRagaName(nucleus.raga.name); // TODO: Make dynamic
-  });
-
-  const setPlayIcon = () => {
-    const playIcon = document.getElementById('play-icon');
-
-    if (!isPlaying) {
-      playIcon.innerHTML = 'play_arrow';
-      playIcon.title = 'play';
-    }
-
-    if (isPlaying) {
-      playIcon.innerHTML = 'pause';
-      playIcon.title = 'pause';
-    }
-  };
-
-  useEffect(() => {
-    setPlayIcon();
   });
 
   const onPlay = () => {
@@ -52,15 +35,15 @@ const Player = () => {
         </div>
         <div className="player__center">
           <button onClick={onPlay} type="button">
-            <i
-              id="play-icon"
-              className="material-icons md-48"
-              aria-labelledby="id"
-            />
+            {isPlaying ? (
+              <MdPause className="player__icon--pause" />
+            ) : (
+              <MdPlayArrow className="player__icon--play" />
+            )}
           </button>
         </div>
         <div className="player__end">
-          <i className="material-icons">volume_up</i>
+          <MdVolumeUp className="icon" />
           <input
             onChange={onVolumeChange}
             onMouseUp={onVolumeMouseUp}

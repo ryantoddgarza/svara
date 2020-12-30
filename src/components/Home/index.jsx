@@ -1,6 +1,11 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGithub, FaArrowRight, FaExternalLinkAlt } from 'react-icons/fa';
+import {
+  FaGithub,
+  FaList,
+  FaArrowRight,
+  FaExternalLinkAlt,
+} from 'react-icons/fa';
 import { VISUALIZER } from '~/constants/routes';
 import Glossary from '~/components/Glossary';
 import { tagline } from '~/data/about.json';
@@ -34,8 +39,8 @@ const Home = () => {
                   >
                     GitHub
                   </a>
-                  <FaGithub className="id-icon" />
-                  <FaExternalLinkAlt className="action-icon" />
+                  <FaGithub className="tile__id-icon icon__lg--responsive" />
+                  <FaExternalLinkAlt className="tile__action-icon icon" />
                 </div>
               </div>
             </div>
@@ -50,8 +55,8 @@ const Home = () => {
                   >
                     Glossary
                   </span>
-                  <FaGithub className="id-icon" />
-                  <FaArrowRight className="action-icon" />
+                  <FaList className="tile__id-icon icon__lg--responsive" />
+                  <FaArrowRight className="tile__action-icon icon" />
                 </div>
               </div>
             </div>
@@ -60,8 +65,10 @@ const Home = () => {
             <div className="grid-module__card grid-module__aspect-ratio--2x1">
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile grid-module__tile--interactive">
-                  <Link className="tile--clickable" to={VISUALIZER}>Visualizer</Link>
-                  <FaArrowRight className="action-icon" />
+                  <Link className="tile--clickable" to={VISUALIZER}>
+                    Visualizer
+                  </Link>
+                  <FaArrowRight className="tile__action-icon icon" />
                 </div>
               </div>
             </div>
