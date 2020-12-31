@@ -9,7 +9,7 @@ const Player = () => {
   const [ragaName, setRagaName] = useState('');
 
   useEffect(() => {
-    setRagaName(nucleus.raga.name); // TODO: Make dynamic
+    setRagaName(nucleus.raga.name);
   });
 
   const onPlay = () => {
@@ -27,7 +27,7 @@ const Player = () => {
 
   return (
     <div className="player">
-      <div className="container player__bottom-row">
+      <div className="player__bottom-row container">
         <div className="player__start">
           <div className="player__media-info">
             <span>{ragaName}</span>

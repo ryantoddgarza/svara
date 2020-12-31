@@ -30,26 +30,28 @@ const Visualizer = () => {
 
   return (
     <div className="visualizer">
-      <PraharClock prahar={nucleus.raga.prahar} />
-      <div className="visualizer__raga-info">
-        <div className="visualizer__raga-name">
-          {`raga ${nucleus.raga.name}`}
+      <div className="visualizer__inner">
+        <PraharClock prahar={nucleus.raga.prahar} />
+        <div className="visualizer__raga-info">
+          <div className="visualizer__raga-name">
+            {`raga ${nucleus.raga.name}`}
+          </div>
+          <div className="visualizer__raga-detail">
+            {`thaat · ${nucleus.raga.thaat}`}
+          </div>
+          <div className="visualizer__raga-detail">
+            {`vadi · ${indexToSvara(nucleus.raga.vadi)}`}
+          </div>
+          <div className="visualizer__raga-detail">
+            {`samvadi · ${indexToSvara(nucleus.raga.samvadi)}`}
+          </div>
+          <div className="visualizer__raga-detail">
+            {`prahar · ${nucleus.raga.prahar}`}
+          </div>
         </div>
-        <div className="visualizer__raga-detail">
-          {`thaat · ${nucleus.raga.thaat}`}
+        <div className="visualizer__analyzer">
+          <canvas />
         </div>
-        <div className="visualizer__raga-detail">
-          {`vadi · ${indexToSvara(nucleus.raga.vadi)}`}
-        </div>
-        <div className="visualizer__raga-detail">
-          {`samvadi · ${indexToSvara(nucleus.raga.samvadi)}`}
-        </div>
-        <div className="visualizer__raga-detail">
-          {`prahar · ${nucleus.raga.prahar}`}
-        </div>
-      </div>
-      <div className="visualizer__analyzer">
-        <canvas />
       </div>
     </div>
   );

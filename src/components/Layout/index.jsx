@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MobileHeader from '~/components/MobileHeader';
+import Header from '~/components/Header';
 import Player from '~/components/Player';
 
 const Layout = ({ children }) => (
-  <div className="layout-container">
-    <MobileHeader />
+  <>
+    <Header />
     <main>{children}</main>
     <Player />
-  </div>
+  </>
 );
 
 Layout.propTypes = {
