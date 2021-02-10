@@ -1,3 +1,4 @@
+const path = require('path');
 const merge = require('webpack-merge');
 const autoprefixer = require('autoprefixer');
 const common = require('./webpack.common.js');
@@ -6,8 +7,8 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'eval-source-map',
   devServer: {
-    contentBase: './dist',
-    historyApiFallback: true,
+    contentBase: path.join(__dirname, 'build'),
+    watchContentBase: true,
     compress: true,
   },
   module: {
