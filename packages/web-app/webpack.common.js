@@ -10,7 +10,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, 'src'),
+      '~': path.join(__dirname, 'src'),
     },
     extensions: ['.js', '.jsx'],
   },
@@ -20,7 +20,7 @@ module.exports = {
       title: 'svara',
     }),
     new HtmlWebpackPartialsPlugin({
-      path: path.join(__dirname, './partials/body.html'),
+      path: path.join(__dirname, 'partials/body.html'),
     }),
     new CopyWebpackPlugin({
       patterns: [
@@ -30,7 +30,7 @@ module.exports = {
   ],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'build'),
+    path: path.join(__dirname, 'build'),
     publicPath: '/',
   },
 };
