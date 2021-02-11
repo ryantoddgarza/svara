@@ -1,8 +1,8 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPartialsPlugin = require('html-webpack-partials-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -13,6 +13,11 @@ module.exports = {
       '~': path.join(__dirname, 'src'),
     },
     extensions: ['.js', '.jsx'],
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      buffer: false,
+      stream: false,
+    },
   },
   plugins: [
     new CleanWebpackPlugin(),

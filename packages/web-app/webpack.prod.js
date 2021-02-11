@@ -1,6 +1,4 @@
-const merge = require('webpack-merge');
-const autoprefixer = require('autoprefixer');
-const postcssPresetEnv = require('postcss-preset-env');
+const { merge } = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const common = require('./webpack.common.js');
 
@@ -35,9 +33,14 @@ module.exports = merge(common, {
           {
             loader: 'postcss-loader',
             options: {
-              ident: 'postcss',
-              sourceMap: true,
-              plugins: () => [postcssPresetEnv({}), autoprefixer({})],
+              postcssOptions: {
+                ident: 'postcss',
+                sourceMap: true,
+                plugins: [
+                  require.resolve('postcss-preset-env'),
+                  require.resolve('autoprefixer'),
+                ],
+              },
             },
           },
           {
