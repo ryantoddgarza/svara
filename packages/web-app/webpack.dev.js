@@ -1,6 +1,7 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const autoprefixer = require('autoprefixer');
+const postcssPresetEnv = require('postcss-preset-env');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
@@ -22,10 +23,7 @@ module.exports = merge(common, {
       },
       {
         test: /worker\.js$/,
-        use: [
-          'worker-loader',
-          'babel-loader',
-        ],
+        use: ['worker-loader', 'babel-loader'],
       },
       {
         test: /\.(css|scss)$/,
@@ -42,9 +40,7 @@ module.exports = merge(common, {
             options: {
               ident: 'postcss',
               sourceMap: true,
-              plugins: () => [
-                autoprefixer({}),
-              ],
+              plugins: () => [postcssPresetEnv({}), autoprefixer({})],
             },
           },
           {

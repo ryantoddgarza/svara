@@ -23,9 +23,7 @@ module.exports = {
       path: path.join(__dirname, 'partials/body.html'),
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: 'static' },
-      ],
+      patterns: [{ from: 'static' }],
     }),
   ],
   output: {
