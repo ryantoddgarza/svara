@@ -1,3 +1,5 @@
+const error = 2;
+
 module.exports = {
   root: true,
   env: {
@@ -6,6 +8,7 @@ module.exports = {
   },
   extends: [
     'airbnb',
+    'prettier',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:react/recommended',
@@ -17,8 +20,9 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
-  plugins: ['react'],
+  plugins: ['prettier', 'react'],
   rules: {
+    'prettier/prettier': error,
     'react/jsx-fragments': ['off'],
   },
 };
