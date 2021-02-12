@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fa';
 import { VISUALIZER } from '~/constants/routes';
 import Glossary from '~/components/Glossary';
-import { tagline } from '~/data/about.json';
+import about from '~/data/about.json';
 
 const Home = () => {
   const glossaryRef = useRef();
@@ -22,7 +22,7 @@ const Home = () => {
             <div className="grid-module__card grid-module__aspect-ratio--2x1">
               <div className="grid-module__aspect-ratio--object">
                 <div className="grid-module__tile">
-                  <h5>{tagline}</h5>
+                  <h5>{about.tagline}</h5>
                 </div>
               </div>
             </div>
