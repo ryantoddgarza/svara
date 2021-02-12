@@ -1,4 +1,4 @@
-import ragas from '~/data/ragas.json';
+import ragas from '@svara/raga-data';
 
 // @param {array} midiNums - Standard MIDI note numbers
 // @param {object} raga - Rules

@@ -1,3 +1,4 @@
+import ragas from '@svara/raga-data';
 import synthEngine from '~/synth/modules/synthEngine';
 import { context, systemOutput } from '~/synth/modules/audioContext';
 import nucleus from '~/synth/modules/nucleus';
@@ -7,7 +8,6 @@ import * as Pattern from '~/synth/modules/pattern';
 import SimpleReverb from '~/synth/modules/simpleReverb';
 import { RagaScales } from '~/utils/raga';
 import Analyser from '~/components/Visualizer/analyser';
-import ragas from '~/data/ragas.json';
 
 const patch = (function() {
   const Nucleus = new Proxy(nucleus, {
