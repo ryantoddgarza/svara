@@ -1,16 +1,16 @@
-const path = require('path');
-const merge = require('webpack-merge');
-const autoprefixer = require('autoprefixer');
+const { merge } = require('webpack-merge');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
-  mode: 'development',
-  devtool: 'eval-source-map',
-  devServer: {
-    contentBase: path.join(__dirname, 'build'),
-    watchContentBase: true,
-    compress: true,
-  },
+  mode: 'production',
+  devtool: 'nosources-source-map',
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+  ],
   module: {
     rules: [
       {
@@ -21,16 +21,9 @@ module.exports = merge(common, {
         },
       },
       {
-        test: /worker\.js$/,
-        use: [
-          'worker-loader',
-          'babel-loader',
-        ],
-      },
-      {
         test: /\.(css|scss)$/,
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
@@ -40,11 +33,14 @@ module.exports = merge(common, {
           {
             loader: 'postcss-loader',
             options: {
-              ident: 'postcss',
-              sourceMap: true,
-              plugins: () => [
-                autoprefixer({}),
-              ],
+              postcssOptions: {
+                ident: 'postcss',
+                sourceMap: true,
+                plugins: [
+                  require.resolve('postcss-preset-env'),
+                  require.resolve('autoprefixer'),
+                ],
+              },
             },
           },
           {

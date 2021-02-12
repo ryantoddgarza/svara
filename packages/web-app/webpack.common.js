@@ -1,8 +1,8 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPartialsPlugin = require('html-webpack-partials-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -10,9 +10,14 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, 'src'),
+      '~': path.join(__dirname, 'src'),
     },
     extensions: ['.js', '.jsx'],
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      buffer: false,
+      stream: false,
+    },
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -20,17 +25,15 @@ module.exports = {
       title: 'svara',
     }),
     new HtmlWebpackPartialsPlugin({
-      path: path.join(__dirname, './partials/body.html'),
+      path: path.join(__dirname, 'partials/body.html'),
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: 'static' },
-      ],
+      patterns: [{ from: 'static' }],
     }),
   ],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'build'),
+    path: path.join(__dirname, 'build'),
     publicPath: '/',
   },
 };
