@@ -1,3 +1,3 @@
-const ragas = require('./src/ragas.json');
+const methods = require('./src/methods');
 
-module.exports = ragas;
+module.exports = { ...methods };

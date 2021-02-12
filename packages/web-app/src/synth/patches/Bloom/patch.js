@@ -1,4 +1,3 @@
-import ragas from '@svara/raga-data';
 import synthEngine from '~/synth/modules/synthEngine';
 import { context, systemOutput } from '~/synth/modules/audioContext';
 import nucleus from '~/synth/modules/nucleus';
@@ -6,8 +5,8 @@ import random from '~/synth/modules/random';
 import * as MIDI from '~/synth/modules/midi';
 import * as Pattern from '~/synth/modules/pattern';
 import SimpleReverb from '~/synth/modules/simpleReverb';
-import { RagaScales } from '~/utils/raga';
 import Analyser from '~/components/Visualizer/analyser';
+import { RagaScales } from '~/utils/raga';
 
 const patch = (function() {
   const Nucleus = new Proxy(nucleus, {
@@ -17,7 +16,7 @@ const patch = (function() {
   });
 
   const midiNums = MIDI.noteNums;
-  const ragaPitchData = new RagaScales(midiNums, ragas[Nucleus.raga.name], Nucleus.tonic);
+  const ragaPitchData = new RagaScales(midiNums, Nucleus.raga, Nucleus.tonic);
 
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
