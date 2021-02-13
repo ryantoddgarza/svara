@@ -3,6 +3,7 @@ import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
 import { systemOutput } from '~/synth/modules/audioContext';
 import synthEngine from '~/synth/modules/synthEngine';
 import nucleus from '~/synth/modules/nucleus';
+import patch from '~/synth/patch';
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
@@ -13,7 +14,7 @@ const Player = () => {
   });
 
   const onPlay = () => {
-    synthEngine.play();
+    patch.play();
     setIsPlaying(synthEngine.isPlaying);
   };
 

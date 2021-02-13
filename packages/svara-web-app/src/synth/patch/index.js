@@ -8,7 +8,7 @@ import SimpleReverb from '~/synth/modules/simpleReverb';
 import Analyser from '~/components/Visualizer/analyser';
 import { RagaScales } from '~/utils/raga';
 
-const patch = (function() {
+const patch = (function () {
   const Nucleus = new Proxy(nucleus, {
     set(target, key, value) {
       target[key] = value;
@@ -51,7 +51,7 @@ const patch = (function() {
   };
 
   const maxBeats = () => {
-    const beats = (Nucleus.meter * subdivision);
+    const beats = Nucleus.meter * subdivision;
     return beats;
   };
 
@@ -162,7 +162,11 @@ const patch = (function() {
   };
 
   const nextNote = (obj) => {
-    const setPos = Pattern.stepThrough(obj, stepThrough.direction, stepThrough.interval);
+    const setPos = Pattern.stepThrough(
+      obj,
+      stepThrough.direction,
+      stepThrough.interval,
+    );
     const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
 
     obj.pos = wrappedPos;
@@ -241,7 +245,7 @@ const patch = (function() {
 
       for (let i = 0; i < numberOfOctaves; i += 1) {
         scaleStepsWithRoot.forEach((midiNum) => {
-          rangeNums.push(midiNum + (12 * i));
+          rangeNums.push(midiNum + 12 * i);
         });
       }
 
@@ -267,7 +271,7 @@ const patch = (function() {
       osc1.connect(vca1);
 
       const attack = 0.1;
-      const decay = (60 / Nucleus.tempo) / subdivision;
+      const decay = 60 / Nucleus.tempo / subdivision;
       const noteLength = attack + decay;
 
       // envelope
@@ -345,6 +349,8 @@ const patch = (function() {
   };
 
   const play = () => {
+    synthEngine.play();
+
     if (synthEngine.isPlaying) {
       voiceDrone();
       context.resume();
@@ -359,6 +365,7 @@ const patch = (function() {
   };
 
   const init = () => {
+    synthEngine.init(scheduler);
     setMelodicVariables();
     setRhythmicVariables();
     setImprovisationState(false); // randomly gen
@@ -370,8 +377,7 @@ const patch = (function() {
   return {
     init,
     play,
-    scheduler,
   };
-}());
+})();
 
 export default patch;
