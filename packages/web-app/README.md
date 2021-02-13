@@ -1,4 +1,4 @@
-# Svara
+# @svara/web-app
 
 The Svara web application is the client-facing interface of the Svara project.
 
