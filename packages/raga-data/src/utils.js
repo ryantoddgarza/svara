@@ -9,19 +9,8 @@ function hourToPrahar(hour = new Date().getHours()) {
   return parseFloat(findInTables(praharas, hour));
 }
 
-function filterByPrahar(prahar = hourToPrahar()) {
-  const filtered = [];
-  const ragaNames = Object.keys(ragas);
-
-  ragaNames.forEach((name) => {
-    const ragaObj = ragas[name];
-
-    if (ragaObj.prahar === prahar) {
-      filtered.push(ragaObj);
-    }
-  });
-
-  return filtered;
+function filterBy(field, val) {
+  return ragas.filter((raga) => raga[field] === val);
 }
 
-module.exports = { hourToPrahar, filterByPrahar };
+module.exports = { filterBy, hourToPrahar };

@@ -1,5 +1,5 @@
 const ragas = require('./ragas.json');
-const { hourToPrahar, filterByPrahar } = require('./utils');
+const { filterBy, hourToPrahar } = require('./utils');
 
 function getPrahar(val) {
   return hourToPrahar(val);
@@ -9,8 +9,8 @@ function getRagas() {
   return ragas;
 }
 
-function getRagasByPrahar(prahar) {
-  return filterByPrahar(prahar);
+function getRagasByPrahar(prahar = hourToPrahar()) {
+  return filterBy('prahar', prahar);
 }
 
-module.exports = { getRagas, getPrahar, getRagasByPrahar };
+module.exports = { getPrahar, getRagas, getRagasByPrahar };
