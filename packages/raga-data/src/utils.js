@@ -1,5 +1,4 @@
-const ragas = require('./ragas.json');
-const praharas = require('./praharas');
+const { ragas, praharas } = require('./data');
 
 function hourToPrahar(hour = new Date().getHours()) {
   function findInTables(tab, val) {

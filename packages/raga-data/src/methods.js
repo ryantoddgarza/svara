@@ -1,4 +1,4 @@
-const ragas = require('./ragas.json');
+const { ragas } = require('./data');
 const { filterBy, hourToPrahar } = require('./utils');
 
 function getPrahar(val) {
