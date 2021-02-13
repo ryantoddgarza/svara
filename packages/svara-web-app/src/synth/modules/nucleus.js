@@ -1,5 +1,5 @@
+import { getRagasByPrahar } from '@svara/raga-data';
 import { noteNums } from '~/synth/modules/midi';
-import { prahar } from '~/utils/raga';
 import random from '~/synth/modules/random';
 
 const generate = {
@@ -19,7 +19,7 @@ const nucleus = {
   tonicToFreq() {
     return noteNums[this.tonic];
   },
-  raga: prahar.getRagas()[0],
+  raga: getRagasByPrahar()[0],
 };
 
 export default nucleus;
