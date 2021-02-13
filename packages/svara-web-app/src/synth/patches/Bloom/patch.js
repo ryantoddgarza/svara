@@ -224,6 +224,7 @@ const patch = (function() {
       seconds: 3,
       decay: 2,
     }),
+
     init() {
       this.reverb.connect(master.vca);
     },
@@ -366,16 +367,10 @@ const patch = (function() {
     melodyVoice.init();
   };
 
-  window.addEventListener('load', init);
-
   return {
-    play() {
-      play();
-    },
-
-    scheduler() {
-      scheduler();
-    },
+    init,
+    play,
+    scheduler,
   };
 }());
 

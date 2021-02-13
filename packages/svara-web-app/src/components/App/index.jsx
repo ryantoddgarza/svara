@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
 import synthEngine from '~/synth/modules/synthEngine';
+import patch from '~/synth/patches/Bloom/patch';
 import Layout from '~/components/Layout';
 import Visualizer from '~/pages/visualizer';
 import Home from '~/pages/home';
@@ -9,6 +10,7 @@ import Home from '~/pages/home';
 const App = () => {
   useEffect(() => {
     synthEngine.init();
+    patch.init();
   }, []);
 
   return (
