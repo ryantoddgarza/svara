@@ -1,0 +1,14 @@
+{
+  "name": "@svara/babel-preset-svara",
+  "private": true,
+  "homepage": "https://github.com/ryantoddgarza/svara#readme",
+  "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryantoddgarza/svara.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ryantoddgarza/svara/issues"
+  }
+}
