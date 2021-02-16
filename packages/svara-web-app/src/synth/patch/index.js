@@ -2,11 +2,15 @@ import synthEngine from '~/synth/modules/synthEngine';
 import { context, systemOutput } from '~/synth/modules/audioContext';
 import nucleus from '~/synth/modules/nucleus';
 import random from '~/synth/modules/random';
-import * as MIDI from '~/synth/modules/midi';
+import {
+  midiNumsToFreq,
+  frequencyList,
+  scaleStepsToMIDI,
+} from '~/synth/helpers';
 import * as Pattern from '~/synth/modules/pattern';
 import SimpleReverb from '~/synth/modules/simpleReverb';
+import RagaPitchTables from '~/synth/modules/RagaPitchTables';
 import Analyser from '~/components/Visualizer/analyser';
-import { RagaScales } from '~/utils/raga';
 
 const patch = (function () {
   const Nucleus = new Proxy(nucleus, {
@@ -15,8 +19,7 @@ const patch = (function () {
     },
   });
 
-  const midiNums = MIDI.noteNums;
-  const ragaPitchData = new RagaScales(midiNums, Nucleus.raga, Nucleus.tonic);
+  const ragaPitchData = new RagaPitchTables(Nucleus.raga, Nucleus.tonic);
 
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
@@ -237,20 +240,19 @@ const patch = (function () {
   const melodyVoice = {
     range: [],
 
-    setRange(rootNum, numberOfOctaves) {
-      const scaleSteps = ragaPitchData.avrohNum;
-      const rangeNums = [];
+    setRange(midiRoot, nOctaves) {
+      const scaleStepsWithRoot = scaleStepsToMIDI(
+        ragaPitchData.avrohScaleSteps,
+        midiRoot,
+      );
 
-      const scaleStepsWithRoot = scaleSteps.map((midiNum) => midiNum + rootNum);
-
-      for (let i = 0; i < numberOfOctaves; i += 1) {
+      for (let i = 0; i < nOctaves; i += 1) {
         scaleStepsWithRoot.forEach((midiNum) => {
-          rangeNums.push(midiNum + 12 * i);
+          this.range.push(midiNum + 12 * i);
         });
       }
 
-      this.range = rangeNums;
-      activeScale = MIDI.midiToFreq(rangeNums);
+      activeScale = midiNumsToFreq(this.range);
     },
 
     patch(time) {
@@ -298,7 +300,7 @@ const patch = (function () {
     const amMod = context.createGain();
     amMod.connect(gain1);
 
-    const root = Nucleus.tonicToFreq();
+    const root = frequencyList[nucleus.tonic];
 
     // carrier osc
     const osc1 = context.createOscillator();
@@ -338,10 +340,10 @@ const patch = (function () {
   };
 
   const setMelodicVariables = () => {
-    ascendingFreq = ragaPitchData.aarohFreq;
-    ascendingNum = ragaPitchData.aarohNum;
-    descendingFreq = ragaPitchData.avrohFreq;
-    descendingNum = ragaPitchData.avrohNum;
+    ascendingFreq = ragaPitchData.aarohFrequencies;
+    ascendingNum = ragaPitchData.aarohScaleSteps;
+    descendingFreq = ragaPitchData.avrohFrequencies;
+    descendingNum = ragaPitchData.avrohScaleSteps;
   };
 
   const setRhythmicVariables = () => {

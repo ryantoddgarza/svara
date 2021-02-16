@@ -1,5 +1,4 @@
 import { getRagasByPrahar } from '@svara/raga-data';
-import { noteNums } from '~/synth/modules/midi';
 import random from '~/synth/modules/random';
 
 const generate = {
@@ -16,9 +15,6 @@ const nucleus = {
   tempo: generate.tempo(),
   meter: generate.meter(),
   tonic: 62,
-  tonicToFreq() {
-    return noteNums[this.tonic];
-  },
   raga: getRagasByPrahar()[0],
 };
 
