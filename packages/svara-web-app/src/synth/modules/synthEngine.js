@@ -1,5 +1,3 @@
-import Bloom from '~/synth/patches/Bloom';
-
 const synthEngine = {
   isPlaying: false,
 
@@ -7,16 +5,14 @@ const synthEngine = {
 
   lookahead: 25.0,
 
-  scheduler() {
-    Bloom.scheduler();
-  },
+  scheduler() {},
 
   play() {
     this.isPlaying = !this.isPlaying;
-    Bloom.play();
   },
 
-  init() {
+  init(callback) {
+    this.scheduler = callback;
     this.timerWorker = new Worker('/metronome.worker.js');
 
     this.timerWorker.onmessage = (e) => {
