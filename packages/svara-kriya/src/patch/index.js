@@ -4,7 +4,6 @@ import {
   SimpleReverb,
   audioContext,
   nucleus,
-  pattern,
   random,
   synthEngine,
 } from '../modules';
@@ -40,11 +39,6 @@ const patch = (function () {
     arr: [],
     pos: 0,
     improvise: undefined,
-  };
-
-  const stepThrough = {
-    direction: pattern.increment,
-    interval: undefined,
   };
 
   const incrementMeasure = (beatNumber) => {
@@ -134,9 +128,6 @@ const patch = (function () {
     if (scaleSteps) {
       setMelodyArr(scaleSteps);
     }
-
-    stepThrough.direction = pattern.increment; // add to init random gen
-    stepThrough.interval = 4; // add to init random gen
   };
 
   const playMotif = (scaleSteps) => {
@@ -145,9 +136,6 @@ const patch = (function () {
     if (scaleSteps) {
       setMelodyArr(scaleSteps);
     }
-
-    stepThrough.direction = pattern.increment;
-    stepThrough.interval = 1;
   };
 
   const exitMotif = () => {
@@ -164,15 +152,9 @@ const patch = (function () {
     }
   };
 
-  const nextNote = (obj) => {
-    const setPos = pattern.stepThrough(
-      obj,
-      stepThrough.direction,
-      stepThrough.interval,
-    );
-
-    // Wrap out of range indeces
-    obj.pos = obj.pos % obj.arr.length;
+  const nextNote = (interval) => {
+    const modN = (n, mod) => n % mod;
+    melody.pos = modN(melody.pos + interval, melody.arr.length);
   };
 
   const currentNote = () => {
@@ -183,18 +165,18 @@ const patch = (function () {
 
       if (bool === true) {
         note = activeScale[melody.pos];
-        nextNote(melody);
+        nextNote(4);
       }
 
       if (bool === false) {
         note = activeScale[random.integer(0, 4)];
-        nextNote(melody);
+        nextNote(4);
       }
     }
 
     if (!melody.improvise) {
       note = activeScale[melody.pos];
-      nextNote(melody);
+      nextNote(1);
 
       if (melody.pos === melody.arr.length - 1) {
         exitMotif();
