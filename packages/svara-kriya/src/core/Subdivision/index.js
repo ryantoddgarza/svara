@@ -23,12 +23,25 @@ function Subdivision(opts = {}) {
       this.current = 0;
     },
 
-    maxBeats() {
+    new(val) {
+      this.value = val || this.conditionallyRender();
+    },
+
+    newQuantizedToDownbeat(subVal) {
+      const isDownbeat = this.current === 0;
+      const isSubValMultiple = this.value % subVal === 0;
+
+      if (isDownbeat && isSubValMultiple) {
+        this.new();
+      }
+    },
+
+    getMaxBeats() {
       return this.meter * this.value;
     },
 
     isMax() {
-      return this.current === this.maxBeats();
+      return this.current === this.getMaxBeats();
     },
 
     conditionallyRender() {
@@ -59,10 +72,6 @@ function Subdivision(opts = {}) {
       });
 
       return rendered;
-    },
-
-    new(val) {
-      this.value = val || this.conditionallyRender();
     },
   };
 }

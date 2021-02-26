@@ -19,7 +19,7 @@ const patch = (function () {
     },
   });
 
-  const subdivision = new Subdivision({ meter: Nucleus.meter })
+  const subdivision = new Subdivision({ meter: Nucleus.meter });
   const ragaPitchData = new RagaPitchTables(Nucleus.raga, Nucleus.tonic);
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
@@ -59,11 +59,9 @@ const patch = (function () {
       incrementMeasure(beatNumber);
     });
 
-    if (subdivision.value % 5 || 7 || 9 === 0) {
-      if (beatNumber === 0) {
-        subdivision.new();
-      }
-    }
+    subdivision.newQuantizedToDownbeat(5);
+    subdivision.newQuantizedToDownbeat(7);
+    subdivision.newQuantizedToDownbeat(9);
 
     if (random.integer(1, 100) % 2 === 0) {
       subdivision.new();
