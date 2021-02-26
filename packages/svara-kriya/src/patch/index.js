@@ -19,15 +19,10 @@ const patch = (function () {
   });
 
   const ragaPitchData = new RagaPitchTables(Nucleus.raga, Nucleus.tonic);
-
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
-
   let measure = 0;
-  let subdivision;
-  let currentSubdivision = 0;
-
   let ascendingFreq = [];
   let ascendingNum = [];
   let descendingFreq = [];
@@ -47,49 +42,69 @@ const patch = (function () {
     }
   };
 
-  const maxBeats = () => {
-    const beats = Nucleus.meter * subdivision;
-    return beats;
+  const incrementNextNoteTime = () => {
+    const secondsPerBeat = 60.0 / Nucleus.tempo;
+    nextNoteTime += (1 / subdivision.value) * secondsPerBeat;
   };
 
-  const nextSubdivision = () => {
-    const secondsPerBeat = 60.0 / Nucleus.tempo;
-    nextNoteTime += (1 / subdivision) * secondsPerBeat;
-    currentSubdivision += 1;
+  const subdivision = {
+    value: 1, // defaults to quarter note
+    current: 0,
+    meter: Nucleus.meter,
 
-    if (currentSubdivision === maxBeats()) {
-      currentSubdivision = 0;
-    }
+    next(callback) {
+      this.current += 1;
+
+      if (typeof callback === 'function' && callback()) {
+        callback();
+      }
+
+      if (this.isMax()) {
+        this.reset();
+      }
+    },
+
+    reset() {
+      this.current = 0;
+    },
+
+    maxBeats() {
+      return this.meter * this.value;
+    },
+
+    isMax() {
+      return this.current === this.maxBeats();
+    },
   };
 
   const subdivideSlow = () => {
     const chance = random.bool();
 
     if (chance) {
-      subdivision = random.integer(1, 3);
+      subdivision.value = random.integer(1, 3);
     }
 
     if (!chance) {
-      subdivision = random.fraction(4);
+      subdivision.value = random.fraction(4);
     }
 
-    return subdivision;
+    return subdivision.value;
   };
 
   const subdivide = () => {
-    if (subdivision <= 1) {
+    if (subdivision.value <= 1) {
       subdivideSlow();
     }
 
-    if (subdivision < 4) {
-      subdivision = random.integer(1, 4);
+    if (subdivision.value < 4) {
+      subdivision.value = random.integer(1, 4);
     }
 
-    if (subdivision >= 4) {
-      subdivision = random.integer(2, 6);
+    if (subdivision.value >= 4) {
+      subdivision.value = random.integer(2, 6);
     }
 
-    return subdivision;
+    return subdivision.value;
   };
 
   const scheduleNote = (beatNumber, time) => {
@@ -97,23 +112,25 @@ const patch = (function () {
     notesInQueue.push({ note: beatNumber, time });
 
     melodyVoice.patch(time);
-    nextSubdivision();
-    incrementMeasure(beatNumber);
+    subdivision.next(() => {
+      incrementNextNoteTime();
+      incrementMeasure(beatNumber);
+    });
 
-    if (subdivision % 5 || 7 || 9 === 0) {
+    if (subdivision.value % 5 || 7 || 9 === 0) {
       if (beatNumber === 0) {
-        subdivision = subdivide();
+        subdivision.value = subdivide();
       }
     }
 
     if (random.integer(1, 100) % 2 === 0) {
-      subdivision = subdivide();
+      subdivision.value = subdivide();
     }
   };
 
   const scheduler = () => {
     while (nextNoteTime < context.currentTime + scheduleAheadTime) {
-      scheduleNote(currentSubdivision, nextNoteTime);
+      scheduleNote(subdivision.current, nextNoteTime);
     }
   };
 
@@ -255,7 +272,7 @@ const patch = (function () {
       osc1.connect(vca1);
 
       const attack = 0.1;
-      const decay = 60 / Nucleus.tempo / subdivision;
+      const decay = 60 / Nucleus.tempo / subdivision.value;
       const noteLength = attack + decay;
 
       // envelope
@@ -329,7 +346,7 @@ const patch = (function () {
   };
 
   const setRhythmicVariables = () => {
-    subdivision = 1; // randomly gen. limit range
+    // subdivision.value = 1;
   };
 
   const play = () => {
