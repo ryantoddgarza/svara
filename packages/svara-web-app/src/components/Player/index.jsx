@@ -13,6 +13,7 @@ const Player = () => {
   const [ragaName, setRagaName] = useState('');
 
   useEffect(() => {
+    patch.init();
     setRagaName(nucleus.raga.name);
   });
 
