@@ -1,4 +1,5 @@
 import Analyser from '@svara/web-app/src/components/Visualizer/analyser';
+import { Subdivision } from '../core';
 import {
   RagaPitchTables,
   SimpleReverb,
@@ -18,6 +19,7 @@ const patch = (function () {
     },
   });
 
+  const subdivision = new Subdivision({ meter: Nucleus.meter })
   const ragaPitchData = new RagaPitchTables(Nucleus.raga, Nucleus.tonic);
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
@@ -45,71 +47,6 @@ const patch = (function () {
   const incrementNextNoteTime = () => {
     const secondsPerBeat = 60.0 / Nucleus.tempo;
     nextNoteTime += (1 / subdivision.value) * secondsPerBeat;
-  };
-
-  const subdivision = {
-    value: 1, // defaults to quarter note
-    current: 0,
-    meter: Nucleus.meter,
-
-    next(callback) {
-      this.current += 1;
-
-      if (typeof callback === 'function' && callback()) {
-        callback();
-      }
-
-      if (this.isMax()) {
-        this.reset();
-      }
-    },
-
-    reset() {
-      this.current = 0;
-    },
-
-    maxBeats() {
-      return this.meter * this.value;
-    },
-
-    isMax() {
-      return this.current === this.maxBeats();
-    },
-
-    conditionallyRender() {
-      let rendered;
-
-      function Query(condition, render) {
-        return {
-          condition,
-          render,
-        };
-      }
-
-      const isSlow = new Query(this.value <= 1, () =>
-        random.bool() ? random.integer(1, 3) : random.fraction(4),
-      );
-
-      const isMedium = new Query(this.value > 1 && this.value < 4, () =>
-        random.integer(1, 4),
-      );
-
-      const isFast = new Query(this.value >= 4, () => random.integer(2, 6));
-
-      const list = [isSlow, isMedium, isFast];
-      list.forEach((query) => {
-        if (query.condition) {
-          rendered = query.render();
-        }
-      });
-
-      return rendered;
-    },
-
-    new(val) {
-      this.value = val || this.conditionallyRender();
-      console.log(this.value);
-    },
   };
 
   const scheduleNote = (beatNumber, time) => {
