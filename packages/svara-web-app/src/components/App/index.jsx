@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { patch } from '@svara/kriya';
 import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
-import patch from '~/synth/patch';
 import Layout from '~/components/Layout';
 import Visualizer from '~/pages/visualizer';
 import Home from '~/pages/home';

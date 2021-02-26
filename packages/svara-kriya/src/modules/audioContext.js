@@ -17,9 +17,6 @@ const systemOutput = (function () {
       gainNode.gain.value = value;
     },
   };
-}());
+})();
 
-export {
-  context,
-  systemOutput,
-};
+export default { context, systemOutput };

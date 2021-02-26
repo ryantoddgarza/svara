@@ -28,4 +28,4 @@ const fibonacci = (n) => {
   return fibArr[n];
 };
 
-export { increment, decrement, stepThrough, fibonacci };
+export default { increment, decrement, stepThrough, fibonacci };

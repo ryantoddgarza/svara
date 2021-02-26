@@ -1,16 +1,16 @@
-import synthEngine from '~/synth/modules/synthEngine';
-import { context, systemOutput } from '~/synth/modules/audioContext';
-import nucleus from '~/synth/modules/nucleus';
-import random from '~/synth/modules/random';
+import Analyser from '@svara/web-app/src/components/Visualizer/analyser';
 import {
-  midiNumsToFreq,
-  frequencyList,
-  scaleStepsToMIDI,
-} from '~/synth/helpers';
-import * as Pattern from '~/synth/modules/pattern';
-import SimpleReverb from '~/synth/modules/simpleReverb';
-import RagaPitchTables from '~/synth/modules/RagaPitchTables';
-import Analyser from '~/components/Visualizer/analyser';
+  RagaPitchTables,
+  SimpleReverb,
+  audioContext,
+  nucleus,
+  pattern,
+  random,
+  synthEngine,
+} from '../modules';
+import { midiNumsToFreq, frequencyList, scaleStepsToMIDI } from '../helpers';
+
+const { context, systemOutput } = audioContext;
 
 const patch = (function () {
   const Nucleus = new Proxy(nucleus, {
@@ -43,7 +43,7 @@ const patch = (function () {
   };
 
   const stepThrough = {
-    direction: Pattern.increment,
+    direction: pattern.increment,
     interval: undefined,
   };
 
@@ -135,7 +135,7 @@ const patch = (function () {
       setMelodyArr(scaleSteps);
     }
 
-    stepThrough.direction = Pattern.increment; // add to init random gen
+    stepThrough.direction = pattern.increment; // add to init random gen
     stepThrough.interval = 4; // add to init random gen
   };
 
@@ -146,7 +146,7 @@ const patch = (function () {
       setMelodyArr(scaleSteps);
     }
 
-    stepThrough.direction = Pattern.increment;
+    stepThrough.direction = pattern.increment;
     stepThrough.interval = 1;
   };
 
@@ -165,7 +165,7 @@ const patch = (function () {
   };
 
   const nextNote = (obj) => {
-    const setPos = Pattern.stepThrough(
+    const setPos = pattern.stepThrough(
       obj,
       stepThrough.direction,
       stepThrough.interval,

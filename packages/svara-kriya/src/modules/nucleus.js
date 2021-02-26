@@ -1,5 +1,5 @@
 import { getRagasByPrahar } from '@svara/raga-data';
-import random from '~/synth/modules/random';
+import random from './random';
 
 const generate = {
   tempo() {

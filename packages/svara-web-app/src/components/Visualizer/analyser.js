@@ -1,9 +1,12 @@
-import { context } from '~/synth/modules/audioContext';
+import { modules } from '@svara/kriya';
+
+const {
+  audioContext: { context },
+} = modules;
 
 // analyser adapted from: https://codepen.io/alexdevp/pen/RNELPV?editors=0100
 
 const Framer = {
-
   countTicks: 360,
 
   frequencyData: [],
@@ -75,8 +78,18 @@ const Framer = {
     this.context.lineWidth = 1;
 
     let offset = Tracker.lineWidth / 2;
-    this.context.moveTo(this.scene.padding + 2 * this.scene.radius - Tracker.innerDelta - offset, this.scene.padding + this.scene.radius);
-    this.context.arc(this.scene.cx, this.scene.cy, this.scene.radius - Tracker.innerDelta - offset, 0, this.loadingAngle, false);
+    this.context.moveTo(
+      this.scene.padding + 2 * this.scene.radius - Tracker.innerDelta - offset,
+      this.scene.padding + this.scene.radius,
+    );
+    this.context.arc(
+      this.scene.cx,
+      this.scene.cy,
+      this.scene.radius - Tracker.innerDelta - offset,
+      0,
+      this.loadingAngle,
+      false,
+    );
 
     this.context.stroke();
     this.context.restore();
@@ -85,18 +98,32 @@ const Framer = {
   getTicks(count, size, animationParams) {
     size = 10;
     let ticks = this.getTickPoitns(count);
-    let x1, y1, x2, y2, m = [], tick, k;
+    let x1,
+      y1,
+      x2,
+      y2,
+      m = [],
+      tick,
+      k;
     let lesser = 160;
     let allScales = [];
     for (let i = 0, len = ticks.length; i < len; ++i) {
       let coef = 1 - i / (len * 2.5);
-      let delta = ((this.frequencyData[i] || 0) - lesser * coef) * this.scene.scaleCoef;
+      let delta =
+        ((this.frequencyData[i] || 0) - lesser * coef) * this.scene.scaleCoef;
       if (delta < 0) {
         delta = 0;
       }
       tick = ticks[i];
-      if (animationParams[0] <= tick.angle && tick.angle <=  animationParams[1]) {
-        k = this.scene.radius / (this.scene.radius - this.getSize(tick.angle, animationParams[0], animationParams[1]) - delta);
+      if (
+        animationParams[0] <= tick.angle &&
+        tick.angle <= animationParams[1]
+      ) {
+        k =
+          this.scene.radius /
+          (this.scene.radius -
+            this.getSize(tick.angle, animationParams[0], animationParams[1]) -
+            delta);
       } else {
         k = this.scene.radius / (this.scene.radius - (size + delta));
       }
@@ -111,14 +138,17 @@ const Framer = {
         allScales.push(scale);
       }
     }
-    let sum = allScales.reduce(function(pv, cv) { return pv + cv; }, 0) / allScales.length;
-    this.canvas.style.transform = 'scale('+sum+')';
+    let sum =
+      allScales.reduce(function (pv, cv) {
+        return pv + cv;
+      }, 0) / allScales.length;
+    this.canvas.style.transform = 'scale(' + sum + ')';
     return m;
   },
 
   getSize(angle, l, r) {
     let m = (r - l) / 2;
-    let x = (angle - l);
+    let x = angle - l;
     let h;
 
     if (x === m) {
@@ -140,9 +170,10 @@ const Framer = {
   },
 
   getTickPoitns(count) {
-    let coords = [], step = this.PI / count;
+    let coords = [],
+      step = this.PI / count;
     for (let deg = 0; deg < this.PI; deg += step) {
-      let rad = deg * Math.PI / (this.PI / 2);
+      let rad = (deg * Math.PI) / (this.PI / 2);
       coords.push({ x: Math.cos(rad), y: -Math.sin(rad), angle: deg });
     }
     return coords;
@@ -150,7 +181,6 @@ const Framer = {
 };
 
 const Tracker = {
-
   innerDelta: 20,
 
   lineWidth: 7,
@@ -173,7 +203,10 @@ const Tracker = {
       return;
     }
     if (!this.pressButton) {
-      this.angle = Analyser.context.currentTime / Analyser.source.buffer.duration * 2 * Math.PI || 0;
+      this.angle =
+        (Analyser.context.currentTime / Analyser.source.buffer.duration) *
+          2 *
+          Math.PI || 0;
     }
     this.drawArc();
   },
@@ -188,16 +221,17 @@ const Tracker = {
     this.context.arc(
       this.scene.radius + this.scene.padding,
       this.scene.radius + this.scene.padding,
-      this.r, 0, this.angle, false,
+      this.r,
+      0,
+      this.angle,
+      false,
     );
     this.context.stroke();
     this.context.restore();
   },
-
 };
 
 const Scene = {
-
   padding: 120,
 
   minSize: 740,
@@ -226,7 +260,7 @@ const Scene = {
   calculateSize() {
     this.scaleCoef = Math.max(0.5, 740 / this.optimiseHeight);
 
-    let size = Math.max(this.minSize, 1/*document.body.clientHeight */);
+    let size = Math.max(this.minSize, 1 /*document.body.clientHeight */);
     this.canvas.setAttribute('width', size);
     this.canvas.setAttribute('height', size);
     // this.canvas.style.marginTop = -size / 2 + 'px';
@@ -283,7 +317,6 @@ const Scene = {
 };
 
 const Analyser = {
-
   buffer: null,
 
   duration: 0,

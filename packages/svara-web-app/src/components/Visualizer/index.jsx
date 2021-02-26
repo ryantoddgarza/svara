@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
-import nucleus from '~/synth/modules/nucleus';
+import { modules } from '@svara/kriya';
 import Analyser from './analyser';
 import PraharClock from '~/components/PraharClock';
+
+const { nucleus } = modules;
 
 const svaraNames = [
   'sa',

@@ -10,5 +10,8 @@
   },
   "bugs": {
     "url": "https://github.com/ryantoddgarza/svara/issues"
+  },
+  "dependencies": {
+    "random-js": "^2.1.0"
   }
 }
