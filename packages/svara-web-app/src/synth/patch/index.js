@@ -170,9 +170,9 @@ const patch = (function () {
       stepThrough.direction,
       stepThrough.interval,
     );
-    const wrappedPos = Pattern.wrapArrayIndex(obj.pos, obj.arr.length);
 
-    obj.pos = wrappedPos;
+    // Wrap out of range indeces
+    obj.pos = obj.pos % obj.arr.length;
   };
 
   const currentNote = () => {

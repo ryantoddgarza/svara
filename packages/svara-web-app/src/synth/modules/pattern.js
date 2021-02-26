@@ -1,28 +1,4 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
-//
-// returns a number within the range of an array's length
-// @param {number} index - num to test
-// @param {number} length - wrap to this length. passed in as `arr.length`
-const wrapArrayIndex = (index, length) => {
-  let wrappedIndex;
-
-  if (index % length === 0) {
-    wrappedIndex = 0;
-    return wrappedIndex;
-  }
-
-  if (index < 0) {
-    wrappedIndex = length + (index % length);
-    return wrappedIndex;
-  }
-
-  if (index > length) {
-    wrappedIndex = index % length;
-    return wrappedIndex;
-  }
-
-  return index;
-};
 
 const increment = (num, interval = 1) => {
   num += interval;
@@ -52,10 +28,4 @@ const fibonacci = (n) => {
   return fibArr[n];
 };
 
-export {
-  wrapArrayIndex,
-  increment,
-  decrement,
-  stepThrough,
-  fibonacci,
-};
+export { increment, decrement, stepThrough, fibonacci };
