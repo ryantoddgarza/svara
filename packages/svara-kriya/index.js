@@ -1,4 +1,5 @@
 import * as modules from './src/modules';
 import patch from './src/patch';
+import Composer from './src/Composer';
 
-export { modules, patch };
+export { Composer, modules, patch };
