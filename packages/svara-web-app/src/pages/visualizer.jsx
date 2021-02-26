@@ -1,4 +1,6 @@
 import React from 'react';
 import Visualizer from '~/components/Visualizer';
 
-export default () => <Visualizer />;
+const VisualizerPage = () => <Visualizer />;
+
+export default VisualizerPage;

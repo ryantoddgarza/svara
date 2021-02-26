@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
 import Layout from '~/components/Layout';
-import Visualizer from '~/pages/visualizer';
-import Home from '~/pages/home';
+import Visualizer from '~/pages/Visualizer';
+import Home from '~/pages/Home';
 
 const App = () => (
   <div className="app">
