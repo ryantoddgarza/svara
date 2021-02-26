@@ -75,36 +75,41 @@ const patch = (function () {
     isMax() {
       return this.current === this.maxBeats();
     },
-  };
 
-  const subdivideSlow = () => {
-    const chance = random.bool();
+    conditionallyRender() {
+      let rendered;
 
-    if (chance) {
-      subdivision.value = random.integer(1, 3);
-    }
+      function Query(condition, render) {
+        return {
+          condition,
+          render,
+        };
+      }
 
-    if (!chance) {
-      subdivision.value = random.fraction(4);
-    }
+      const isSlow = new Query(this.value <= 1, () =>
+        random.bool() ? random.integer(1, 3) : random.fraction(4),
+      );
 
-    return subdivision.value;
-  };
+      const isMedium = new Query(this.value > 1 && this.value < 4, () =>
+        random.integer(1, 4),
+      );
 
-  const subdivide = () => {
-    if (subdivision.value <= 1) {
-      subdivideSlow();
-    }
+      const isFast = new Query(this.value >= 4, () => random.integer(2, 6));
 
-    if (subdivision.value < 4) {
-      subdivision.value = random.integer(1, 4);
-    }
+      const list = [isSlow, isMedium, isFast];
+      list.forEach((query) => {
+        if (query.condition) {
+          rendered = query.render();
+        }
+      });
 
-    if (subdivision.value >= 4) {
-      subdivision.value = random.integer(2, 6);
-    }
+      return rendered;
+    },
 
-    return subdivision.value;
+    new(val) {
+      this.value = val || this.conditionallyRender();
+      console.log(this.value);
+    },
   };
 
   const scheduleNote = (beatNumber, time) => {
@@ -119,12 +124,12 @@ const patch = (function () {
 
     if (subdivision.value % 5 || 7 || 9 === 0) {
       if (beatNumber === 0) {
-        subdivision.value = subdivide();
+        subdivision.new();
       }
     }
 
     if (random.integer(1, 100) % 2 === 0) {
-      subdivision.value = subdivide();
+      subdivision.new();
     }
   };
 
