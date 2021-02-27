@@ -1,0 +1,3 @@
+[submodule "packages/warbly"]
+	path = packages/warbly
+	url = https://github.com/warbly/warbly.git
