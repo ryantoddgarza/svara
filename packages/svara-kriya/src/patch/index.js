@@ -24,7 +24,6 @@ const patch = (function () {
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
-  let measure = 0;
   let ascendingFreq = [];
   let ascendingNum = [];
   let descendingFreq = [];
@@ -36,12 +35,6 @@ const patch = (function () {
     arr: [],
     pos: 0,
     improvise: undefined,
-  };
-
-  const incrementMeasure = (beatNumber) => {
-    if (beatNumber === 0) {
-      measure += 1;
-    }
   };
 
   const incrementNextNoteTime = () => {
@@ -56,7 +49,6 @@ const patch = (function () {
     melodyVoice.patch(time);
     subdivision.next(() => {
       incrementNextNoteTime();
-      incrementMeasure(beatNumber);
     });
 
     subdivision.newQuantizedToDownbeat(5);
