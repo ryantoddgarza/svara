@@ -1,14 +1,18 @@
 import Analyser from '@svara/web-app/src/components/Visualizer/analyser';
 import { Subdivision } from '../core';
 import {
+  midiNumsToFreq,
+  frequencyList,
+  random,
+  scaleStepsToMIDI,
+} from '../core/helpers';
+import {
   RagaPitchTables,
   SimpleReverb,
   audioContext,
   nucleus,
-  random,
   synthEngine,
 } from '../modules';
-import { midiNumsToFreq, frequencyList, scaleStepsToMIDI } from '../helpers';
 
 const { context, systemOutput } = audioContext;
 
