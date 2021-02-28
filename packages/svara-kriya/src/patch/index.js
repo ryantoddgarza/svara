@@ -10,12 +10,12 @@ import {
 import {
   RagaPitchTables,
   SimpleReverb,
-  context,
   synthEngine,
   systemOutput,
 } from '../modules';
 
 const patch = (function () {
+  const context = new AudioContext();
   const nucleus = new Composer();
   const subdivision = new Subdivision({ meter: nucleus.meter });
   const ragaPitchData = new RagaPitchTables(nucleus.raga, nucleus.tonic);
@@ -308,6 +308,7 @@ const patch = (function () {
   return {
     init,
     play,
+    context,
     nucleus,
   };
 })();
