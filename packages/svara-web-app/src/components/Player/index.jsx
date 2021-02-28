@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
 import { modules, patch } from '@svara/kriya';
 
-const {
-  audioContext: { systemOutput },
-  synthEngine,
-  nucleus,
-} = modules;
+const { systemOutput, synthEngine, nucleus } = modules;
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);

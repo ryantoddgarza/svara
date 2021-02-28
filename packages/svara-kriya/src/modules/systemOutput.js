@@ -1,7 +1,4 @@
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const context = new AudioContext();
-
-context.suspend && context.suspend();
+import context from './context';
 
 const systemOutput = (function () {
   const initVolume = localStorage.getItem('volume') || 1;
@@ -19,4 +16,4 @@ const systemOutput = (function () {
   };
 })();
 
-export default { context, systemOutput };
+export default systemOutput;

@@ -1,8 +1,6 @@
 import { modules } from '@svara/kriya';
 
-const {
-  audioContext: { context },
-} = modules;
+const { context } = modules;
 
 // analyser adapted from: https://codepen.io/alexdevp/pen/RNELPV?editors=0100
 

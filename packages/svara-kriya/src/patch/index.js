@@ -9,12 +9,11 @@ import {
 import {
   RagaPitchTables,
   SimpleReverb,
-  audioContext,
+  context,
   nucleus,
   synthEngine,
+  systemOutput,
 } from '../modules';
-
-const { context, systemOutput } = audioContext;
 
 const patch = (function () {
   const Nucleus = new Proxy(nucleus, {
