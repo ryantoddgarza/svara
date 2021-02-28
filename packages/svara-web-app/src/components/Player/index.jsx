@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
 import { modules, patch } from '@svara/kriya';
 
-const { systemOutput, synthEngine, nucleus } = modules;
+const { systemOutput, synthEngine } = modules;
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
@@ -10,7 +10,7 @@ const Player = () => {
 
   useEffect(() => {
     patch.init();
-    setRagaName(nucleus.raga.name);
+    setRagaName(patch.nucleus.raga.name);
   });
 
   const onPlay = () => {
