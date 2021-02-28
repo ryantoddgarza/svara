@@ -7,12 +7,7 @@ import {
   random,
   scaleStepsToMIDI,
 } from '../core/helpers';
-import {
-  RagaPitchTables,
-  SimpleReverb,
-  synthEngine,
-  systemOutput,
-} from '../modules';
+import { RagaPitchTables, SimpleReverb, synthEngine } from '../modules';
 
 const patch = (function () {
   const context = new AudioContext();
@@ -132,6 +127,22 @@ const patch = (function () {
 
     return note;
   };
+
+  const systemOutput = (function () {
+    const initVolume = localStorage.getItem('volume') || 1;
+
+    const gainNode = context.createGain();
+    gainNode.connect(context.destination);
+    gainNode.gain.value = initVolume;
+
+    return {
+      initVolume,
+      gainNode,
+      setGain(value) {
+        gainNode.gain.value = value;
+      },
+    };
+  })();
 
   const master = {
     vca: context.createGain(),
@@ -310,6 +321,7 @@ const patch = (function () {
     play,
     context,
     nucleus,
+    systemOutput,
   };
 })();
 
