@@ -1,6 +1,4 @@
-import { modules } from '@svara/kriya';
-
-const { context } = modules;
+import { patch } from '@svara/kriya';
 
 // analyser adapted from: https://codepen.io/alexdevp/pen/RNELPV?editors=0100
 
@@ -320,7 +318,7 @@ const Analyser = {
   duration: 0,
 
   init() {
-    this.context = context; // from Web Audio constant
+    this.context = patch.context;
     this.firstLaunch = true;
     try {
       this.javascriptNode = this.context.createScriptProcessor(2048, 1, 1);
