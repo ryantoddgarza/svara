@@ -8,8 +8,12 @@ const Player = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
   const [ragaName, setRagaName] = useState('');
 
+  const getLocalVolume = () => localStorage.getItem('volume');
+  const initVolume = getLocalVolume() || 1;
+
   useEffect(() => {
     patch.init();
+    patch.systemOutput.setGain(initVolume);
     setRagaName(patch.nucleus.raga.name);
   });
 
@@ -48,7 +52,7 @@ const Player = () => {
           <input
             onChange={onVolumeChange}
             onMouseUp={onVolumeMouseUp}
-            defaultValue={patch.systemOutput.initVolume}
+            defaultValue={initVolume}
             title="volume"
             className="control--volume"
             type="range"
