@@ -1,5 +1,6 @@
 import Analyser from '@svara/web-app/src/components/Visualizer/analyser';
 import { Subdivision } from '../core';
+import Composer from '../Composer';
 import {
   midiNumsToFreq,
   frequencyList,
@@ -10,20 +11,14 @@ import {
   RagaPitchTables,
   SimpleReverb,
   context,
-  nucleus,
   synthEngine,
   systemOutput,
 } from '../modules';
 
 const patch = (function () {
-  const Nucleus = new Proxy(nucleus, {
-    set(target, key, value) {
-      target[key] = value;
-    },
-  });
-
-  const subdivision = new Subdivision({ meter: Nucleus.meter });
-  const ragaPitchData = new RagaPitchTables(Nucleus.raga, Nucleus.tonic);
+  const nucleus = new Composer();
+  const subdivision = new Subdivision({ meter: nucleus.meter });
+  const ragaPitchData = new RagaPitchTables(nucleus.raga, nucleus.tonic);
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
@@ -41,7 +36,7 @@ const patch = (function () {
   };
 
   const incrementNextNoteTime = () => {
-    const secondsPerBeat = 60.0 / Nucleus.tempo;
+    const secondsPerBeat = 60.0 / nucleus.tempo;
     nextNoteTime += (1 / subdivision.value) * secondsPerBeat;
   };
 
@@ -207,7 +202,7 @@ const patch = (function () {
       osc1.connect(vca1);
 
       const attack = 0.1;
-      const decay = 60 / Nucleus.tempo / subdivision.value;
+      const decay = 60 / nucleus.tempo / subdivision.value;
       const noteLength = attack + decay;
 
       // envelope
@@ -219,7 +214,7 @@ const patch = (function () {
     },
 
     init() {
-      this.setRange(Nucleus.tonic, 2);
+      this.setRange(nucleus.tonic, 2);
     },
   };
 
@@ -313,6 +308,7 @@ const patch = (function () {
   return {
     init,
     play,
+    nucleus,
   };
 })();
 
