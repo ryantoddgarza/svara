@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
 import { modules, patch } from '@svara/kriya';
 
-const { systemOutput, synthEngine } = modules;
+const { synthEngine } = modules;
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
@@ -19,7 +19,7 @@ const Player = () => {
   };
 
   const onVolumeChange = (e) => {
-    systemOutput.setGain(e.target.value);
+    patch.systemOutput.setGain(e.target.value);
   };
 
   const onVolumeMouseUp = (e) => {
@@ -48,7 +48,7 @@ const Player = () => {
           <input
             onChange={onVolumeChange}
             onMouseUp={onVolumeMouseUp}
-            defaultValue={systemOutput.initVolume}
+            defaultValue={patch.systemOutput.initVolume}
             title="volume"
             className="control--volume"
             type="range"
