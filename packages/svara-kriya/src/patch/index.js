@@ -1,91 +1,25 @@
 import Analyser from '@svara/web-app/src/components/Visualizer/analyser';
 import { PitchClassSet, Subdivision } from '../core';
 import Composer from '../Composer';
-import { frequencyList, random, scaleStepsToMIDI } from '../core/helpers';
+import { midiToFreq, random, scaleStepsToMIDI } from '../core/helpers';
 import { RagaPitchTables, SimpleReverb, synthEngine } from '../modules';
 
 const patch = (function () {
   const context = new AudioContext();
   const nucleus = new Composer();
   const ragaPitchData = new RagaPitchTables(nucleus.raga, nucleus.tonic);
-  const subdivision = new Subdivision({ meter: nucleus.meter });
-  const note = new PitchClassSet({
+  const pitchClassSet = new PitchClassSet({
     tonic: nucleus.tonic,
     octaves: 2,
     scaleSteps: ragaPitchData.avrohScaleSteps,
   });
   const scheduleAheadTime = 0.1;
-  let nextNoteTime = 0.0;
-  let notesInQueue = [];
-  let improvise;
 
   // steps, midi, and freq quantized to aaroh
   const makeMotif = (steps) =>
     steps.map((step) => ragaPitchData.aarohScaleSteps[step]);
   const motif = makeMotif([0, 3, 2, 3, 4]);
   const motifMIDI = scaleStepsToMIDI(motif, nucleus.tonic);
-
-  const playImprovise = () => {
-    improvise = true;
-    note.arr = note.range;
-  };
-
-  const playMotif = () => {
-    improvise = false;
-    note.arr = motifMIDI;
-  };
-
-  const currentNote = () => frequencyList[note.getCurrentPitch()];
-
-  const scheduleNextPitch = () => {
-    // Improvise
-    if (improvise) {
-      note.setNextPitch(random.bool() ? note.pos : random.integer(0, 4));
-
-      if (random.integer(0, 9) === 0) {
-        note.pos = 0;
-        playMotif();
-      }
-    }
-
-    // Motif
-    if (!improvise) {
-      note.setNextPitch(1);
-
-      if (note.pos === note.arr.length - 1) {
-        playImprovise();
-      }
-    }
-  };
-
-  const setNextNoteTime = () => {
-    const secondsPerBeat = 60.0 / nucleus.tempo;
-    nextNoteTime += (1 / subdivision.value) * secondsPerBeat;
-  };
-
-  const scheduleNextNote = (beatNumber, time) => {
-    notesInQueue.push({ note: beatNumber, time });
-
-    melodyVoice.patch(time);
-    subdivision.next(() => {
-      setNextNoteTime();
-    });
-
-    subdivision.newQuantizedToDownbeat(5);
-    subdivision.newQuantizedToDownbeat(7);
-    subdivision.newQuantizedToDownbeat(9);
-
-    if (random.integer(1, 100) % 2 === 0) {
-      subdivision.new();
-    }
-  };
-
-  const scheduler = () => {
-    while (nextNoteTime < context.currentTime + scheduleAheadTime) {
-      scheduleNextPitch();
-      scheduleNextNote(subdivision.current, nextNoteTime);
-    }
-  };
 
   const systemOutput = (function () {
     const gainNode = context.createGain();
@@ -133,6 +67,78 @@ const patch = (function () {
   };
 
   const melodyVoice = {
+    subdivision: new Subdivision({ meter: nucleus.meter }),
+
+    pitch: pitchClassSet,
+
+    queue: [],
+
+    nextNoteTime: 0.0,
+
+    isImprovise: false,
+
+    improvise() {
+      this.isImprovise = true;
+      this.pitch.arr = this.pitch.range;
+    },
+
+    motif() {
+      this.isImprovise = false;
+      this.pitch.arr = motifMIDI;
+    },
+
+    scheduleNextPitch() {
+      // Improvise
+      if (this.isImprovise) {
+        this.pitch.setNextPitch(
+          random.bool() ? this.pitch.pos : random.integer(0, 4),
+        );
+
+        if (random.integer(0, 9) === 0) {
+          this.pitch.pos = 0;
+          this.motif();
+        }
+      }
+
+      // Motif
+      if (!this.isImprovise) {
+        this.pitch.setNextPitch(1);
+
+        if (this.pitch.pos === this.pitch.arr.length - 1) {
+          this.improvise();
+        }
+      }
+    },
+
+    setNextNoteTime() {
+      const secondsPerBeat = 60.0 / nucleus.tempo;
+      this.nextNoteTime += (1 / this.subdivision.value) * secondsPerBeat;
+    },
+
+    scheduleNextNote(beatNumber, time) {
+      this.queue.push({ note: beatNumber, time });
+
+      this.patch(time);
+      this.subdivision.next(() => {
+        this.setNextNoteTime();
+      });
+
+      this.subdivision.newQuantizedToDownbeat(5);
+      this.subdivision.newQuantizedToDownbeat(7);
+      this.subdivision.newQuantizedToDownbeat(9);
+
+      if (random.integer(1, 100) % 2 === 0) {
+        this.subdivision.new();
+      }
+    },
+
+    scheduler() {
+      while (this.nextNoteTime < context.currentTime + scheduleAheadTime) {
+        this.scheduleNextPitch();
+        this.scheduleNextNote(this.subdivision.current, this.nextNoteTime);
+      }
+    },
+
     patch(time) {
       // sub-patch vca
       const vcaOut = context.createGain();
@@ -147,11 +153,11 @@ const patch = (function () {
 
       // carrier oscillator
       const osc1 = context.createOscillator();
-      osc1.frequency.value = currentNote();
+      osc1.frequency.value = midiToFreq(this.pitch.getCurrentPitch());
       osc1.connect(vca1);
 
       const attack = 0.1;
-      const decay = 60 / nucleus.tempo / subdivision.value;
+      const decay = 60 / nucleus.tempo / this.subdivision.value;
       const noteLength = attack + decay;
 
       // envelope
@@ -174,7 +180,7 @@ const patch = (function () {
     const amMod = context.createGain();
     amMod.connect(gain1);
 
-    const root = frequencyList[nucleus.tonic];
+    const root = midiToFreq(nucleus.tonic);
 
     // carrier osc
     const osc1 = context.createOscillator();
@@ -213,9 +219,13 @@ const patch = (function () {
     osc2.start();
   };
 
+  const scheduler = () => {
+    melodyVoice.scheduler();
+  };
+
   const setMelodicVariables = () => {
-    // random.bool() ? playImprovise() : playMotif();
-    playMotif();
+    // random.bool() ? melodyVoice.improvise() : melodyVoice.motif();
+    melodyVoice.motif();
   };
 
   const play = () => {
@@ -224,7 +234,7 @@ const patch = (function () {
     if (synthEngine.isPlaying) {
       voiceDrone();
       context.resume();
-      nextNoteTime = context.currentTime;
+      melodyVoice.nextNoteTime = context.currentTime;
       synthEngine.timerWorker.postMessage('start');
     }
 
