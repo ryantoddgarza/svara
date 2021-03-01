@@ -17,10 +17,6 @@ const patch = (function () {
   const scheduleAheadTime = 0.1;
   let nextNoteTime = 0.0;
   let notesInQueue = [];
-  let ascendingFreq = [];
-  let ascendingNum = [];
-  let descendingFreq = [];
-  let descendingNum = [];
   let improvise;
 
   // steps, midi, and freq quantized to aaroh
@@ -218,15 +214,9 @@ const patch = (function () {
   };
 
   const setMelodicVariables = () => {
-    ascendingFreq = ragaPitchData.aarohFrequencies;
-    ascendingNum = ragaPitchData.aarohScaleSteps;
-    descendingFreq = ragaPitchData.avrohFrequencies;
-    descendingNum = ragaPitchData.avrohScaleSteps;
     // random.bool() ? playImprovise() : playMotif();
     playMotif();
   };
-
-  const setRhythmicVariables = () => {};
 
   const play = () => {
     synthEngine.play();
@@ -247,7 +237,6 @@ const patch = (function () {
   const init = () => {
     synthEngine.init(scheduler);
     setMelodicVariables();
-    setRhythmicVariables();
     effects.init();
     master.init();
   };
