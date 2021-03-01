@@ -1,5 +1,5 @@
 import Analyser from '@svara/web-app/src/components/Visualizer/analyser';
-import { Subdivision } from '../core';
+import { PitchClassSet, Subdivision } from '../core';
 import Composer from '../Composer';
 import { frequencyList, random, scaleStepsToMIDI } from '../core/helpers';
 import { RagaPitchTables, SimpleReverb, synthEngine } from '../modules';
@@ -7,9 +7,15 @@ import { RagaPitchTables, SimpleReverb, synthEngine } from '../modules';
 const patch = (function () {
   const context = new AudioContext();
   const nucleus = new Composer();
-  const subdivision = new Subdivision({ meter: nucleus.meter });
   const ragaPitchData = new RagaPitchTables(nucleus.raga, nucleus.tonic);
+  const subdivision = new Subdivision({ meter: nucleus.meter });
+  const note = new PitchClassSet({
+    tonic: nucleus.tonic,
+    octaves: 2,
+    scaleSteps: ragaPitchData.avrohScaleSteps,
+  });
   const scheduleAheadTime = 0.1;
+  let nextNoteTime = 0.0;
   let notesInQueue = [];
   let ascendingFreq = [];
   let ascendingNum = [];
@@ -31,51 +37,6 @@ const patch = (function () {
   const playMotif = () => {
     improvise = false;
     note.arr = motifMIDI;
-  };
-
-  const note = {
-    nextNoteTime: 0.0,
-    arr: [], // variable possible midi nums
-    pos: 0,
-    range: [], // n octaves of midi nums
-
-    getCurrentPitch() {
-      return this.arr[this.pos];
-    },
-
-    setNextPitch(interval) {
-      const modN = (n, mod) => n % mod;
-      this.pos = modN(this.pos + interval, this.arr.length);
-      console.log({
-        range: this.range,
-        arr: this.arr,
-        pos: this.pos,
-      });
-    },
-
-    setNextTime() {
-      const secondsPerBeat = 60.0 / nucleus.tempo;
-      this.nextNoteTime += (1 / subdivision.value) * secondsPerBeat;
-    },
-
-    // Expand raga mod 12 scale steps to n octaves of midi nums
-    // steps, midi, and freq quantized to avroh
-    setRange(midiRoot, nOctaves = 1) {
-      const midiNums = scaleStepsToMIDI(
-        ragaPitchData.avrohScaleSteps,
-        midiRoot,
-      );
-
-      for (let i = 1; i < nOctaves; i += 1) {
-        midiNums.forEach((midiNum) => {
-          this.range.push(midiNum + 12 * i);
-        });
-      }
-    },
-
-    init() {
-      this.setRange(nucleus.tonic, 2);
-    },
   };
 
   const currentNote = () => frequencyList[note.getCurrentPitch()];
@@ -101,12 +62,17 @@ const patch = (function () {
     }
   };
 
+  const setNextNoteTime = () => {
+    const secondsPerBeat = 60.0 / nucleus.tempo;
+    nextNoteTime += (1 / subdivision.value) * secondsPerBeat;
+  };
+
   const scheduleNextNote = (beatNumber, time) => {
     notesInQueue.push({ note: beatNumber, time });
 
     melodyVoice.patch(time);
     subdivision.next(() => {
-      note.setNextTime();
+      setNextNoteTime();
     });
 
     subdivision.newQuantizedToDownbeat(5);
@@ -119,9 +85,9 @@ const patch = (function () {
   };
 
   const scheduler = () => {
-    while (note.nextNoteTime < context.currentTime + scheduleAheadTime) {
+    while (nextNoteTime < context.currentTime + scheduleAheadTime) {
       scheduleNextPitch();
-      scheduleNextNote(subdivision.current, note.nextNoteTime);
+      scheduleNextNote(subdivision.current, nextNoteTime);
     }
   };
 
@@ -256,7 +222,6 @@ const patch = (function () {
     ascendingNum = ragaPitchData.aarohScaleSteps;
     descendingFreq = ragaPitchData.avrohFrequencies;
     descendingNum = ragaPitchData.avrohScaleSteps;
-    note.init();
     // random.bool() ? playImprovise() : playMotif();
     playMotif();
   };
@@ -269,7 +234,7 @@ const patch = (function () {
     if (synthEngine.isPlaying) {
       voiceDrone();
       context.resume();
-      note.nextNoteTime = context.currentTime;
+      nextNoteTime = context.currentTime;
       synthEngine.timerWorker.postMessage('start');
     }
 
