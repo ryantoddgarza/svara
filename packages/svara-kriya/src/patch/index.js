@@ -169,54 +169,58 @@ const patch = (function () {
     },
   };
 
-  const voiceDrone = () => {
-    // sub-patch vca
-    const gain1 = context.createGain();
-    gain1.gain.value = 0.1;
-    gain1.connect(master.vca);
-    gain1.connect(effects.reverb.input);
+  const droneVoice = {
+    pitch: pitchClassSet,
 
-    // amplitude mod
-    const amMod = context.createGain();
-    amMod.connect(gain1);
+    patch() {
+      const root = midiToFreq(this.pitch.range[0]);
 
-    const root = midiToFreq(nucleus.tonic);
+      // sub-patch vca
+      const gain1 = context.createGain();
+      gain1.gain.value = 0.1;
+      gain1.connect(master.vca);
+      gain1.connect(effects.reverb.input);
 
-    // carrier osc
-    const osc1 = context.createOscillator();
-    osc1.frequency.value = root;
-    osc1.connect(amMod);
-    osc1.start();
+      // amplitude mod
+      const amMod = context.createGain();
+      amMod.connect(gain1);
 
-    // sub osc
-    const subOsc = context.createOscillator();
-    subOsc.frequency.value = root * 0.50001;
-    subOsc.connect(amMod);
-    subOsc.start();
+      // carrier osc
+      const osc1 = context.createOscillator();
+      osc1.frequency.value = root;
+      osc1.connect(amMod);
+      osc1.start();
 
-    // am vca
-    const gain3 = context.createGain();
-    gain3.gain.value = 0.5;
-    gain3.connect(amMod.gain);
+      // sub osc
+      const subOsc = context.createOscillator();
+      subOsc.frequency.value = root * 0.50001;
+      subOsc.connect(amMod);
+      subOsc.start();
 
-    // am osc
-    const osc3 = context.createOscillator();
-    osc3.type = 'triangle';
-    osc3.frequency.value = root * 0.5;
-    osc3.connect(gain3);
-    osc3.start();
+      // am vca
+      const gain3 = context.createGain();
+      gain3.gain.value = 0.5;
+      gain3.connect(amMod.gain);
 
-    // slow trem vca
-    const gain2 = context.createGain();
-    gain2.gain.value = 0.06;
-    gain2.connect(gain1.gain);
+      // am osc
+      const osc3 = context.createOscillator();
+      osc3.type = 'triangle';
+      osc3.frequency.value = root * 0.5;
+      osc3.connect(gain3);
+      osc3.start();
 
-    // slow trem osc
-    const osc2 = context.createOscillator();
-    osc2.type = 'triangle';
-    osc2.frequency.value = 0.02;
-    osc2.connect(gain2);
-    osc2.start();
+      // slow trem vca
+      const gain2 = context.createGain();
+      gain2.gain.value = 0.06;
+      gain2.connect(gain1.gain);
+
+      // slow trem osc
+      const osc2 = context.createOscillator();
+      osc2.type = 'triangle';
+      osc2.frequency.value = 0.02;
+      osc2.connect(gain2);
+      osc2.start();
+    },
   };
 
   const scheduler = () => {
@@ -232,8 +236,8 @@ const patch = (function () {
     synthEngine.play();
 
     if (synthEngine.isPlaying) {
-      voiceDrone();
       context.resume();
+      droneVoice.patch();
       melodyVoice.nextNoteTime = context.currentTime;
       synthEngine.timerWorker.postMessage('start');
     }
