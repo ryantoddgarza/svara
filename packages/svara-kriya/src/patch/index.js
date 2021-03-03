@@ -1,4 +1,5 @@
 import Analyser from '@svara/web-app/src/components/Visualizer/analyser';
+import { SimpleGain } from 'warbly/packages/modules';
 import { PitchClassSet, Subdivision } from '../core';
 import Composer from '../Composer';
 import { midiToFreq, random, scaleStepsToMIDI } from '../core/helpers';
@@ -22,23 +23,22 @@ const patch = (function () {
   const motifMIDI = scaleStepsToMIDI(motif, nucleus.tonic);
 
   const systemOutput = (function () {
-    const gainNode = context.createGain();
-    gainNode.connect(context.destination);
+    const gain = new SimpleGain(context);
 
     return {
-      gainNode,
+      gain,
       setGain(value) {
-        gainNode.gain.value = value;
+        gain.gain.value = value;
       },
     };
   })();
 
   const master = {
-    vca: context.createGain(),
+    gain: new SimpleGain(context, { connect: systemOutput.gain }),
 
     connectToAnalyzer() {
       if (Analyser.analyser) {
-        this.vca.connect(Analyser.analyser);
+        this.gain.connect(Analyser.analyser);
       }
     },
 
@@ -49,8 +49,6 @@ const patch = (function () {
     },
 
     init() {
-      this.vca.connect(systemOutput.gainNode);
-      this.vca.gain.value = 1;
       this.pollForAnalyzer();
     },
   };
@@ -62,7 +60,7 @@ const patch = (function () {
     }),
 
     init() {
-      this.reverb.connect(master.vca);
+      this.reverb.connect(master.gain);
     },
   };
 
@@ -140,30 +138,32 @@ const patch = (function () {
     },
 
     patch(time) {
-      // sub-patch vca
-      const vcaOut = context.createGain();
-      vcaOut.connect(master.vca);
-      vcaOut.connect(effects.reverb.input);
-      vcaOut.gain.value = 0.2;
+      // voice vca
+      const voiceGain = new SimpleGain(context, {
+        connect: master.gain,
+        gain: 0.2,
+      });
+      voiceGain.connect(effects.reverb.input);
 
-      // note envelope vca
-      const vca1 = context.createGain();
-      vca1.connect(vcaOut);
-      vca1.gain.value = 0;
+      // carrier osc vca gated by envelope generator
+      const gain1 = new SimpleGain(context, {
+        connect: voiceGain,
+        gain: 0,
+      });
 
       // carrier oscillator
       const osc1 = context.createOscillator();
       osc1.frequency.value = midiToFreq(this.pitch.getCurrentPitch());
-      osc1.connect(vca1);
+      osc1.connect(gain1);
 
+      // envelope generator
       const attack = 0.1;
       const decay = 60 / nucleus.tempo / this.subdivision.value;
       const noteLength = attack + decay;
 
-      // envelope
-      vca1.gain.setValueAtTime(0, time);
-      vca1.gain.linearRampToValueAtTime(1, time + attack);
-      vca1.gain.linearRampToValueAtTime(0, time + noteLength);
+      gain1.gain.setValueAtTime(0, time);
+      gain1.gain.linearRampToValueAtTime(1, time + attack);
+      gain1.gain.linearRampToValueAtTime(0, time + noteLength);
       osc1.start(time);
       osc1.stop(time + noteLength);
     },
@@ -175,46 +175,45 @@ const patch = (function () {
     patch() {
       const root = midiToFreq(this.pitch.range[0]);
 
-      // sub-patch vca
-      const gain1 = context.createGain();
-      gain1.gain.value = 0.1;
-      gain1.connect(master.vca);
-      gain1.connect(effects.reverb.input);
+      // voice vca
+      const voiceGain = new SimpleGain(context, {
+        connect: master.gain,
+        gain: 0.1,
+      });
+      voiceGain.connect(effects.reverb.input);
 
-      // amplitude mod
-      const amMod = context.createGain();
-      amMod.connect(gain1);
+      // carrier/sub osc vca amplitude modulated by amGain
+      const gain1 = new SimpleGain(context, { connect: voiceGain });
 
       // carrier osc
       const osc1 = context.createOscillator();
       osc1.frequency.value = root;
-      osc1.connect(amMod);
+      osc1.connect(gain1);
       osc1.start();
 
       // sub osc
       const subOsc = context.createOscillator();
       subOsc.frequency.value = root * 0.50001;
-      subOsc.connect(amMod);
+      subOsc.connect(gain1);
       subOsc.start();
 
-      // am vca
-      const gain3 = context.createGain();
-      gain3.gain.value = 0.5;
-      gain3.connect(amMod.gain);
+      // gain1 am osc attenuator
+      const amOscGain = new SimpleGain(context, { connect: gain1, gain: 0.5 });
 
-      // am osc
-      const osc3 = context.createOscillator();
-      osc3.type = 'triangle';
-      osc3.frequency.value = root * 0.5;
-      osc3.connect(gain3);
-      osc3.start();
+      // gain1 am osc
+      const amOsc = context.createOscillator();
+      amOsc.type = 'triangle';
+      amOsc.frequency.value = root * 0.5;
+      amOsc.connect(amOscGain);
+      amOsc.start();
 
-      // slow trem vca
-      const gain2 = context.createGain();
-      gain2.gain.value = 0.06;
-      gain2.connect(gain1.gain);
+      // voiceGain am osc slow trem attenuator
+      const gain2 = new SimpleGain(context, {
+        connect: voiceGain.gain,
+        gain: 0.06,
+      });
 
-      // slow trem osc
+      // voiceGain am slow trem osc
       const osc2 = context.createOscillator();
       osc2.type = 'triangle';
       osc2.frequency.value = 0.02;
