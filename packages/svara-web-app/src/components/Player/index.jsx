@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
-import { systemOutput } from '~/synth/modules/audioContext';
-import synthEngine from '~/synth/modules/synthEngine';
-import nucleus from '~/synth/modules/nucleus';
-import patch from '~/synth/patch';
+import { modules, patch } from '@svara/kriya';
+
+const { synthEngine } = modules;
 
 const Player = () => {
   const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
   const [ragaName, setRagaName] = useState('');
 
+  const getLocalVolume = () => localStorage.getItem('volume');
+  const initVolume = getLocalVolume() || 1;
+
   useEffect(() => {
-    setRagaName(nucleus.raga.name);
+    patch.init();
+    patch.systemOutput.setGain(initVolume);
+    setRagaName(patch.nucleus.raga.name);
   });
 
   const onPlay = () => {
@@ -19,7 +23,7 @@ const Player = () => {
   };
 
   const onVolumeChange = (e) => {
-    systemOutput.setGain(e.target.value);
+    patch.systemOutput.setGain(e.target.value);
   };
 
   const onVolumeMouseUp = (e) => {
@@ -48,7 +52,7 @@ const Player = () => {
           <input
             onChange={onVolumeChange}
             onMouseUp={onVolumeMouseUp}
-            defaultValue={systemOutput.initVolume}
+            defaultValue={initVolume}
             title="volume"
             className="control--volume"
             type="range"

@@ -1,4 +1,4 @@
-import { midiNumsToFreq, scaleStepsToMIDI } from '~/synth/helpers';
+import { midiNumsToFreq, scaleStepsToMIDI } from '../core/helpers';
 
 function RagaPitchTables(raga, midiRoot) {
   const aarohScaleSteps = raga.aaroh;
