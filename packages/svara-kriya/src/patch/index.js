@@ -22,15 +22,14 @@ const patch = (function () {
   const motif = makeMotif([0, 3, 2, 3, 4]);
   const motifMIDI = scaleStepsToMIDI(motif, nucleus.tonic);
 
-  const systemOutput = (function () {
+  const systemOutput = (function systemOutput() {
     const gain = new SimpleGain(context);
 
-    return {
-      gain,
-      setGain(value) {
-        gain.gain.value = value;
-      },
-    };
+    function setGain(value) {
+      gain.gain.value = value;
+    }
+
+    return { gain, setGain };
   })();
 
   const master = {
