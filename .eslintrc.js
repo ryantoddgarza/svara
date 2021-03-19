@@ -6,13 +6,6 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'airbnb',
-    'prettier',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:react/recommended',
-  ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -20,9 +13,9 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
-  plugins: ['prettier', 'react'],
+  extends: ['airbnb', 'prettier'],
+  plugins: ['prettier'],
   rules: {
     'prettier/prettier': error,
-    'react/jsx-fragments': ['off'],
   },
 };
