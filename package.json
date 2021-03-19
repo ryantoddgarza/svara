@@ -18,5 +18,8 @@
   },
   "browserslist": [
     "defaults"
-  ]
+  ],
+  "scripts": {
+    "deploy-web-app": "sh ./scripts/deploy-web-app.sh"
+  }
 }
