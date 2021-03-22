@@ -27,31 +27,17 @@ module.exports = merge(common, {
         test: /\.(css|scss)$/,
         use: [
           'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
+          'css-loader',
           {
             loader: 'postcss-loader',
             options: {
               postcssOptions: {
                 ident: 'postcss',
-                sourceMap: true,
-                plugins: [
-                  require.resolve('postcss-preset-env'),
-                  require.resolve('autoprefixer'),
-                ],
+                plugins: ['postcss-preset-env', 'autoprefixer'],
               },
             },
           },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
+          'sass-loader',
         ],
       },
     ],
