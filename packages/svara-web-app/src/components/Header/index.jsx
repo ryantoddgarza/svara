@@ -1,20 +1,20 @@
 import React from 'react';
-import { Link } from 'gatsby';
-import { HOME, VISUALIZER } from '~/constants/routes';
+import { NavLink } from 'react-router-dom';
+import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
 
 const Header = () => (
   <div className="header">
     <header className="header__contents container">
-      <Link className="header__site-link" to={HOME}>
+      <NavLink className="header__site-link" to={LANDING}>
         <div className="header__site-title">svara</div>
-      </Link>
+      </NavLink>
       <nav className="header__nav">
         <ul className="header__nav-list">
           <li className="header__nav-item">
-            <Link to={HOME}>about</Link>
+            <NavLink to={HOME}>about</NavLink>
           </li>
           <li className="header__nav-item">
-            <Link to={VISUALIZER}>visualizer</Link>
+            <NavLink to={VISUALIZER}>visualizer</NavLink>
           </li>
         </ul>
       </nav>
