@@ -1,9 +1,8 @@
-# Dependencies
+# dependencies
 node_modules/
 
-# Gatsby
-.cache
-public/
+# production
+build/
 
-# OS
+# misc
 .DS_Store
