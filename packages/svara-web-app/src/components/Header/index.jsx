@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
+import { LANDING } from '~/constants/routes';
+import menu from './menu';
 
 const Header = () => (
   <div className="header">
@@ -10,12 +11,11 @@ const Header = () => (
       </NavLink>
       <nav className="header__nav">
         <ul className="header__nav-list">
-          <li className="header__nav-item">
-            <NavLink to={HOME}>about</NavLink>
-          </li>
-          <li className="header__nav-item">
-            <NavLink to={VISUALIZER}>visualizer</NavLink>
-          </li>
+          {menu.map(({ name, path }) => (
+            <li className="header__nav-item" key={`key__${name}`}>
+              <NavLink to={path}>{name}</NavLink>
+            </li>
+          ))}
         </ul>
       </nav>
     </header>
