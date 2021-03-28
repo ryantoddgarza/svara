@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Header from '~/components/Header';
+import Navbar from '~/components/Navbar';
 import Player from '~/components/Player';
 
 const Layout = ({ children }) => (
   <>
-    <Header />
+    <Header>
+      <Navbar />
+    </Header>
     <main>{children}</main>
     <Player />
   </>

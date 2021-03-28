@@ -1,0 +1,24 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: $navbar-height;
+
+  &__list {
+    display: flex;
+    @include evenly-space-children(1rem);
+  }
+
+  &__item {
+    a.active {
+      color: $theme-color-base;
+    }
+  }
+
+  &__site-title {
+    margin-right: 1rem;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    color: $theme-color-base-ink;
+  }
+}
