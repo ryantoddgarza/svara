@@ -13,21 +13,26 @@
   }
 
   &__content {
+    width: 100%;
     max-width: 62rem;
     margin: 0 auto;
+    padding: 3rem 0 0;
   }
 
   &__row-top {
-    margin: 2rem 0 3rem;
+    @include row(0, 3rem);
   }
 
   &__row-bottom {
-    @include row (3rem);
+    @include row(3rem);
   }
 
   &__col {
     width: 100%;
     margin: 0 0 2rem;
+    @include breakpoint('from-tablet') {
+      margin: 0;
+    }
 
     &--terms {
       @include breakpoint('from-tablet') {
@@ -43,23 +48,21 @@
   }
 
   &__term {
+    display: block;
     margin-bottom: 0.75rem;
     font-size: 1.75rem;
     color: $theme-color-base-light;
     transition: color 0.4s;
-    cursor: pointer;
 
-    &--active {
-      color: white;
-    }
-
-    &:hover {
+    &:hover,
+    &:focus,
+    &.active {
       color: white;
     }
   }
 
   &__definition {
     font-size: 1.125rem;
-    line-height: 1.75rem;;
+    line-height: 1.5em;
   }
 }

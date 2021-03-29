@@ -1,42 +1,30 @@
 import React, { useState, useEffect, forwardRef } from 'react';
+import { usePrevious } from '~/hooks';
 import glossary from '~/data/glossary.json';
 
 const Glossary = forwardRef((props, ref) => {
-  const [activeDefinition, setActiveDefinition] = useState(undefined);
-  const [activeId, setActiveId] = useState(Object.keys(glossary)[0]);
+  const [activeDefinition, setActiveDefinition] = useState();
+  const [activeTermEl, setActiveTermEl] = useState();
+  const prevTermEl = usePrevious(activeTermEl);
 
-  const toggleActiveTerm = (id) => {
-    document.getElementById(`${activeId}`).classList.remove('glossary__term--active');
-    document.getElementById(`${id}`).classList.add('glossary__term--active');
-    setActiveDefinition(Object.values(glossary[id]));
-    setActiveId(id);
-  };
+  function setGlossaryUI(term) {
+    setActiveDefinition(Object.values(glossary[term]));
+  }
 
-  const handleTermClick = (e) => {
-    toggleActiveTerm(e.target.id);
-  };
-
-  const createHtmlTermEls = () => {
-    const termsArray = Object.keys(glossary);
-
-    const els = termsArray.map((term) => (
-      <li
-        onClick={handleTermClick}
-        key={term}
-        id={term}
-        className="glossary__term"
-      >
-        {term}
-      </li>
-    ));
-
-    return els;
-  };
+  function handleTermClick(event) {
+    setGlossaryUI(event.target.id);
+    setActiveTermEl(event.target);
+  }
 
   useEffect(() => {
-    setActiveDefinition(Object.values(glossary)[0]);
-    toggleActiveTerm(activeId);
-  }, []);
+    if (activeTermEl) {
+      activeTermEl.classList.add('active');
+    }
+
+    if (prevTermEl) {
+      prevTermEl.classList.remove('active');
+    }
+  }, [handleTermClick]);
 
   return (
     <section className="glossary" ref={ref}>
@@ -45,7 +33,19 @@ const Glossary = forwardRef((props, ref) => {
           <div className="glossary__title">glossary</div>
         </div>
         <div className="glossary__row-bottom">
-          <ul className="glossary__col glossary__col--terms">{createHtmlTermEls()}</ul>
+          <ul className="glossary__col glossary__col--terms">
+            {Object.keys(glossary).map((term) => (
+              <button
+                type="button"
+                onClick={(event) => handleTermClick(event)}
+                key={`key__${term}`}
+                id={term}
+                className="glossary__term"
+              >
+                {term}
+              </button>
+            ))}
+          </ul>
           <div className="glossary__col glossary__col--definition">
             <div className="glossary__definition">{activeDefinition}</div>
           </div>
