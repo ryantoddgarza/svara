@@ -1,4 +1,4 @@
-const { ragas, praharas } = require('./data');
+import { ragas, praharas } from './data';
 
 function hourToPrahar(hour = new Date().getHours()) {
   function findInTables(tab, val) {
@@ -12,4 +12,4 @@ function filterBy(field, val) {
   return ragas.filter((raga) => raga[field] === val);
 }
 
-module.exports = { filterBy, hourToPrahar };
+export { filterBy, hourToPrahar };

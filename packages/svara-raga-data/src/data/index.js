@@ -1,4 +1,2 @@
-const ragas = require('./ragas.json');
-const praharas = require('./praharas.json');
-
-module.exports = { ragas, praharas };
+export { default as ragas } from './ragas.json';
+export { default as praharas } from './praharas.json';

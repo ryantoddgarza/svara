@@ -1,5 +1,5 @@
-const { ragas } = require('./data');
-const { filterBy, hourToPrahar } = require('./utils');
+import { ragas } from './data';
+import { filterBy, hourToPrahar } from './utils';
 
 function getPrahar(val) {
   return hourToPrahar(val);
@@ -13,4 +13,4 @@ function getRagasByPrahar(prahar = hourToPrahar()) {
   return filterBy('prahar', prahar);
 }
 
-module.exports = { getPrahar, getRagas, getRagasByPrahar };
+export { getPrahar, getRagas, getRagasByPrahar };
