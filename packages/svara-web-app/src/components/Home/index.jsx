@@ -8,7 +8,8 @@ import {
 } from 'react-icons/fa';
 import { VISUALIZER } from '~/constants/routes';
 import Glossary from '~/components/Glossary';
-import about from '~/data/about.json';
+import aboutData from '~/data/about/data.json';
+import aboutMd from '~/data/about/index.md';
 
 const Home = () => {
   const glossaryRef = useRef();
@@ -17,13 +18,18 @@ const Home = () => {
   return (
     <div className="home">
       <section className="home__section home__section--light">
+        <div className="container home__container home__article">
+          <div dangerouslySetInnerHTML={{ __html: aboutMd }} />
+        </div>
+      </section>
+      <section className="home__section home__section--light">
         <div className="home__container grid-module">
           <div className="grid-module__row">
             <div className="grid-module__col--8">
               <div className="grid-module__card grid-module__aspect-ratio--2x1">
                 <div className="grid-module__aspect-ratio--object">
                   <div className="grid-module__tile">
-                    <h5>{about.tagline}</h5>
+                    <h5>{aboutData.description}</h5>
                   </div>
                 </div>
               </div>

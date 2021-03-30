@@ -22,4 +22,8 @@
     max-width: 62rem;
     margin: auto;
   }
+
+  &__article {
+    @include theme-typography;
+  }
 }
