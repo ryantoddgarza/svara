@@ -1,4 +1,4 @@
-import { ragas, praharas } from './data';
+import { praharas } from '../data';
 
 function hourToPrahar(hour = new Date().getHours()) {
   function findInTables(tab, val) {
@@ -8,8 +8,4 @@ function hourToPrahar(hour = new Date().getHours()) {
   return parseFloat(findInTables(praharas, hour));
 }
 
-function filterBy(field, val) {
-  return ragas.filter((raga) => raga[field] === val);
-}
-
-export { filterBy, hourToPrahar };
+export default hourToPrahar;
