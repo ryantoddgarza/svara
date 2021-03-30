@@ -1,5 +1,3 @@
-import * as modules from './modules';
-import patch from './patch';
-import Composer from './Composer';
-
-export { Composer, modules, patch };
+export * as modules from './modules';
+export { default as Composer } from './Composer';
+export { default as patch } from './patch';
