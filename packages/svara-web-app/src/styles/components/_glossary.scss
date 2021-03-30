@@ -4,8 +4,6 @@
   justify-content: center;
   min-height: 50vh;
   padding: 0 1rem;
-  background: $theme-color-base-darkest;
-  color: white;
   overflow: hidden;
 
   &__title {
@@ -14,9 +12,6 @@
 
   &__content {
     width: 100%;
-    max-width: 62rem;
-    margin: 0 auto;
-    padding: 3rem 0 0;
   }
 
   &__row-top {
@@ -29,14 +24,12 @@
 
   &__col {
     width: 100%;
-    margin: 0 0 2rem;
-    @include breakpoint('from-tablet') {
-      margin: 0;
-    }
 
     &--terms {
+      margin: 0 0 2rem;
       @include breakpoint('from-tablet') {
         width: 33.33333%;
+        margin: 0;
       }
     }
 

@@ -1,6 +1,4 @@
 .grid-module {
-  margin: 2rem 0;
-
   &__card {
     font-size: 1.5rem;
     margin: 1px;
@@ -21,8 +19,6 @@
   &__row {
     @include row(0);
     position: relative;
-    max-width: 62rem;
-    margin: 0 auto;
   }
 
   @mixin responsive-grid-col($value, $min-value: null) {
