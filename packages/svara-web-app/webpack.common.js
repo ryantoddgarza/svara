@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPartialsPlugin = require('html-webpack-partials-plugin');
+const RemarkHTML = require('remark-html');
 
 module.exports = {
   entry: {
@@ -31,6 +32,26 @@ module.exports = {
       patterns: [{ from: 'static' }],
     }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'html-loader',
+          },
+          {
+            loader: 'remark-loader',
+            options: {
+              remarkOptions: {
+                plugins: [RemarkHTML],
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
   output: {
     filename: '[name].bundle.js',
     path: path.join(__dirname, 'build'),
