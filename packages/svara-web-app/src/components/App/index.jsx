@@ -7,7 +7,7 @@ import HomePage from '~/pages/HomePage';
 const App = () => (
   <BrowserRouter>
     <Switch>
-      <Route path={LANDING} exact component={VisualizerPage} />
+      <Route path={LANDING} exact component={HomePage} />
       <Route path={HOME} component={HomePage} />
       <Route path={VISUALIZER} component={VisualizerPage} />
     </Switch>
