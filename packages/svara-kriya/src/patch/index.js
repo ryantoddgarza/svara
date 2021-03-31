@@ -7,24 +7,25 @@ import {
 import { PitchClassSet, Subdivision } from '../core';
 import Composer from '../Composer';
 import { midiToFreq, random, scaleStepsToMIDI } from '../core/helpers';
-import { RagaPitchTables, SimpleReverb, synthEngine } from '../modules';
+import { SimpleReverb, synthEngine } from '../modules';
 
 const patch = (function () {
   const context = new AudioContext();
   const nucleus = new Composer();
-  const ragaPitchData = new RagaPitchTables(nucleus.raga, nucleus.tonic);
   const pitchClassSet = new PitchClassSet({
     tonic: nucleus.tonic,
     octaves: 2,
-    scaleSteps: ragaPitchData.avrohScaleSteps,
+    // TODO: scale needs to change based on previous note
+    scaleSteps: nucleus.raga.avroh,
   });
-  const scheduleAheadTime = 0.1;
 
-  // steps, midi, and freq quantized to aaroh
-  const makeMotif = (steps) =>
-    steps.map((step) => ragaPitchData.aarohScaleSteps[step]);
-  const motif = makeMotif([0, 3, 2, 3, 4]);
-  const motifMIDI = scaleStepsToMIDI(motif, nucleus.tonic);
+  const gat = [
+    nucleus.getRandomScaleSteps(),
+    nucleus.getRandomScaleSteps(),
+    nucleus.getRandomScaleSteps(),
+  ];
+
+  const scheduleAheadTime = 0.1;
 
   const systemOutput = (function systemOutput() {
     const gain = new SimpleGain(context);
@@ -85,7 +86,9 @@ const patch = (function () {
 
     motif() {
       this.isImprovise = false;
-      this.pitch.arr = motifMIDI;
+
+      const randomGat = gat[random.integer(0, gat.length - 1)];
+      this.pitch.arr = scaleStepsToMIDI(randomGat, nucleus.tonic);
     },
 
     scheduleNextPitch() {
