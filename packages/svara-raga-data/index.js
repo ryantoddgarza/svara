@@ -1,3 +1,1 @@
-const methods = require('./src/methods');
-
-module.exports = methods;
+export * from './src/index.js';

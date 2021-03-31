@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 import {
   FaGithub,
   FaList,
@@ -19,7 +20,9 @@ const Home = () => {
     <div className="home">
       <section className="home__section home__section--light">
         <div className="container home__container home__article">
-          <div dangerouslySetInnerHTML={{ __html: aboutMd }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(aboutMd) }}
+          />
         </div>
       </section>
       <section className="home__section home__section--light">
