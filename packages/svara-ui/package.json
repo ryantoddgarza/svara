@@ -1,0 +1,29 @@
+{
+  "name": "@svara/ui",
+  "private": true,
+  "main": "dist/ui.bundle.min.js",
+  "homepage": "https://github.com/ryantoddgarza/svara#readme",
+  "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryantoddgarza/svara.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ryantoddgarza/svara/issues"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "build-watch": "webpack --config webpack.prod.js --watch"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.x",
+    "prop-types": "15.x",
+    "react": "17.x",
+    "styled-components": "^5.x"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "webpack": "^5.30.0"
+  }
+}

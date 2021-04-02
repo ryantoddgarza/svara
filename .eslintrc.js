@@ -1,3 +1,4 @@
+const off = 0;
 const error = 2;
 
 module.exports = {
@@ -14,8 +15,12 @@ module.exports = {
     sourceType: 'module',
   },
   extends: ['airbnb', 'prettier'],
-  plugins: ['prettier'],
+  plugins: ['import', 'prettier'],
   rules: {
+    'import/no-extraneous-dependencies': [
+      off,
+      { devDependencies: ['webpack.*.js'] },
+    ],
     'prettier/prettier': error,
   },
 };

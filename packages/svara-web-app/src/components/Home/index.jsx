@@ -9,8 +9,9 @@ import {
 } from 'react-icons/fa';
 import { VISUALIZER } from '~/constants/routes';
 import Glossary from '~/components/Glossary';
-import aboutData from '~/data/about/data.json';
-import aboutMd from '~/data/about/index.md';
+import { home } from '~/cms';
+
+const { about, glossary } = home;
 
 const Home = () => {
   const glossaryRef = useRef();
@@ -21,7 +22,9 @@ const Home = () => {
       <section className="home__section home__section--light">
         <div className="container home__container home__article">
           <div
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(aboutMd) }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(about.excerpt),
+            }}
           />
         </div>
       </section>
@@ -32,7 +35,7 @@ const Home = () => {
               <div className="grid-module__card grid-module__aspect-ratio--2x1">
                 <div className="grid-module__aspect-ratio--object">
                   <div className="grid-module__tile">
-                    <h5>{aboutData.description}</h5>
+                    <h5>{about.description}</h5>
                   </div>
                 </div>
               </div>
@@ -88,7 +91,7 @@ const Home = () => {
       </section>
       <section className="home__section home__section--dark">
         <div className="home__container">
-          <Glossary ref={glossaryRef} />
+          <Glossary ref={glossaryRef} entries={glossary} />
         </div>
       </section>
     </div>

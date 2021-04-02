@@ -40,7 +40,7 @@ const Visualizer = () => {
         <div className="visualizer__raga-info">
           <div className="visualizer__raga-name">{`raga ${raga.name}`}</div>
           <div className="visualizer__raga-detail">
-            {`thaat · ${raga.thaat}`}
+            {`thaat · ${raga.thaat.name}`}
           </div>
           <div className="visualizer__raga-detail">
             {`vadi · ${indexToSvara(raga.vadi)}`}
