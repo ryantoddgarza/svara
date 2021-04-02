@@ -14,7 +14,8 @@
   },
   "scripts": {
     "build": "webpack --config webpack.prod.js",
-    "build-watch": "webpack --config webpack.prod.js --watch"
+    "build-watch": "webpack --config webpack.prod.js --watch",
+    "develop": "npm run build-watch"
   },
   "peerDependencies": {
     "@babel/core": "7.x",
