@@ -1,6 +1,8 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { usePrevious } from '~/hooks';
-import glossary from '~/data/glossary.json';
+import { home } from '~/cms';
+
+const { glossary } = home;
 
 const Glossary = forwardRef((props, ref) => {
   const [activeDefinition, setActiveDefinition] = useState();
