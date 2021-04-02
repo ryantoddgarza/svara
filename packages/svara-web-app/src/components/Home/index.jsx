@@ -11,7 +11,7 @@ import { VISUALIZER } from '~/constants/routes';
 import Glossary from '~/components/Glossary';
 import { home } from '~/cms';
 
-const { about } = home;
+const { about, glossary } = home;
 
 const Home = () => {
   const glossaryRef = useRef();
@@ -91,7 +91,7 @@ const Home = () => {
       </section>
       <section className="home__section home__section--dark">
         <div className="home__container">
-          <Glossary ref={glossaryRef} />
+          <Glossary ref={glossaryRef} entries={glossary} />
         </div>
       </section>
     </div>

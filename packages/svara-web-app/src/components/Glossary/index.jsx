@@ -1,16 +1,14 @@
 import React, { useState, useEffect, forwardRef } from 'react';
+import PropTypes from 'prop-types';
 import { usePrevious } from '~/hooks';
-import { home } from '~/cms';
 
-const { glossary } = home;
-
-const Glossary = forwardRef((props, ref) => {
+const Glossary = forwardRef(({ entries }, ref) => {
   const [activeDefinition, setActiveDefinition] = useState();
   const [activeTermEl, setActiveTermEl] = useState();
   const prevTermEl = usePrevious(activeTermEl);
 
   function setGlossaryUI(term) {
-    setActiveDefinition(Object.values(glossary[term]));
+    setActiveDefinition(Object.values(entries[term]));
   }
 
   function handleTermClick(event) {
@@ -36,7 +34,7 @@ const Glossary = forwardRef((props, ref) => {
         </div>
         <div className="glossary__row-bottom">
           <ul className="glossary__col glossary__col--terms">
-            {Object.keys(glossary).map((term) => (
+            {Object.keys(entries).map((term) => (
               <button
                 type="button"
                 onClick={(event) => handleTermClick(event)}
@@ -56,5 +54,13 @@ const Glossary = forwardRef((props, ref) => {
     </section>
   );
 });
+
+Glossary.propTypes = {
+  entries: PropTypes.objectOf(PropTypes.string),
+};
+
+Glossary.defaultProps = {
+  entries: {},
+};
 
 export default Glossary;
