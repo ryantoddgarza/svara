@@ -6,6 +6,9 @@ module.exports = {
   entry: {
     index: { import: './src/index.js' },
   },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
   externals: {
     'styled-components': {
       commonjs: 'styled-components',
