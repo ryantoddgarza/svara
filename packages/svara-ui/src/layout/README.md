@@ -6,7 +6,7 @@ Layout components for [React](https://reactjs.org/) built with [styled-component
 
 ### Usage
 
-The `Flex` component is centered around the `box` and `item` elements.
+Create flexbox based layouts with the `Flex` component. The system is made of `box` and `item` elements. Pass either as a prop to the `Flex` component.
 
 ```js
 import { Flex } from '@svara/ui';
@@ -24,31 +24,15 @@ const Component = () => (
 
 #### `box`
 
-Sets the CSS styles for a flex box (container) element.
+Sets the CSS styles for a flex box (container).
 
 ```js
 <Flex box />
 ```
 
-#### `gap`
-
-Specifying a pixel value adds positive margin – rendered in `rem` – to each `item` element and a negative margin compensation to the `box` element. There is no `gap` by default.
-
-```js
-<Flex box gap={number} />
-```
-
-#### `gapBottom`
-
-Sets each `item`s bottom margin to the `gap` value.
-
-```js
-<Flex box gap={number} gapBottom />
-```
-
 #### `item`
 
-Sets the CSS styles for a flex item (child). Elements default to equal width columns.
+Sets the CSS styles for a flex item (child). `item`s default to equal width columns.
 
 ```js
 <Flex item />
@@ -56,22 +40,31 @@ Sets the CSS styles for a flex item (child). Elements default to equal width col
 
 #### `cols`
 
-Set the width of an `item` element by specifying the number of columns. The result is a fluid column.
+Specify a number of columns to set the fluid width of an `item`. Supports responsive breakpoints.
 
 ```js
 <Flex item cols={3} />
 ```
 
-#### Gotcha: Negative margin
+#### `gap`
 
-Because a negative margin is applied to the `box` element, it can cause an unwanted horizontal scroll if it exceeds the document `<body>`. There are two ways to prevent this:
+Specify a pixel value to add a horizontal negative margin – rendered in `rem` – to the `box` and a positive margin to all direct child elements. There is no `gap` by default.
 
-1. Apply padding to the parent that is a minimum of half the `gap` value.
-2. Add `overflow-x: hidden;` to the parent's styles.
+```js
+<Flex box gap={number} />
+```
+
+#### `gapBottom`
+
+Sets the bottom margin of a `box`'s direct children to the `gap` value.
+
+```js
+<Flex box gap={number} gapBottom />
+```
 
 ### Themed media queries
 
-Use the styled-components `ThemeProvider` component to set the theme's breakpoints. Props that support breakpoints – such as `cols` – use the values from the theme's `breakpoints` property to create mobile first [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries).
+Use the styled-components `ThemeProvider` component to set the theme's breakpoints and pass an array of values to the prop that supports responsive breakpoints. The shorter of either array determines the number of mobile first [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries) that are created. For instance, in the following example no media query will be generated for the `'1600px'` breakpoint since the `cols` value array has a length of 3. Breakpoints below the first value default to full-width.
 
 ```js
 import React from 'react';
@@ -90,10 +83,16 @@ const App = () => (
       <Flex item cols={cols}>
         column
       </Flex>
-      ))}
     </Flex>
   </ThemeProvider>
 );
 ```
 
-Breakpoints below the first value default to full-width. Queries are only created until either the breakpoints or value array no longer has a corresponding pair. For instance, in the above example no `cols` media query will be generated for the `'1600px'` breakpoint.
+### Gotchas
+
+#### Negative margin
+
+Because a negative margin is applied to the `box` element, it can cause an unwanted horizontal scroll if it exceeds the document `<body>`. There are two ways to prevent this:
+
+1. Apply padding to the parent that is a minimum of half the `gap` value.
+2. Add `overflow-x: hidden;` to the parent's styles.
