@@ -12,8 +12,8 @@
     "url": "https://github.com/ryantoddgarza/svara/issues"
   },
   "scripts": {
-    "start": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "develop": "webpack serve --config webpack.dev.js"
   },
   "dependencies": {
     "autoprefixer": "^10.2.5",
