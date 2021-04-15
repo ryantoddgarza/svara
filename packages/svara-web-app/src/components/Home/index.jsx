@@ -35,7 +35,7 @@ const Home = () => {
         </div>
       </section>
       <section className="home__section home__section--dark">
-        <div className="home__container">
+        <div className="container home__container">
           <Glossary entries={glossary} />
         </div>
       </section>
