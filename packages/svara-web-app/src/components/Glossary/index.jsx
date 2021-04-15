@@ -1,4 +1,5 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import { Flex } from '@svara/ui';
 import PropTypes from 'prop-types';
 import { usePrevious } from '~/hooks';
 
@@ -6,6 +7,8 @@ const Glossary = forwardRef(({ entries }, ref) => {
   const [activeDefinition, setActiveDefinition] = useState();
   const [activeTermEl, setActiveTermEl] = useState();
   const prevTermEl = usePrevious(activeTermEl);
+  const definitionRef = useRef(null);
+  const scrollToDefinition = () => definitionRef.current.scrollIntoView();
 
   function setGlossaryUI(term) {
     setActiveDefinition(Object.values(entries[term]));
@@ -14,6 +17,7 @@ const Glossary = forwardRef(({ entries }, ref) => {
   function handleTermClick(event) {
     setGlossaryUI(event.target.id);
     setActiveTermEl(event.target);
+    scrollToDefinition();
   }
 
   useEffect(() => {
@@ -27,31 +31,29 @@ const Glossary = forwardRef(({ entries }, ref) => {
   }, [handleTermClick]);
 
   return (
-    <section className="glossary" ref={ref}>
-      <div className="glossary__content">
-        <div className="glossary__row-top">
-          <div className="glossary__title">glossary</div>
-        </div>
-        <div className="glossary__row-bottom">
-          <ul className="glossary__col glossary__col--terms">
-            {Object.keys(entries).map((term) => (
-              <button
-                type="button"
-                onClick={(event) => handleTermClick(event)}
-                key={`key__${term}`}
-                id={term}
-                className="glossary__term"
-              >
-                {term}
-              </button>
-            ))}
-          </ul>
-          <div className="glossary__col glossary__col--definition">
-            <div className="glossary__definition">{activeDefinition}</div>
+    <div className="glossary" ref={ref}>
+      <h2 className="glossary__title">Glossary</h2>
+      <Flex box gap={16} gapBottom>
+        <Flex item cols={[1, 3]}>
+          {Object.keys(entries).map((term) => (
+            <button
+              type="button"
+              onClick={(event) => handleTermClick(event)}
+              key={`key__${term}`}
+              id={term}
+              className="glossary__term"
+            >
+              {term}
+            </button>
+          ))}
+        </Flex>
+        <Flex item>
+          <div ref={definitionRef} className="glossary__definition">
+            {activeDefinition}
           </div>
-        </div>
-      </div>
-    </section>
+        </Flex>
+      </Flex>
+    </div>
   );
 });
 

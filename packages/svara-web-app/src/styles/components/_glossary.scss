@@ -1,49 +1,15 @@
 .glossary {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 50vh;
-  padding: 0 1rem;
-  overflow: hidden;
+  min-height: 60vh;
 
   &__title {
-    letter-spacing: 0.1rem;
-  }
-
-  &__content {
-    width: 100%;
-  }
-
-  &__row-top {
-    @include row(0, 3rem);
-  }
-
-  &__row-bottom {
-    @include row(3rem);
-  }
-
-  &__col {
-    width: 100%;
-
-    &--terms {
-      margin: 0 0 2rem;
-      @include breakpoint('from-tablet') {
-        width: 33.33333%;
-        margin: 0;
-      }
-    }
-
-    &--definition {
-      @include breakpoint('from-tablet') {
-        width: 66.66666%;
-      }
-    }
+    font-size: 2rem;
+    margin-bottom: 3rem;
   }
 
   &__term {
     display: block;
     margin-bottom: 0.75rem;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     text-align: left;
     color: $theme-color-base-light;
     transition: color 0.4s;
