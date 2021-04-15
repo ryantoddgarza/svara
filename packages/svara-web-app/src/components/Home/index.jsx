@@ -1,97 +1,38 @@
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import DOMPurify from 'dompurify';
-import {
-  FaGithub,
-  FaList,
-  FaArrowRight,
-  FaExternalLinkAlt,
-} from 'react-icons/fa';
-import { VISUALIZER } from '~/constants/routes';
+import React, { Fragment, useRef } from 'react';
+import { Flex } from '@svara/ui';
 import Glossary from '~/components/Glossary';
 import { home } from '~/cms';
 
-const { about, glossary } = home;
-
 const Home = () => {
+  const { settings, content } = home;
   const glossaryRef = useRef();
   const scrollGlossaryIntoView = () => glossaryRef.current.scrollIntoView();
+  const cardCols = [1, 2, 3];
 
   return (
     <div className="home">
       <section className="home__section home__section--light">
         <div className="container home__container home__article">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(about.excerpt),
-            }}
-          />
-        </div>
-      </section>
-      <section className="home__section home__section--light">
-        <div className="home__container grid-module">
-          <div className="grid-module__row">
-            <div className="grid-module__col--8">
-              <div className="grid-module__card grid-module__aspect-ratio--2x1">
-                <div className="grid-module__aspect-ratio--object">
-                  <div className="grid-module__tile">
-                    <h5>{about.description}</h5>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="grid-module__col--4">
-              <div className="grid-module__card grid-module__aspect-ratio--1x1">
-                <div className="grid-module__aspect-ratio--object">
-                  <div className="grid-module__tile grid-module__tile--interactive">
-                    <a
-                      className="tile__clickable"
-                      href="https://github.com/ryantoddgarza/svara"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      GitHub
-                    </a>
-                    <FaGithub className="tile__id-icon icon__lg--responsive" />
-                    <FaExternalLinkAlt className="tile__action-icon icon" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="grid-module__col--4">
-              <div className="grid-module__card grid-module__aspect-ratio--1x1">
-                <div className="grid-module__aspect-ratio--object">
-                  <div className="grid-module__tile grid-module__tile--interactive">
-                    <span
-                      className="tile__clickable"
-                      onClick={scrollGlossaryIntoView}
-                    >
-                      Glossary
-                    </span>
-                    <FaList className="tile__id-icon icon__lg--responsive" />
-                    <FaArrowRight className="tile__action-icon icon" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="grid-module__col--8">
-              <div className="grid-module__card grid-module__aspect-ratio--2x1">
-                <div className="grid-module__aspect-ratio--object">
-                  <div className="grid-module__tile grid-module__tile--interactive">
-                    <Link className="tile__clickable" to={VISUALIZER}>
-                      Visualizer
-                    </Link>
-                    <FaArrowRight className="tile__action-icon icon" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h1>{settings.general.subtitle}</h1>
+          {content.features.map(({ heading, body }) => (
+            <Fragment key={`key__${heading}`}>
+              <h2>{heading}</h2>
+              {body}
+            </Fragment>
+          ))}
+          <Flex box gap={16}>
+            {content.cards.map(({ heading, body }) => (
+              <Flex item cols={cardCols} key={`key__${heading}`}>
+                <h3>{heading}</h3>
+                {body}
+              </Flex>
+            ))}
+          </Flex>
         </div>
       </section>
       <section className="home__section home__section--dark">
         <div className="home__container">
-          <Glossary ref={glossaryRef} entries={glossary} />
+          <Glossary ref={glossaryRef} entries={content.glossary} />
         </div>
       </section>
     </div>
