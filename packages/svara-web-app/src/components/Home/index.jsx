@@ -1,12 +1,10 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment } from 'react';
 import { Flex } from '@svara/ui';
 import Glossary from '~/components/Glossary';
 import { home } from '~/cms';
 
 const Home = () => {
   const { settings, content } = home;
-  const glossaryRef = useRef();
-  const scrollGlossaryIntoView = () => glossaryRef.current.scrollIntoView();
   const cardCols = [1, 2, 3];
 
   return (
@@ -32,7 +30,7 @@ const Home = () => {
       </section>
       <section className="home__section home__section--dark">
         <div className="home__container">
-          <Glossary ref={glossaryRef} entries={content.glossary} />
+          <Glossary entries={content.glossary} />
         </div>
       </section>
     </div>
