@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import theme from '@svara/design-system';
+import LayoutMain from '~/components/LayoutMain';
 import Header from '~/components/Header';
 import Nav from '~/components/Nav';
 import Player from '~/components/Player';
@@ -11,7 +12,7 @@ const Layout = ({ children }) => (
     <Header>
       <Nav />
     </Header>
-    <main>{children}</main>
+    <LayoutMain>{children}</LayoutMain>
     <Player />
   </ThemeProvider>
 );
