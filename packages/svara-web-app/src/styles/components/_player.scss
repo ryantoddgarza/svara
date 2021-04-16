@@ -1,11 +1,4 @@
 .player {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: white;
-  border-top: 1px solid $theme-color-base-lighter;
-  z-index: 6000;
-
   &__bottom-row {
     display: grid;
     grid-template-columns: 5fr 1fr;

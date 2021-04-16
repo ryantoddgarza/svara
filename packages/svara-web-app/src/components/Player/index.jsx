@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
 import { modules, patch } from '@svara/kriya';
+import { Player as StyledPlayer, PlayerRow } from './styled';
 
 const { synthEngine } = modules;
 
@@ -31,8 +32,8 @@ const Player = () => {
   };
 
   return (
-    <div className="player">
-      <div className="player__bottom-row container">
+    <StyledPlayer className="player">
+      <PlayerRow className="player__bottom-row">
         <div className="player__start">
           <div className="player__media-info">
             <span>{ragaName}</span>
@@ -62,8 +63,8 @@ const Player = () => {
             aria-labelledby="title"
           />
         </div>
-      </div>
-    </div>
+      </PlayerRow>
+    </StyledPlayer>
   );
 };
 
