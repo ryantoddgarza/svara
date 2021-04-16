@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Container } from '@svara/ui';
+import { Container, rem } from '@svara/ui';
 
 export const Header = styled.header`
   background-color: white;
@@ -10,7 +10,7 @@ export const HeaderContainer = styled(Container)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 4rem;
+  height: ${({ theme: { header } }) => rem(header.height.mobile)};
 `;
 
 export const HeaderTitle = styled.div`
