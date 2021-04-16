@@ -1,28 +1,4 @@
 .home {
-  padding: 0 0 $player-height--mobile 0;
-  @include breakpoint('from-tablet') {
-    padding: 0 0 $player-height--desktop 0;
-  }
-
-  &__section {
-    padding: 3rem 0;
-
-    &--light {
-      background: white;
-      color: $theme-color-base-ink;
-    }
-
-    &--dark {
-      background-color: $theme-color-base-darkest;
-      color: white;
-    }
-  }
-
-  &__container {
-    max-width: 62rem;
-    margin: auto;
-  }
-
   &__article {
     @include theme-typography;
   }

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Flex } from '@svara/ui';
 import Glossary from '~/components/Glossary';
 import { home } from '~/cms';
+import { Home as StyledHome, Container, Section } from './styled';
 
 const Home = () => {
   const {
@@ -14,9 +15,9 @@ const Home = () => {
   const cardCols = [1, 2, 3];
 
   return (
-    <div className="home">
-      <section className="home__section home__section--light">
-        <div className="container home__container home__article">
+    <StyledHome>
+      <Section className="home__article">
+        <Container>
           <h1>{subtitle}</h1>
           {features.map(({ heading, body }) => (
             <Fragment key={`key__${heading}`}>
@@ -32,14 +33,14 @@ const Home = () => {
               </Flex>
             ))}
           </Flex>
-        </div>
-      </section>
-      <section className="home__section home__section--dark">
-        <div className="container home__container">
+        </Container>
+      </Section>
+      <Section dark>
+        <Container>
           <Glossary entries={glossary} />
-        </div>
-      </section>
-    </div>
+        </Container>
+      </Section>
+    </StyledHome>
   );
 };
 

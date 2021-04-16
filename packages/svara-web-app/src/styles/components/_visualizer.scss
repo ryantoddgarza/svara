@@ -1,8 +1,7 @@
 .visualizer {
-  height: calc(100vh - #{$navbar-height});
-  padding: 0 0 $player-height--mobile 0;
+  height: calc(100vh - #{$navbar-height} - #{$player-height--mobile});
   @include breakpoint('from-tablet') {
-    padding: 0 0 $player-height--desktop 0;
+    height: calc(100vh - #{$navbar-height} - #{$player-height--desktop});
   }
 
   &__inner {
