@@ -1,4 +1,5 @@
-import { mediaQuery, minWidthTargets } from '../utils';
+import mediaQuery from './mediaQuery';
+import minWidthTargets from './minWidthTargets';
 
 function CSSDeclaration(property, callback) {
   this.property = property;
