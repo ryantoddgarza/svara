@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import theme from '@svara/design-system';
 import Header from '~/components/Header';
-import Navbar from '~/components/Navbar';
+import Nav from '~/components/Nav';
 import Player from '~/components/Player';
 
 const Layout = ({ children }) => (
   <ThemeProvider theme={theme}>
     <Header>
-      <Navbar />
+      <Nav />
     </Header>
     <main>{children}</main>
     <Player />

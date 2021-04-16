@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { LANDING } from '~/constants/routes';
+import { Header as StyledHeader, HeaderContainer, HeaderTitle } from './styled';
 
 const Header = ({ children }) => (
-  <header className="header">
-    <div className="header__contents container">{children}</div>
-  </header>
+  <StyledHeader>
+    <HeaderContainer>
+      <HeaderTitle>
+        <Link to={LANDING}>svara</Link>
+      </HeaderTitle>
+      {children}
+    </HeaderContainer>
+  </StyledHeader>
 );
 
 Header.propTypes = {
