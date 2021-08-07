@@ -1,8 +1,11 @@
-# dependencies
-node_modules/
-
-# production
+*.env*
 build/
+lib/
+node_modules/
+package-lock.json
 
-# misc
-.DS_Store
+# Preserve lock files for applications
+!packages/svara-web-app/package-lock.json
+
+# Keep builds until we can publish private packages
+!packages/svara-ui/lib/
