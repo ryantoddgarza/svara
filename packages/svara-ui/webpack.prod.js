@@ -28,7 +28,7 @@ module.exports = {
   },
   output: {
     filename: 'ui.bundle.min.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'lib'),
     library: {
       name: 'svaraUI',
       type: 'umd',
