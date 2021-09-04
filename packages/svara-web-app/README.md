@@ -2,6 +2,8 @@
 
 The Svara web application is the client-facing interface of the Svara project.
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b9cb2539-e185-4636-856e-4825cae9a7b3/deploy-status)](https://app.netlify.com/sites/svara/deploys)
+
 ## Application features
 
 The web player is an implementation example of the generative system. User initialization of the application defines parameters such as raga selection, musical motifs, tempo, and random seeding among others. All musical processes occur in real time.
