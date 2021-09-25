@@ -1,7 +1,14 @@
 module.exports = {
   arrowParens: 'always',
-  semi: true,
   quoteProps: 'consistent',
+  semi: true,
   singleQuote: true,
-  trailingComma: 'all',
+  overrides: [
+    {
+      files: ['*.[s]css'],
+      options: {
+        singleQuote: false,
+      },
+    },
+  ],
 };
