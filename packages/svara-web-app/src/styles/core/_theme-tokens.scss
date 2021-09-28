@@ -1,0 +1,50 @@
+// Base colors
+
+$theme-color-base-lightest: gray-10;
+$theme-color-base-lighter: gray-20;
+$theme-color-base-light: gray-30;
+$theme-color-base: gray-50;
+$theme-color-base-dark: gray-60;
+$theme-color-base-darker: gray-70;
+$theme-color-base-darkest: gray-90;
+$theme-color-base-white: white;
+$theme-color-base-ink: gray-90;
+
+$theme-color-background: $theme-color-base-white;
+$theme-color-background-inverse: $theme-color-base-ink;
+$theme-color-text: $theme-color-base-ink;
+$theme-color-text-inverse: $theme-color-base-white;
+
+$theme-font-role-body: system;
+$theme-font-role-heading: system;
+$theme-font-role-ui: system;
+$theme-font-role-code: monospace;
+
+$theme-line-height-body: 5;
+$theme-line-height-heading: 3;
+$theme-line-height-ui: 1;
+
+$theme-type-scale-xs: 0;
+$theme-type-scale-sm: 1;
+$theme-type-scale-md: 2;
+$theme-type-scale-lg: 3;
+$theme-type-scale-xl: 4;
+$theme-type-scale-2xl: 5;
+$theme-type-scale-3xl: 7;
+$theme-type-scale-display: 12;
+
+$theme-font-weight-thin: false;
+$theme-font-weight-ultralight: 2;
+$theme-font-weight-light: false;
+$theme-font-weight-normal: 4;
+$theme-font-weight-medium: false;
+$theme-font-weight-semibold: false;
+$theme-font-weight-bold: 7;
+$theme-font-weight-black: false;
+
+// Components
+
+$theme-player-height-mobile: 8;
+$theme-player-height-desktop: 8;
+
+$theme-navbar-height: 8;

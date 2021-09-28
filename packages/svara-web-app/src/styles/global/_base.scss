@@ -1,0 +1,9 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: color($theme-color-text);
+  background-color: color($theme-color-background);
+  overflow-x: hidden;
+}

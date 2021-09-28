@@ -1,9 +1,11 @@
+// DEPRECATED
+
 .grid-module {
   &__card {
     font-size: 1.5rem;
     margin: 1px;
-    background: $theme-color-base;
-    border: 1px solid $theme-color-base-ink;
+    background: color($theme-color-base);
+    border: 1px solid color($theme-color-base-ink);
 
     h5 {
       font-size: 1.625rem;

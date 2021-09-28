@@ -1,7 +1,15 @@
 .visualizer {
-  height: calc(100vh - #{$navbar-height} - #{$player-height--mobile});
-  @include breakpoint('from-tablet') {
-    height: calc(100vh - #{$navbar-height} - #{$player-height--desktop});
+  height: calc(
+    100vh - #{unist($theme-navbar-height)} - #{units(
+        $theme-player-height-mobile
+      )}
+  );
+  @include breakpoint("from-tablet") {
+    height: calc(
+      100vh - #{units($theme-navbar-height)} - #{units(
+          $theme-player-height-desktop
+        )}
+    );
   }
 
   &__inner {
@@ -42,7 +50,7 @@
       left: 1.25rem;
       font-size: calc(1rem + 6vw);
       letter-spacing: 0.1em;
-      color: $theme-color-base-lighter;
+      color: color($theme-color-base-lighter);
       opacity: 0.4;
     }
   }
@@ -64,8 +72,8 @@
     &-detail {
       font-size: calc(1rem + 1vw);
       margin: 0 0 0.5rem;
-      font-weight: 200;
-      color: $theme-color-base;
+      font-weight: font-weight($theme-font-weight-ultralight);
+      color: color($theme-color-base);
     }
   }
 }

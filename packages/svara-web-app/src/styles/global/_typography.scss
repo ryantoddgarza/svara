@@ -1,0 +1,8 @@
+body {
+  font-family: font-family($theme-font-role-body);
+  font-size: type-scale($theme-type-scale-md);
+  font-weight: font-weight($theme-font-weight-normal);
+  line-height: line-height($theme-line-height-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

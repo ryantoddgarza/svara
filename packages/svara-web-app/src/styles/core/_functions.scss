@@ -1,0 +1,27 @@
+@function breakpoint($value) {
+  @return map-get($system-breakpoint, $value);
+}
+
+@function color($value) {
+  @return map-get($system-color, $value);
+}
+
+@function font-family($value) {
+  @return map-get($system-font-stack, $value);
+}
+
+@function font-weight($value) {
+  @return map-get($system-font-weight, $value);
+}
+
+@function line-height($value) {
+  @return map-get($system-line-height, $value);
+}
+
+@function type-scale($value) {
+  @return map-get($system-type-scale, $value) + px;
+}
+
+@function units($value) {
+  @return map-get($system-spacing, "base") * $value;
+}

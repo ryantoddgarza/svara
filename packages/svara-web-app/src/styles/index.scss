@@ -1,19 +1,13 @@
-// helpers
-@import 'helpers/variables';
-@import 'helpers/mixins';
-@import 'helpers/functions';
+@import "core/system-tokens";
+@import "core/theme-tokens";
 
-// core
-@import 'core';
+@import "core/functions";
+@import "core/mixins";
 
-// theme
-@import 'theme';
+@import "global/reset";
+@import "global/box-sizing";
+@import "global/cursor";
+@import "global/typography";
+@import "global/base";
 
-// base
-@import 'base/reset';
-@import 'base/typography';
-@import 'base/animation';
-@import 'base/global';
-
-// components
-@import 'components';
+@import "components";

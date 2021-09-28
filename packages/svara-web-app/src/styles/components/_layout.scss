@@ -1,0 +1,7 @@
+.layout.main {
+  padding-bottom: units($theme-player-height-mobile);
+
+  @include at-media("tablet") {
+    padding-bottom: units($theme-player-height-desktop);
+  }
+}

@@ -2,12 +2,12 @@
   &__bottom-row {
     display: grid;
     grid-template-columns: 5fr 1fr;
-    grid-template-areas: 'start center';
-    height: $player-height--mobile;
-    @include breakpoint('from-tablet') {
+    grid-template-areas: "start center";
+    height: units($theme-player-height-mobile);
+    @include breakpoint("from-tablet") {
       grid-template-columns: 1fr 2fr 1fr;
-      grid-template-areas: 'start center end';
-      height: $player-height--desktop;
+      grid-template-areas: "start center end";
+      height: units($theme-player-height-desktop);
     }
   }
 
@@ -32,7 +32,7 @@
   &__end {
     grid-area: end;
     display: none;
-    @include breakpoint('from-tablet') {
+    @include breakpoint("from-tablet") {
       display: flex;
       justify-content: flex-end;
     }
@@ -51,8 +51,8 @@
       $track-width: 130px;
       $track-height: 4px;
       $thumb-diameter: 12px;
-      $track-color: $theme-color-base-lighter;
-      $thumb-color: $theme-color-base-ink;
+      $track-color: color($theme-color-base-lighter);
+      $thumb-color: color($theme-color-base-ink);
 
       @mixin track {
         box-sizing: border-box;

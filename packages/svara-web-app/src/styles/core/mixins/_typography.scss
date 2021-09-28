@@ -1,0 +1,60 @@
+@mixin display {
+  margin-top: units(4);
+  font-size: type-scale($theme-type-scale-display);
+}
+
+@mixin h1 {
+  margin-top: units(4);
+  font-size: type-scale($theme-type-scale-3xl);
+}
+
+@mixin h2 {
+  margin-top: units(4);
+  font-size: type-scale($theme-type-scale-2xl);
+}
+
+@mixin h3 {
+  margin-top: units(4);
+  font-size: type-scale($theme-type-scale-xl);
+}
+
+@mixin h4 {
+  margin-top: units(4);
+  font-size: type-scale($theme-type-scale-lg);
+}
+@mixin p {
+  margin-top: units(2);
+  margin-bottom: units(2);
+  font-size: type-scale($theme-type-scale-md);
+  line-height: line-height($theme-line-height-body);
+}
+
+@mixin a {
+  text-decoration: underline;
+}
+
+@mixin theme-typography {
+  h1 {
+    @include h1;
+  }
+
+  h2 {
+    @include h2;
+  }
+
+  h3 {
+    @include h3;
+  }
+
+  h4 {
+    @include h3;
+  }
+
+  p {
+    @include p;
+  }
+
+  a {
+    @include a;
+  }
+}

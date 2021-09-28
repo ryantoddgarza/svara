@@ -11,7 +11,7 @@
     margin-bottom: 0.75rem;
     font-size: 1.5rem;
     text-align: left;
-    color: $theme-color-base-light;
+    color: color($theme-color-base-light);
     transition: color 0.4s;
 
     &:hover,
@@ -23,6 +23,6 @@
 
   &__definition {
     font-size: 1.125rem;
-    line-height: 1.5em;
+    line-height: line-height($theme-line-height-body);
   }
 }
