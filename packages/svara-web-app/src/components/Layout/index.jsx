@@ -11,7 +11,7 @@ const Layout = ({ children }) => (
     <Header>
       <Nav />
     </Header>
-    <div className="layout main">{children}</div>
+    <div className="layout__main">{children}</div>
     <Player />
   </ThemeProvider>
 );
