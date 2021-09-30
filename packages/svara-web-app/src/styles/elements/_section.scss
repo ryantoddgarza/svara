@@ -1,0 +1,14 @@
+.section {
+  padding-top: units(8);
+  padding-bottom: units(8);
+}
+
+.section.light {
+  color: color($theme-color-text);
+  background-color: color($theme-color-background);
+}
+
+.section.dark {
+  color: color($theme-color-text-inverse);
+  background-color: color($theme-color-background-inverse);
+}
