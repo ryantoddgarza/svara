@@ -1,30 +1,27 @@
 .visualizer {
   height: calc(
-    100vh - #{units($theme-navbar-height)} - #{units(
-        $theme-player-height-mobile
-      )}
+    100vh - units($theme-navbar-height) - units($theme-player-height-mobile)
   );
 
   @include at-media("tablet") {
     height: calc(
-      100vh - #{units($theme-navbar-height)} - #{units(
-          $theme-player-height-desktop
-        )}
+      100vh - units($theme-navbar-height) - units($theme-player-height-desktop)
     );
   }
 
   &__inner {
     position: relative;
     display: flex;
-    height: 100%;
+    min-height: 100%;
   }
 
   &__analyzer {
     width: fit-content;
-    max-height: 100%;
-    overflow: hidden;
-    margin: auto;
+    height: 100%;
     padding: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
 
     canvas {
       display: block;
@@ -35,21 +32,21 @@
 
   &__prahar {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
+    top: units(2);
+    left: units(2);
     z-index: -1;
     line-height: 0.8;
 
     &-numeral {
       position: relative;
-      font-size: calc(6rem + 10vw);
+      font-size: calc(units(12) + 10vw);
     }
 
     &-clock {
       position: absolute;
-      top: 1.25rem;
-      left: 1.25rem;
-      font-size: calc(1rem + 6vw);
+      top: units(2);
+      left: units(2);
+      font-size: calc(units(2) + 6vw);
       letter-spacing: 0.1em;
       color: color($theme-color-base-lighter);
       opacity: 0.4;
@@ -59,22 +56,30 @@
   &__raga {
     &-info {
       position: absolute;
-      bottom: 1rem;
-      right: 1rem;
-      left: 1rem;
+      bottom: 0;
+      width: 100%;
       text-align: right;
+      padding-left: units(2);
+      padding-right: units(2);
+      padding-top: units(2);
+      padding-bottom: units(2);
+      @include typeset(
+        $theme-font-role-body,
+        $theme-type-scale-md,
+        $theme-line-height-ui
+      );
     }
 
     &-name {
-      font-size: calc(2rem + 4vw);
-      margin: 0 0 1rem;
+      margin-bottom: units(4);
+      font-size: calc(units(4) + 4vw);
     }
 
     &-detail {
-      font-size: calc(1rem + 1vw);
-      margin: 0 0 0.5rem;
-      font-weight: font-weight($theme-font-weight-ultralight);
+      margin-bottom: units(2);
       color: color($theme-color-base);
+      font-size: calc(units(2) + 1vw);
+      font-weight: font-weight($theme-font-weight-ultralight);
     }
   }
 }

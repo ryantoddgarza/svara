@@ -1,7 +1,9 @@
 .icon {
   font-size: 1.25rem;
+
   &--responsive {
     font-size: 1.175rem;
+
     @include at-media('tablet') {
       font-size: 1.25rem;
     }
@@ -9,8 +11,10 @@
 
   &__lg {
     font-size: 2rem;
+
     &--responsive {
       font-size: 1.875rem;
+
       @include at-media('tablet') {
         font-size: 2rem;
       }

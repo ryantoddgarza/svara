@@ -33,6 +33,7 @@
   &__end {
     grid-area: end;
     display: none;
+
     @include at-media("tablet") {
       display: flex;
       justify-content: flex-end;
@@ -42,16 +43,16 @@
   &__icon {
     &--play,
     &--pause {
-      font-size: 3rem;
+      font-size: units(6);
     }
   }
 
   .control {
     &--volume {
       // read more at https://css-tricks.com/sliding-nightmare-understanding-range-input/
-      $track-width: 130px;
-      $track-height: 4px;
-      $thumb-diameter: 12px;
+      $track-width: units(15);
+      $track-height: units(0.5);
+      $thumb-diameter: units(1.5);
       $track-color: color($theme-color-base-lighter);
       $thumb-color: color($theme-color-base-ink);
 

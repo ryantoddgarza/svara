@@ -2,27 +2,38 @@
   min-height: 60vh;
 
   &__title {
-    font-size: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: units(6);
+    @include typeset(
+      $theme-font-role-heading,
+      $theme-type-scale-3xl,
+      $theme-line-height-heading
+    );
   }
 
   &__term {
     display: block;
-    margin-bottom: 0.75rem;
-    font-size: 1.5rem;
     text-align: left;
+    margin-bottom: units(2);
     color: color($theme-color-base-light);
     transition: color 0.4s;
+    @include typeset(
+      $theme-font-role-ui,
+      $theme-type-scale-2xl,
+      $theme-line-height-ui
+    );
 
     &:hover,
     &:focus,
     &.active {
-      color: white;
+      color: color($theme-color-text-inverse);
     }
   }
 
   &__definition {
-    font-size: 1.125rem;
-    line-height: line-height($theme-line-height-body);
+    @include typeset(
+      $theme-font-role-body,
+      $theme-type-scale-xl,
+      $theme-line-height-body
+    );
   }
 }
