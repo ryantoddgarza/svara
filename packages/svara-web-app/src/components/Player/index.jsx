@@ -49,7 +49,7 @@ const Player = () => {
           </button>
         </div>
         <div className="player__end">
-          <MdVolumeUp className="icon" />
+          <MdVolumeUp className="icon sm" />
           <input
             onChange={onVolumeChange}
             onMouseUp={onVolumeMouseUp}

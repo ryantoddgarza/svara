@@ -1,23 +1,16 @@
 .icon {
-  font-size: 1.25rem;
+}
 
-  &--responsive {
-    font-size: 1.175rem;
+// Size variants
 
-    @include at-media('tablet') {
-      font-size: 1.25rem;
-    }
-  }
+.icon.sm {
+  font-size: units(2.5);
+}
 
-  &__lg {
-    font-size: 2rem;
+.icon.md {
+  font-size: units(3);
+}
 
-    &--responsive {
-      font-size: 1.875rem;
-
-      @include at-media('tablet') {
-        font-size: 2rem;
-      }
-    }
-  }
+.icon.lg {
+  font-size: units(4);
 }
