@@ -1,10 +1,11 @@
 .visualizer {
   height: calc(
-    100vh - #{unist($theme-navbar-height)} - #{units(
+    100vh - #{units($theme-navbar-height)} - #{units(
         $theme-player-height-mobile
       )}
   );
-  @include breakpoint("from-tablet") {
+
+  @include at-media("tablet") {
     height: calc(
       100vh - #{units($theme-navbar-height)} - #{units(
           $theme-player-height-desktop
