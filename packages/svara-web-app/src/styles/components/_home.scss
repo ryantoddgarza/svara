@@ -1,5 +1,6 @@
 .home {
-  &__article {
-    @include theme-typography;
-  }
+}
+
+.home .article {
+  @include theme-typography;
 }
