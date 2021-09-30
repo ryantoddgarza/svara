@@ -58,3 +58,13 @@
     @include a;
   }
 }
+
+@mixin typeset(
+  $family: $theme-font-role-body,
+  $scale: $theme-type-scale-md,
+  $line-height: $theme-line-height-body
+) {
+  font-family: font-family($family);
+  font-size: type-scale($scale);
+  line-height: line-height($line-height);
+}
