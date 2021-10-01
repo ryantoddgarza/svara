@@ -1,114 +1,145 @@
+// Layout
+
 .player {
-  &__bottom-row {
-    display: grid;
-    grid-template-columns: 5fr 1fr;
-    grid-template-areas: "start center";
-    height: units($theme-player-height-mobile);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: color($theme-color-background);
+  border-width: 1px;
+  border-color: color($theme-color-base-lighter);
+  border-top-style: solid;
+  z-index: 6000;
+}
 
-    @include at-media("tablet") {
-      grid-template-columns: 1fr 2fr 1fr;
-      grid-template-areas: "start center end";
-      height: units($theme-player-height-desktop);
-    }
+.player .grid {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  grid-template-areas: "start center";
+  height: units($theme-player-height-mobile);
+
+  @include at-media($theme-player-breakpoint) {
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas: "start center end";
+    height: units($theme-player-height-desktop);
   }
+}
 
-  &__start,
-  &__center,
-  &__end {
+.player .start,
+.player .center,
+.player .end {
+  display: flex;
+  align-items: center;
+  @include evenly-space-children(units(2));
+}
+
+.player .start {
+  grid-area: start;
+  justify-content: flex-start;
+}
+
+.player .center {
+  grid-area: center;
+  justify-content: center;
+}
+
+.player .end {
+  grid-area: end;
+  justify-content: flex-end;
+}
+
+.player .item {
+  display: block;
+}
+
+.player .item-group {
+  display: flex;
+  align-items: center;
+  @include evenly-space-children(units(2));
+}
+
+.player .item-group.from-tablet {
+  display: none;
+
+  @include at-media($theme-player-breakpoint) {
     display: flex;
-    align-items: center;
-    @include evenly-space-children(1rem);
+  }
+}
+
+// Controls
+
+.player .control--play,
+.player .control--pause {
+  display: flex;
+  font-size: units(6);
+}
+
+.player .control--volume {
+  // Read more about range styling at
+  // https://css-tricks.com/sliding-nightmare-understanding-range-input/
+  $track-width: units(15);
+  $track-height: units(0.5);
+  $thumb-diameter: units(1.5);
+  $track-color: color($theme-color-base-lighter);
+  $thumb-color: color($theme-color-base-ink);
+
+  @mixin track {
+    box-sizing: border-box;
+    max-width: $track-width;
+    height: $track-height;
+    background: $track-color;
+    border: none;
+    border-radius: $track-height * 0.5;
+    cursor: pointer;
   }
 
-  &__start {
-    grid-area: start;
-    justify-content: flex-start;
+  @mixin thumb {
+    box-sizing: border-box;
+    width: $thumb-diameter;
+    height: $thumb-diameter;
+    background: $thumb-color;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
   }
 
-  &__center {
-    grid-area: center;
-    justify-content: center;
+  width: $track-width;
+  height: $thumb-diameter;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+
+  &,
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
   }
 
-  &__end {
-    grid-area: end;
+  &::-webkit-slider-runnable-track {
+    @include track;
+  }
+
+  &::-moz-range-track {
+    @include track;
+  }
+
+  &::-ms-track {
+    @include track;
+  }
+
+  &::-webkit-slider-thumb {
+    margin-top: ($track-height - $thumb-diameter) * 0.5;
+    @include thumb;
+  }
+
+  &::-moz-range-thumb {
+    @include thumb;
+  }
+
+  &::-ms-thumb {
+    margin-top: 0;
+    @include thumb;
+  }
+
+  &::-ms-tooltip {
     display: none;
-
-    @include at-media("tablet") {
-      display: flex;
-      justify-content: flex-end;
-    }
-  }
-
-  &__icon {
-    &--play,
-    &--pause {
-      font-size: units(6);
-    }
-  }
-
-  .control {
-    &--volume {
-      // read more at https://css-tricks.com/sliding-nightmare-understanding-range-input/
-      $track-width: units(15);
-      $track-height: units(0.5);
-      $thumb-diameter: units(1.5);
-      $track-color: color($theme-color-base-lighter);
-      $thumb-color: color($theme-color-base-ink);
-
-      @mixin track {
-        box-sizing: border-box;
-        max-width: $track-width;
-        height: $track-height;
-        background: $track-color;
-        border: none;
-        border-radius: $track-height * 0.5;
-        cursor: pointer;
-      }
-
-      @mixin thumb {
-        box-sizing: border-box;
-        width: $thumb-diameter;
-        height: $thumb-diameter;
-        background: $thumb-color;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-      }
-
-      width: $track-width;
-      height: $thumb-diameter;
-      margin: 0;
-      padding: 0;
-      background: transparent;
-
-      &,
-      &::-webkit-slider-thumb {
-        -webkit-appearance: none;
-      }
-      &::-webkit-slider-runnable-track {
-        @include track;
-      }
-      &::-moz-range-track {
-        @include track;
-      }
-      &::-ms-track {
-        @include track;
-      }
-      &::-webkit-slider-thumb {
-        margin-top: ($track-height - $thumb-diameter) * 0.5;
-        @include thumb;
-      }
-      &::-moz-range-thumb {
-        @include thumb;
-      }
-      &::-ms-thumb {
-        margin-top: 0;
-        @include thumb;
-      }
-      &::-ms-tooltip {
-        display: none;
-      }
-    }
   }
 }

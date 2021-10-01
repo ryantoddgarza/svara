@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
 import { modules, patch } from '@svara/kriya';
-import { Player as StyledPlayer, PlayerRow } from './styled';
 
 const { synthEngine } = modules;
 
@@ -32,39 +31,43 @@ const Player = () => {
   };
 
   return (
-    <StyledPlayer className="player">
-      <PlayerRow className="player__bottom-row">
-        <div className="player__start">
-          <div className="player__media-info">
-            <span>{ragaName}</span>
+    <div className="player">
+      <div className="layout">
+        <div className="grid">
+          <div className="start">
+            <div className="item-group">
+              <div className="item">{ragaName}</div>
+            </div>
+          </div>
+          <div className="center">
+            <button className="item" onClick={onPlay} type="button">
+              {isPlaying ? (
+                <MdPause className="control--pause" />
+              ) : (
+                <MdPlayArrow className="control--play" />
+              )}
+            </button>
+          </div>
+          <div className="end">
+            <div className="item-group from-tablet">
+              <MdVolumeUp className="item icon sm" />
+              <input
+                onChange={onVolumeChange}
+                onMouseUp={onVolumeMouseUp}
+                defaultValue={initVolume}
+                title="volume"
+                className="item control--volume"
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                aria-labelledby="title"
+              />
+            </div>
           </div>
         </div>
-        <div className="player__center">
-          <button onClick={onPlay} type="button">
-            {isPlaying ? (
-              <MdPause className="player__icon--pause" />
-            ) : (
-              <MdPlayArrow className="player__icon--play" />
-            )}
-          </button>
-        </div>
-        <div className="player__end">
-          <MdVolumeUp className="icon sm" />
-          <input
-            onChange={onVolumeChange}
-            onMouseUp={onVolumeMouseUp}
-            defaultValue={initVolume}
-            title="volume"
-            className="control--volume"
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            aria-labelledby="title"
-          />
-        </div>
-      </PlayerRow>
-    </StyledPlayer>
+      </div>
+    </div>
   );
 };
 
