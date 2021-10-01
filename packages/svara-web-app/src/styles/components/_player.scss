@@ -4,9 +4,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: color($theme-color-background);
   border-width: 1px;
-  border-color: color($theme-color-base-lighter);
   border-top-style: solid;
   z-index: 6000;
 }
@@ -63,6 +61,14 @@
   @include at-media($theme-player-breakpoint) {
     display: flex;
   }
+}
+
+// Theme variants
+
+.player.light {
+  color: color($theme-color-text);
+  background: color($theme-color-background);
+  border-color: color($theme-color-base-lighter);
 }
 
 // Controls

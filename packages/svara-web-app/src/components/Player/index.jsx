@@ -31,7 +31,7 @@ const Player = () => {
   };
 
   return (
-    <div className="player">
+    <div className="player light">
       <div className="layout">
         <div className="grid">
           <div className="start">
