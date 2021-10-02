@@ -1,4 +1,8 @@
+// Layout
+
 .visualizer {
+  position: relative;
+  display: flex;
   height: calc(
     100vh - units($theme-navbar-height) - units($theme-player-height-mobile)
   );
@@ -8,78 +12,71 @@
       100vh - units($theme-navbar-height) - units($theme-player-height-desktop)
     );
   }
+}
 
-  &__inner {
-    position: relative;
-    display: flex;
-    min-height: 100%;
-  }
+// Components
 
-  &__analyzer {
-    width: fit-content;
-    height: 100%;
-    padding: 5%;
-    margin-left: auto;
-    margin-right: auto;
-    overflow: hidden;
+.visualizer .analyzer {
+  padding: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
 
-    canvas {
-      display: block;
-      max-width: 100%;
-      max-height: 100%;
-    }
-  }
+.visualizer .analyzer-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
 
-  &__prahar {
-    position: absolute;
-    top: units(2);
-    left: units(2);
-    z-index: -1;
-    line-height: 0.8;
+.visualizer .prahar {
+  position: absolute;
+  top: units(2);
+  left: units(2);
+  line-height: 0.8;
+  user-select: none;
+  z-index: -1;
+}
 
-    &-numeral {
-      position: relative;
-      font-size: calc(units(12) + 10vw);
-    }
+.visualizer .prahar .numeral {
+  color: color($theme-color-text);
+  font-size: calc(units(12) + 10vw);
+}
 
-    &-clock {
-      position: absolute;
-      top: units(2);
-      left: units(2);
-      font-size: calc(units(2) + 6vw);
-      letter-spacing: 0.1em;
-      color: color($theme-color-base-lighter);
-      opacity: 0.4;
-    }
-  }
+.visualizer .prahar .clock {
+  position: absolute;
+  top: units(2);
+  left: units(2);
+  color: color($theme-color-base-lighter);
+  opacity: 0.5;
+  font-size: calc(units(2) + 6vw);
+}
 
-  &__raga {
-    &-info {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      text-align: right;
-      padding-left: units(2);
-      padding-right: units(2);
-      padding-top: units(2);
-      padding-bottom: units(2);
-      @include typeset(
-        $theme-font-role-body,
-        $theme-type-scale-md,
-        $theme-line-height-ui
-      );
-    }
+.visualizer .raga-info {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+  padding-left: units(2);
+  padding-right: units(2);
+  padding-top: units(2);
+  padding-bottom: units(2);
+  @include typeset(
+    $theme-font-role-body,
+    $theme-type-scale-md,
+    $theme-line-height-ui
+  );
+}
 
-    &-name {
-      margin-bottom: units(4);
-      font-size: calc(units(4) + 4vw);
-    }
+.visualizer .raga-info .name {
+  margin-bottom: units(4);
+  color: color($theme-color-text);
+  font-size: calc(units(4) + 4vw);
+}
 
-    &-detail {
-      margin-bottom: units(2);
-      color: color($theme-color-base);
-      font-size: calc(units(2) + 1vw);
-      font-weight: font-weight($theme-font-weight-ultralight);
-    }
-  }
+.visualizer .raga-info .detail {
+  margin-bottom: units(2);
+  color: color($theme-color-base);
+  font-size: calc(units(2) + 1vw);
+  font-weight: font-weight($theme-font-weight-ultralight);
 }

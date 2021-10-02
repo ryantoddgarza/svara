@@ -35,26 +35,18 @@ const Visualizer = () => {
 
   return (
     <div className="visualizer">
-      <div className="visualizer__inner">
-        <PraharClock prahar={raga.prahar} />
-        <div className="visualizer__raga-info">
-          <div className="visualizer__raga-name">{`raga ${raga.name}`}</div>
-          <div className="visualizer__raga-detail">
-            {`thaat · ${raga.thaat.name}`}
-          </div>
-          <div className="visualizer__raga-detail">
-            {`vadi · ${indexToSvara(raga.vadi)}`}
-          </div>
-          <div className="visualizer__raga-detail">
-            {`samvadi · ${indexToSvara(raga.samvadi)}`}
-          </div>
-          <div className="visualizer__raga-detail">
-            {`prahar · ${raga.prahar}`}
-          </div>
+      <PraharClock prahar={raga.prahar} />
+      <div className="raga-info">
+        <div className="name">{`raga ${raga.name}`}</div>
+        <div className="detail">{`thaat · ${raga.thaat.name}`}</div>
+        <div className="detail">{`vadi · ${indexToSvara(raga.vadi)}`}</div>
+        <div className="detail">
+          {`samvadi · ${indexToSvara(raga.samvadi)}`}
         </div>
-        <div className="visualizer__analyzer">
-          <canvas />
-        </div>
+        <div className="detail">{`prahar · ${raga.prahar}`}</div>
+      </div>
+      <div className="analyzer">
+        <canvas className="analyzer-canvas" />
       </div>
     </div>
   );

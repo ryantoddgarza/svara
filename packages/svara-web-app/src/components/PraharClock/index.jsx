@@ -18,9 +18,9 @@ const PraharClock = ({ prahar }) => {
   });
 
   return (
-    <div className="visualizer__prahar">
-      <div className="visualizer__prahar-numeral">{prahar}</div>
-      <div className="visualizer__prahar-clock">{clock}</div>
+    <div className="prahar">
+      <div className="numeral">{prahar}</div>
+      <div className="clock">{clock}</div>
     </div>
   );
 };
