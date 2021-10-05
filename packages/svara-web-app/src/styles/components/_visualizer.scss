@@ -4,12 +4,12 @@
   position: relative;
   display: flex;
   height: calc(
-    100vh - units($theme-navbar-height) - units($theme-player-height-mobile)
+    100vh - units($theme-header-height) - units($theme-player-height-mobile)
   );
 
   @include at-media("tablet") {
     height: calc(
-      100vh - units($theme-navbar-height) - units($theme-player-height-desktop)
+      100vh - units($theme-header-height) - units($theme-player-height-desktop)
     );
   }
 }
