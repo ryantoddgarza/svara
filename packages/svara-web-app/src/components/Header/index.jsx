@@ -1,22 +1,39 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { LANDING } from '~/constants/routes';
-import { Header as StyledHeader, HeaderContainer, HeaderTitle } from './styled';
+import { Link, NavLink } from 'react-router-dom';
+import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
 
-const Header = ({ children }) => (
-  <StyledHeader>
-    <HeaderContainer>
-      <HeaderTitle>
-        <Link to={LANDING}>svara</Link>
-      </HeaderTitle>
-      {children}
-    </HeaderContainer>
-  </StyledHeader>
+const menu = [
+  {
+    name: 'home',
+    path: HOME,
+  },
+  {
+    name: 'visualizer',
+    path: VISUALIZER,
+  },
+];
+
+const Header = () => (
+  <div className="header light">
+    <div className="layout">
+      <div className="grid">
+        <div className="item title">
+          <Link className="text" to={LANDING}>
+            svara
+          </Link>
+        </div>
+        <nav className="nav">
+          {menu.map(({ name, path }) => (
+            <div className="item" key={`key_${name}`}>
+              <NavLink className="link" to={path}>
+                {name}
+              </NavLink>
+            </div>
+          ))}
+        </nav>
+      </div>
+    </div>
+  </div>
 );
-
-Header.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export default Header;

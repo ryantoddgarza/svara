@@ -1,0 +1,55 @@
+.header {
+  border-width: 1px;
+  border-bottom-style: solid;
+  z-index: 9000;
+}
+
+.header .grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: units($theme-navbar-height);
+}
+
+.header .nav {
+  display: flex;
+  flex-direction: row;
+  @include evenly-space-children(units(2));
+}
+
+.header .item {
+  display: block;
+  text-transform: lowercase;
+  @include typeset(
+    $theme-font-role-ui,
+    $theme-type-scale-sm,
+    $theme-line-height-ui
+  );
+}
+
+.header .link {
+  color: color($theme-color-text);
+
+  &:hover,
+  &.active {
+    color: color($theme-color-base);
+  }
+}
+
+.header .title .text {
+  font-weight: font-weight($theme-font-weight-bold);
+  letter-spacing: 0.1em;
+  @include typeset(
+    $theme-font-role-ui,
+    $theme-type-scale-sm,
+    $theme-line-height-ui
+  );
+}
+
+// Theme variants
+
+.header.light {
+  color: color($theme-color-text);
+  background-color: color($theme-color-background);
+  border-color: color($theme-color-base-lighter);
+}
