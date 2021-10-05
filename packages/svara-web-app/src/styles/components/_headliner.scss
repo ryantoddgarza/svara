@@ -1,0 +1,16 @@
+.headliner .title {
+  @include typeset(
+    $theme-font-role-heading,
+    $theme-type-scale-display,
+    $theme-line-height-heading
+  );
+}
+
+.headliner .copy {
+  margin-top: units(1);
+  @include typeset(
+    $theme-font-role-heading,
+    $theme-type-scale-2xl,
+    $theme-line-height-heading
+  );
+}
