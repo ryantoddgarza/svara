@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import { Flex } from '@svara/ui';
 import PropTypes from 'prop-types';
 import { usePrevious } from '~/hooks';
 
@@ -32,37 +31,32 @@ const Glossary = forwardRef(({ entries }, ref) => {
 
   return (
     <div className="glossary" ref={ref}>
-      <h2 className="glossary__title">Glossary</h2>
-      <Flex box gap={16} gapBottom>
-        <Flex item cols={[1, 3]}>
+      <div className="grid">
+        <div className="aside">
           {Object.keys(entries).map((term) => (
             <button
               type="button"
               onClick={(event) => handleTermClick(event)}
               key={`key__${term}`}
               id={term}
-              className="glossary__term"
+              className="term"
             >
               {term}
             </button>
           ))}
-        </Flex>
-        <Flex item>
-          <div ref={definitionRef} className="glossary__definition">
+        </div>
+        <div className="main">
+          <div ref={definitionRef} className="definition">
             {activeDefinition}
           </div>
-        </Flex>
-      </Flex>
+        </div>
+      </div>
     </div>
   );
 });
 
 Glossary.propTypes = {
-  entries: PropTypes.objectOf(PropTypes.string),
-};
-
-Glossary.defaultProps = {
-  entries: {},
+  entries: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default Glossary;
