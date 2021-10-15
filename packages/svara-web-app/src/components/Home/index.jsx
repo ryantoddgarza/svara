@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { Flex } from '@svara/ui';
 import Glossary from '~/components/Glossary';
 import { home } from '~/cms';
 
@@ -11,29 +10,40 @@ const Home = () => {
     content: { features, cards, glossary },
   } = home;
 
-  const cardCols = [1, 2, 3];
-
   return (
-    <div className="home">
+    <>
       <section className="section light">
         <div className="layout">
           <div className="content">
-            <div className="article">
-              <h1>{subtitle}</h1>
+            <div className="headliner">
+              <h2 className="title">{subtitle}</h2>
+            </div>
+            <div className="feature">
               {features.map(({ heading, body }) => (
-                <Fragment key={`key__${heading}`}>
-                  <h2>{heading}</h2>
-                  {body}
-                </Fragment>
+                <div className="item" key={`key__${heading}`}>
+                  <h2 className="heading">{heading}</h2>
+                  <div className="body">{body}</div>
+                </div>
               ))}
-              <Flex box gap={16}>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section light">
+        <div className="layout">
+          <div className="content">
+            <div className="headliner">
+              <h2 className="title">Packages</h2>
+            </div>
+            <div className="feature">
+              <div className="grid">
                 {cards.map(({ heading, body }) => (
-                  <Flex item cols={cardCols} key={`key__${heading}`}>
-                    <h3>{heading}</h3>
-                    {body}
-                  </Flex>
+                  <div className="item" key={`key__${heading}`}>
+                    <h3 className="heading">{heading}</h3>
+                    <div className="body">{body}</div>
+                  </div>
                 ))}
-              </Flex>
+              </div>
             </div>
           </div>
         </div>
@@ -41,11 +51,14 @@ const Home = () => {
       <section className="section dark">
         <div className="layout">
           <div className="content">
+            <div className="headliner">
+              <h2 className="title">Glossary</h2>
+            </div>
             <Glossary entries={glossary} />
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 
