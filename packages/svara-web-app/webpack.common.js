@@ -10,9 +10,6 @@ module.exports = {
     app: './src/index.jsx',
   },
   resolve: {
-    alias: {
-      '~': path.join(__dirname, 'src'),
-    },
     extensions: ['.js', '.jsx'],
     fallback: {
       crypto: require.resolve('crypto-browserify'),
