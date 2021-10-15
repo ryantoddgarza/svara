@@ -10,5 +10,14 @@
   },
   "bugs": {
     "url": "https://github.com/ryantoddgarza/svara/issues"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.10.3",
+    "@babel/preset-react": "^7.10.1",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.10.3"
   }
 }
