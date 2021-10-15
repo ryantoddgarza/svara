@@ -1,0 +1,46 @@
+// Layout
+
+.feature .grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column-gap: units(4);
+
+  @include at-media("tablet") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include at-media("desktop") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature .item {
+  margin-top: units(4);
+}
+
+// Components
+
+.feature .item .heading {
+  @include typeset(
+    $theme-font-role-heading,
+    $theme-type-scale-2xl,
+    $theme-line-height-heading
+  );
+}
+
+.feature .item .body {
+  margin-top: units(2);
+  @include typeset(
+    $theme-font-role-body,
+    $theme-type-scale-md,
+    $theme-line-height-body
+  );
+}
+
+.feature .item .body p {
+  margin-top: units(2);
+}
+
+.feature .item .body a {
+  @include a;
+}
