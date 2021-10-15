@@ -1,6 +1,6 @@
 module.exports = function preset() {
   return {
-    presets: [['@babel/preset-env', { loose: true }], '@babel/preset-react'],
+    presets: ['@babel/preset-env', '@babel/preset-react'],
     plugins: ['@babel/plugin-proposal-class-properties'],
     env: {
       production: {
