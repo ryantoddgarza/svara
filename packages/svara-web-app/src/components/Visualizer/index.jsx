@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { patch } from '@svara/kriya';
 import Analyser from './analyser';
-import Clock from '~/components/Clock';
+import Clock from '../Clock';
 
 const Visualizer = () => {
   const {

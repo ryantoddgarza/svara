@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Header from '~/components/Header';
-import Player from '~/components/Player';
+import Header from '../Header';
+import Player from '../Player';
 
 const Layout = ({ children }) => (
   <>

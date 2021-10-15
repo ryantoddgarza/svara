@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
+import { LANDING, HOME, VISUALIZER } from '../../constants/routes';
 
 const menu = [
   {

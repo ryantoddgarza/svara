@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { usePrevious } from '~/hooks';
+import { usePrevious } from '../../hooks';
 
 const Glossary = forwardRef(({ entries }, ref) => {
   const [activeDefinition, setActiveDefinition] = useState();

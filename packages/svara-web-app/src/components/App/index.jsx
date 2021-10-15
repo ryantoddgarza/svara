@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { LANDING, HOME, VISUALIZER } from '~/constants/routes';
-import VisualizerPage from '~/pages/VisualizerPage';
-import HomePage from '~/pages/HomePage';
+import { LANDING, HOME, VISUALIZER } from '../../constants/routes';
+import VisualizerPage from '../../pages/VisualizerPage';
+import HomePage from '../../pages/HomePage';
 
 const App = () => (
   <BrowserRouter>

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import Glossary from '~/components/Glossary';
-import { home } from '~/cms';
+import Glossary from '../Glossary';
+import { home } from '../../cms';
 
 const Home = () => {
   const {
