@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { HOME, VISUALIZER } from '../../constants/routes';
+import { home, visualizer } from '../../cms';
 
 const menu = [
   {
     name: 'home',
-    path: HOME,
+    path: home.settings.path,
   },
   {
     name: 'visualizer',
-    path: VISUALIZER,
+    path: visualizer.settings.path,
   },
 ];
 
@@ -18,7 +18,7 @@ const Header = () => (
     <div className="layout">
       <div className="grid">
         <div className="item title">
-          <Link className="text" to={HOME}>
+          <Link className="text" to={home.settings.path}>
             svara
           </Link>
         </div>
