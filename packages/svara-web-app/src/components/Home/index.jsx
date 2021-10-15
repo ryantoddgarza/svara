@@ -4,9 +4,7 @@ import { home } from '../../cms';
 
 const Home = () => {
   const {
-    settings: {
-      general: { subtitle },
-    },
+    settings: { description },
     content: { features, cards, glossary },
   } = home;
 
@@ -16,7 +14,7 @@ const Home = () => {
         <div className="layout">
           <div className="content">
             <div className="headliner">
-              <h2 className="title">{subtitle}</h2>
+              <h2 className="title">{description}</h2>
             </div>
             <div className="feature">
               {features.map(({ heading, body }) => (

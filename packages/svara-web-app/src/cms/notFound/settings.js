@@ -1,9 +1,7 @@
 const settings = {
-  general: {
-    slug: '/404',
-    title: 'Not Found',
-    subtitle: 'Page not found',
-  },
+  path: '/404',
+  title: 'Not Found',
+  description: 'Page not found',
 };
 
 export default settings;

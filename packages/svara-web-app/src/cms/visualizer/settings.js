@@ -1,9 +1,7 @@
 const settings = {
-  general: {
-    slug: '/visualizer',
-    title: 'Visualizer',
-    subtitle: '',
-  },
+  path: '/visualizer',
+  title: 'Visualizer',
+  description: '',
 };
 
 export default settings;

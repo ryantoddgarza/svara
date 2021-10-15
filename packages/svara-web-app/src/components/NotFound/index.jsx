@@ -3,9 +3,7 @@ import { notFound } from '../../cms';
 
 const NotFound = () => {
   const {
-    settings: {
-      general: { subtitle },
-    },
+    settings: { description },
   } = notFound;
 
   return (
@@ -13,7 +11,7 @@ const NotFound = () => {
       <div className="layout">
         <div className="content">
           <div className="headliner">
-            <h2 className="title">{subtitle}</h2>
+            <h2 className="title">{description}</h2>
           </div>
         </div>
       </div>
