@@ -4,11 +4,11 @@ import Header from '../Header';
 import Player from '../Player';
 
 const Layout = ({ children }) => (
-  <>
+  <div className="app">
     <Header />
-    <div className="layout__main">{children}</div>
+    <div className="main">{children}</div>
     <Player />
-  </>
+  </div>
 );
 
 Layout.propTypes = {
