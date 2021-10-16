@@ -1,3 +1,5 @@
+// Layout
+
 .header {
   border-width: 1px;
   border-bottom-style: solid;
@@ -10,6 +12,8 @@
   align-items: center;
   height: units($theme-header-height);
 }
+
+// Components
 
 .header .nav {
   display: flex;
