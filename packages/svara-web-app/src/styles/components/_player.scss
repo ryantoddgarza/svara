@@ -1,9 +1,6 @@
 // Layout
 
 .player {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
   border-width: 1px;
   border-top-style: solid;
   z-index: 6000;
@@ -48,6 +45,8 @@
 .player .item {
   display: block;
 }
+
+// Components
 
 .player .item-group {
   display: flex;

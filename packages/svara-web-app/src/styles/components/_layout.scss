@@ -18,11 +18,3 @@
     width: math.percentage(math.div(2, 3));
   }
 }
-
-.layout__main {
-  padding-bottom: units($theme-player-height-mobile);
-
-  @include at-media("tablet") {
-    padding-bottom: units($theme-player-height-desktop);
-  }
-}
