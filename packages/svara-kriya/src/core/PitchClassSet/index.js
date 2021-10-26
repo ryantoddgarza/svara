@@ -1,4 +1,3 @@
-import { scaleStepsToMIDI } from '../helpers';
 import d from './defaults';
 
 function PitchClassSet(opts = {}) {
@@ -8,7 +7,7 @@ function PitchClassSet(opts = {}) {
   const arr = []; // possible midi num list
 
   function parseOctaves() {
-    const oneOctMIDI = scaleStepsToMIDI(scaleSteps, tonic);
+    const oneOctMIDI = Array.from(scaleSteps, (step) => tonic + step);
     const multOctMIDI = [];
 
     if (octaves === 1) {

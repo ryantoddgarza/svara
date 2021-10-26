@@ -6,7 +6,7 @@ import {
 } from 'warbly/packages/modules';
 import { PitchClassSet, Subdivision } from '../core';
 import Composer from '../Composer';
-import { midiToFreq, random, scaleStepsToMIDI } from '../core/helpers';
+import { midi, random } from '../core/helpers';
 import { SimpleReverb, synthEngine } from '../modules';
 
 const patch = (function () {
@@ -88,14 +88,14 @@ const patch = (function () {
       this.isImprovise = false;
 
       const randomGat = gat[random.integer(0, gat.length - 1)];
-      this.pitch.arr = scaleStepsToMIDI(randomGat, nucleus.tonic);
+      this.pitch.arr = Array.from(randomGat, (step) => nucleus.tonic + step);
     },
 
     scheduleNextPitch() {
       // Improvise
       if (this.isImprovise) {
         this.pitch.setNextPitch(
-          random.bool() ? this.pitch.pos : random.integer(0, 4),
+          random.bool() ? this.pitch.pos : random.integer(0, 4)
         );
 
         if (random.integer(0, 9) === 0) {
@@ -160,7 +160,7 @@ const patch = (function () {
       // carrier oscillator
       const osc1 = new SimpleOscillator(context, {
         connect: gain1,
-        frequency: midiToFreq(this.pitch.getCurrentPitch()),
+        frequency: midi.toFreq(this.pitch.getCurrentPitch()),
       });
 
       const variableRelease = 60 / nucleus.tempo / this.subdivision.value;
@@ -185,7 +185,7 @@ const patch = (function () {
     pitch: pitchClassSet,
 
     patch() {
-      const root = midiToFreq(this.pitch.range[0]);
+      const root = midi.toFreq(this.pitch.range[0]);
 
       // voice vca
       const voiceGain = new SimpleGain(context, {
