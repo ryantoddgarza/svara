@@ -6,6 +6,3 @@ package-lock.json
 
 # Preserve lock files for applications
 !packages/svara-web-app/package-lock.json
-
-# Keep builds until we can publish private packages
-!packages/svara-ui/lib/
