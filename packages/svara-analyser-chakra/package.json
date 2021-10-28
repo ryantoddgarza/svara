@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "svara-analyser-chakra",
+  "description": "Audio frequency data visualisation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryantoddgarza/svara.git",
+    "directory": "packages/svara-analyser-chakra"
+  },
+  "bugs": {
+    "url": "https://github.com/ryantoddgarza/svara/issues"
+  },
+  "homepage": "https://github.com/ryantoddgarza/svara#readme"
+}
