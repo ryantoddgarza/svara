@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { patch } from '@svara/kriya';
-import Analyser from './analyser';
+import React, { useEffect, useState } from 'react';
+import patch from '@svara-kriya';
+import Analyser from 'svara-analyser-chakra';
 import Clock from '../Clock';
 
 const Visualizer = () => {
@@ -29,11 +29,20 @@ const Visualizer = () => {
     },
   };
 
+  const [isConnected, setIsConnected] = useState(false);
+
+  const connectAnalyzer = () => {
+    patch.systemOutput.gain.connect(Analyser.analyser);
+    setIsConnected(true);
+  };
+
   useEffect(() => {
-    Analyser.init();
+    Analyser.init(patch.context);
+    connectAnalyzer();
 
     return function cleanup() {
       Analyser.stop();
+      setIsConnected(false);
     };
   }, []);
 
