@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "svara-patch-bloom",
+  "description": "Generative audio synthesis patch",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryantoddgarza/svara.git",
+    "directory": "packages/svara-patch-bloom"
+  },
+  "bugs": {
+    "url": "https://github.com/ryantoddgarza/svara/issues"
+  },
+  "homepage": "https://github.com/ryantoddgarza/svara#readme",
+  "bundledDependencies": [
+    "svara-kriya",
+    "warbly"
+  ]
+}
