@@ -1,16 +1,20 @@
 {
-  "name": "@svara/babel-preset-svara",
   "private": true,
-  "homepage": "https://github.com/ryantoddgarza/svara#readme",
+  "name": "babel-preset-svara",
+  "description": "Default Babel preset for Svara projects",
+  "version": "0.1.0",
+  "main": "index.js",
   "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ryantoddgarza/svara.git"
+    "url": "git+https://github.com/ryantoddgarza/svara.git",
+    "directory": "packages/babel-preset-svara"
   },
   "bugs": {
     "url": "https://github.com/ryantoddgarza/svara/issues"
   },
+  "homepage": "https://github.com/ryantoddgarza/svara#readme",
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.10.3",
