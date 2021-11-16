@@ -1,29 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
-import { modules, patch } from '@svara/kriya';
-
-const { synthEngine } = modules;
+import { synthEngine } from 'svara-kriya';
+import Patch from 'svara-patch-bloom';
 
 const Player = () => {
-  const [isPlaying, setIsPlaying] = useState(synthEngine.isPlaying);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [ragaName, setRagaName] = useState('');
 
   const getLocalVolume = () => localStorage.getItem('volume');
   const initVolume = getLocalVolume() || 1;
 
   useEffect(() => {
-    patch.init();
-    patch.systemOutput.setGain(initVolume);
-    setRagaName(patch.nucleus.raga.name);
+    Patch.init();
+    Patch.volume.setGain(initVolume);
+    setRagaName(Patch.nucleus.raga.name);
+    setIsPlaying(synthEngine.isPlaying);
   });
 
-  const onPlay = () => {
-    patch.play();
-    setIsPlaying(synthEngine.isPlaying);
+  const togglePlay = () => {
+    if (isPlaying) {
+      Patch.stop();
+    }
+    if (!isPlaying) {
+      Patch.start();
+    }
+    setIsPlaying(!isPlaying);
   };
 
   const onVolumeChange = (e) => {
-    patch.systemOutput.setGain(e.target.value);
+    Patch.volume.setGain(e.target.value);
   };
 
   const onVolumeMouseUp = (e) => {
@@ -40,7 +45,7 @@ const Player = () => {
             </div>
           </div>
           <div className="center">
-            <button className="item" onClick={onPlay} type="button">
+            <button className="item" onClick={togglePlay} type="button">
               {isPlaying ? (
                 <MdPause className="control--pause" />
               ) : (

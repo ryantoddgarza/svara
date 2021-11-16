@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import patch from '@svara-kriya';
+import Patch from 'svara-patch-bloom';
 import Analyser from 'svara-analyser-chakra';
 import Clock from '../Clock';
 
@@ -8,7 +8,7 @@ const Visualizer = () => {
     nucleus: {
       raga: { name, prahar, vadi, samvadi, thaat },
     },
-  } = patch;
+  } = Patch;
 
   const svara = {
     name: {
@@ -32,12 +32,12 @@ const Visualizer = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   const connectAnalyzer = () => {
-    patch.systemOutput.gain.connect(Analyser.analyser);
+    Patch.output.gain.connect(Analyser.analyser);
     setIsConnected(true);
   };
 
   useEffect(() => {
-    Analyser.init(patch.context);
+    Analyser.init(Patch.context);
     connectAnalyzer();
 
     return function cleanup() {
