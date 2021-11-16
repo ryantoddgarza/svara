@@ -1,3 +1,3 @@
 module.exports = {
-  presets: ['@svara/babel-preset-svara'],
+  presets: ['babel-preset-svara'],
 };
