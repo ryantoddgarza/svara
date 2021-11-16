@@ -1,16 +1,17 @@
 {
-  "name": "@svara/web-app",
   "private": true,
-  "homepage": "https://github.com/ryantoddgarza/svara#readme",
+  "name": "svara-web-app",
   "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ryantoddgarza/svara.git"
+    "url": "git+https://github.com/ryantoddgarza/svara.git",
+    "directory": "packages/svara-web-app"
   },
   "bugs": {
     "url": "https://github.com/ryantoddgarza/svara/issues"
   },
+  "homepage": "https://github.com/ryantoddgarza/svara#readme",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "develop": "webpack serve --config webpack.dev.js",
