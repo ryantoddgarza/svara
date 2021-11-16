@@ -1,4 +1,4 @@
-import { getRagasByPrahar } from '@svara/raga-data';
+import { getRagasByPrahar } from 'svara-raga-data';
 import { random } from '../core/helpers';
 import d from './defaults';
 

@@ -17,5 +17,8 @@
   "homepage": "https://github.com/ryantoddgarza/svara#readme",
   "dependencies": {
     "random-js": "^2.1.0"
-  }
+  },
+  "bundledDependencies": [
+    "svara-raga-data"
+  ]
 }
