@@ -1,3 +1,5 @@
-# @svara/raga-data
+# svara-raga-data
 
-Unstable raga schemas and methods. Deprecated pending `@svara/api`.
+Unstable. Deprecated pending `svara-api`.
+
+Query raga data via getter methods.
