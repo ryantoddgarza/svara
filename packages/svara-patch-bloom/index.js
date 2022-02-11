@@ -2,7 +2,7 @@ import {
   SimpleEnvelope,
   SimpleGain,
   SimpleOscillator,
-} from 'warbly/packages/modules';
+} from '@warbly/modules';
 import {
   Composer,
   PitchClassSet,

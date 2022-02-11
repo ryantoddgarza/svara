@@ -15,8 +15,10 @@
     "url": "https://github.com/ryantoddgarza/svara/issues"
   },
   "homepage": "https://github.com/ryantoddgarza/svara#readme",
+  "dependencies": {
+    "@warbly/modules": "^0.4.2"
+  },
   "bundledDependencies": [
-    "svara-kriya",
-    "warbly"
+    "svara-kriya"
   ]
 }
