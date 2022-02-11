@@ -15,7 +15,6 @@
     "defaults"
   ],
   "scripts": {
-    "deploy-web-app": "sh ./scripts/deploy-web-app.sh",
     "format:code": "npm run lint:code -- --fix",
     "lint:code": "eslint --ext .js,.jsx ."
   }
