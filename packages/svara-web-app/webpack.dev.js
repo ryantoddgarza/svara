@@ -7,9 +7,10 @@ module.exports = merge(common, {
   devtool: 'eval-source-map',
   devServer: {
     historyApiFallback: true,
-    contentBase: path.join(__dirname, 'build'),
-    watchContentBase: true,
-    compress: true,
+    static: {
+      directory: path.join(__dirname, 'build'),
+      watch: true,
+    },
   },
   module: {
     rules: [
