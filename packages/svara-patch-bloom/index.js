@@ -1,11 +1,8 @@
-import {
-  SimpleEnvelope,
-  SimpleGain,
-  SimpleOscillator,
-} from '@warbly/modules';
+import { SimpleEnvelope, SimpleGain, SimpleOscillator } from '@warbly/modules';
 import {
   Composer,
   PitchClassSet,
+  Queue,
   Subdivision,
   SimpleReverb,
   synthEngine,
@@ -60,7 +57,7 @@ const Bloom = () => {
 
     pitch: pitchClassSet,
 
-    queue: [],
+    queue: new Queue(),
 
     nextNoteTime: 0.0,
 
@@ -107,7 +104,8 @@ const Bloom = () => {
     },
 
     scheduleNextNote(beatNumber, time) {
-      this.queue.push({ note: beatNumber, time });
+      this.queue.enqueue({ note: beatNumber, time });
+      this.queue.dequeue();
 
       this.patch(time);
       this.subdivision.next(() => {
