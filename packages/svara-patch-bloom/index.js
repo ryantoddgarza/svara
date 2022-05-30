@@ -12,18 +12,12 @@ import {
 
 const Bloom = () => {
   const context = new AudioContext();
-  const nucleus = new Composer();
+  const nucleus = new Composer({ tempo: 60 });
   const pitchClassSet = new PitchClassSet({
     tonic: nucleus.tonic,
     octaves: 2,
     scaleSteps: nucleus.raga.avroh,
   });
-
-  const gat = [
-    nucleus.getRandomScaleSteps(),
-    nucleus.getRandomScaleSteps(),
-    nucleus.getRandomScaleSteps(),
-  ];
 
   const scheduleAheadTime = 0.1;
 
@@ -70,6 +64,12 @@ const Bloom = () => {
 
     motif() {
       this.isImprovise = false;
+
+      const gat = [
+        nucleus.genRandomScaleSteps(nucleus.raga.avroh, random.integer(5, 8)),
+        nucleus.genRandomScaleSteps(nucleus.raga.avroh, random.integer(5, 8)),
+        nucleus.genRandomScaleSteps(nucleus.raga.avroh, random.integer(5, 8)),
+      ];
 
       const randomGat = gat[random.integer(0, gat.length - 1)];
       this.pitch.arr = Array.from(randomGat, (step) => nucleus.tonic + step);
