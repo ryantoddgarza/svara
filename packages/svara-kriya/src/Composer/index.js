@@ -1,5 +1,5 @@
 import { getRagasByPrahar } from 'svara-raga-data';
-import { random } from '../core/helpers';
+import { random } from '../helpers';
 import d from './defaults';
 
 function Composer(opts = {}) {
