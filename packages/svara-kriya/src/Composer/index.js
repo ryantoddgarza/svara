@@ -9,24 +9,23 @@ function Composer(opts = {}) {
   this.tonic = opts.tonic || d.tonic;
 }
 
-Composer.prototype = {
-  getRandomScaleSteps(opts = {}) {
-    // TODO: scale needs to change based on previous note
-    const scale = opts.scale || this.raga.avroh;
-    const length = {
-      min: opts.minLength || 6,
-      max: opts.maxLength || 8,
-    };
+// TODO: This shouldn't be a Composer method
+Composer.prototype.genRandomScaleSteps = function generate(
+  scale = [],
+  length = 1
+) {
+  const steps = [];
 
-    const indexOpts = {
-      length: opts.length || random.integer(length.min, length.max),
-      max: scale.length - 1,
-    };
-    const randomIndices = random.array(indexOpts);
-    const steps = randomIndices.map((i) => scale[i]);
+  function getRandomEl(arr) {
+    return Math.floor(Math.random() * arr.length);
+  }
 
-    return steps;
-  },
+  for (let i = 0; i < length; i += 1) {
+    const step = getRandomEl(scale);
+    steps.push(step);
+  }
+
+  return steps;
 };
 
 export default Composer;
