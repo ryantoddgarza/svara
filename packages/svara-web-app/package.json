@@ -51,6 +51,7 @@
   "bundledDependencies": [
     "babel-preset-svara",
     "svara-analyser-chakra",
+    "svara-kriya",
     "svara-patch-bloom"
   ]
 }
