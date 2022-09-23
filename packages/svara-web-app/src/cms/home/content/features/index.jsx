@@ -1,6 +1,6 @@
 import React from 'react';
 import DOMPurify from 'dompurify';
-import microsystems from './microsystems.md';
+import project from './project.md';
 import player from './player.md';
 
 const features = [
@@ -9,8 +9,8 @@ const features = [
     html: player,
   },
   {
-    heading: 'Microsystems',
-    html: microsystems,
+    heading: 'Project',
+    html: project,
   },
 ];
 

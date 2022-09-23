@@ -1,3 +1,3 @@
-The GraphQL API provides data sets with melodic and rhythmic rules of Hindustani – North Indian – classical music. Prerequisite knowledge of fundamental raga concepts and integer notation is recommended but not difficult to learn.
+The GraphQL API offers flexible queries to raga data. Use the Svara API to develop patches or in your own projects.
 
-See the [documentation](https://github.com/ryantoddgarza/svara-api) for more information.
+See the [svara-api repository](https://github.com/ryantoddgarza/svara-api) for development information.

@@ -1,1 +1,1 @@
-The web player is an implementation example of the generative system. The system selects a raga based on the user's local time and initializes parameters to provide a unique and continuous ambient interpretation.
+The web player is an implementation example of the generative system. The system selects a raga based on the user's local time and initializes parameters to provide a unique and continuous ambient interpretation. Check back often to enjoy the latest updates.

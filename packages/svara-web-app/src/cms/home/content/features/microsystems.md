@@ -1,1 +1,0 @@
-The project is open-source and actively undergoing development. Visit the repository on [GitHub](https://github.com/ryantoddgarza/svara). Developers, use packages at your own risk or await major version one before incorporating any of the Svara services into your own projects. Listeners, check back often to enjoy the latest updates.
