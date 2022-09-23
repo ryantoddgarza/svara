@@ -15,8 +15,9 @@
     "defaults"
   ],
   "scripts": {
-    "format:code": "npm run lint:code -- --fix",
-    "lint:code": "eslint --ext .js,.jsx ."
+    "format": "sh ./scripts/format.sh",
+    "lint": "sh ./scripts/lint.sh",
+    "prettier": "sh ./scripts/prettier.sh"
   },
   "engines": {
     "npm": ">=7.0.0"
