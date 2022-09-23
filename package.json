@@ -17,5 +17,8 @@
   "scripts": {
     "format:code": "npm run lint:code -- --fix",
     "lint:code": "eslint --ext .js,.jsx ."
+  },
+  "engines": {
+    "npm": ">=7.0.0"
   }
 }
