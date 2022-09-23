@@ -1,5 +1,9 @@
-import cards from './cards';
-import features from './features';
 import glossary from './glossary';
+import highlights from './highlights';
+import packages from './packages';
 
-export default { cards, features, glossary };
+export default {
+  glossary,
+  highlights,
+  packages,
+};

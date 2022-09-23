@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
+import { sanitize } from 'dompurify';
 import Glossary from '../Glossary';
 import { home } from '../../cms';
 
 const Home = () => {
   const {
     settings: { description },
-    content: { features, cards, glossary },
+    content: { glossary, highlights, packages },
   } = home;
 
   return (
@@ -17,10 +18,13 @@ const Home = () => {
               <h2 className="title">{description}</h2>
             </div>
             <div className="feature">
-              {features.map(({ heading, body }) => (
-                <div className="item" key={`key__${heading}`}>
-                  <h2 className="heading">{heading}</h2>
-                  <div className="body">{body}</div>
+              {highlights.map(({ id, name, html }) => (
+                <div className="item" key={id}>
+                  <h2 className="heading">{name}</h2>
+                  <div
+                    className="body"
+                    dangerouslySetInnerHTML={{ __html: sanitize(html) }}
+                  />
                 </div>
               ))}
             </div>
@@ -35,10 +39,13 @@ const Home = () => {
             </div>
             <div className="feature">
               <div className="grid">
-                {cards.map(({ heading, body }) => (
-                  <div className="item" key={`key__${heading}`}>
-                    <h3 className="heading">{heading}</h3>
-                    <div className="body">{body}</div>
+                {packages.map(({ id, name, html }) => (
+                  <div className="item" key={id}>
+                    <h3 className="heading">{name}</h3>
+                    <div
+                      className="body"
+                      dangerouslySetInnerHTML={{ __html: sanitize(html) }}
+                    />
                   </div>
                 ))}
               </div>
