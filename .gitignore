@@ -3,6 +3,3 @@ build/
 lib/
 node_modules/
 package-lock.json
-
-# Preserve lock files for applications
-!packages/svara-web-app/package-lock.json
