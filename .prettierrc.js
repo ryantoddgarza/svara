@@ -3,6 +3,7 @@ module.exports = {
   quoteProps: 'consistent',
   semi: true,
   singleQuote: true,
+  trailingComma: 'all',
   overrides: [
     {
       files: ['*.[s]css'],
