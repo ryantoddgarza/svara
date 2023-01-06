@@ -2,11 +2,12 @@ import { SimpleEnvelope, SimpleGain, SimpleOscillator } from '@warbly/modules';
 import {
   Composer,
   Queue,
-  Subdivision,
   SimpleReverb,
-  synthEngine,
+  Subdivision,
+  escapeIndex,
   midi,
   random,
+  synthEngine,
 } from 'svara-kriya';
 
 const Bloom = () => {
@@ -100,7 +101,8 @@ const Bloom = () => {
 
       // IF improvising THEN `improvise.next`
       if (this.improvise) {
-        const delta = random.integer(-5, 5);
+        const maxPosDelta = 5;
+        const delta = random.integer(-maxPosDelta, maxPosDelta);
         const n = this.pitch.pos + delta;
 
         // TODO: Reduce `pitch.set` reassign frequency
@@ -122,13 +124,7 @@ const Bloom = () => {
         }
 
         // Handle position beyond array bounds
-        if (this.pitch.pos < 0) {
-          this.pitch.pos = 0;
-        } else if (this.pitch.pos > this.pitch.set.length - 1) {
-          this.pitch.pos = this.pitch.set.length - 1;
-        } else {
-          this.pitch.pos = n;
-        }
+        this.pitch.pos = escapeIndex(n, this.pitch.set.length);
       }
     },
 
