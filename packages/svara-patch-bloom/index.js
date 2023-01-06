@@ -1,7 +1,6 @@
 import { SimpleEnvelope, SimpleGain, SimpleOscillator } from '@warbly/modules';
 import {
   Composer,
-  PitchClassSet,
   Queue,
   Subdivision,
   SimpleReverb,
@@ -13,11 +12,6 @@ import {
 const Bloom = () => {
   const context = new AudioContext();
   const nucleus = new Composer({ tempo: 60 });
-  const pitchClassSet = new PitchClassSet({
-    tonic: nucleus.tonic,
-    octaves: 2,
-    scaleSteps: nucleus.raga.avroh,
-  });
 
   const scheduleAheadTime = 0.1;
 
@@ -49,51 +43,91 @@ const Bloom = () => {
   const melodyVoice = {
     subdivision: new Subdivision({ meter: nucleus.meter }),
 
-    pitch: pitchClassSet,
+    pitch: {
+      set: [],
+      pos: 0,
+    },
+
+    gats: [],
+
+    motif: [],
 
     queue: new Queue(),
 
     nextNoteTime: 0.0,
 
-    isImprovise: false,
+    improvise: false,
 
-    improvise() {
-      this.isImprovise = true;
-      this.pitch.arr = this.pitch.range;
+    buildGats(n = 3) {
+      // TODO: Should obey ascend/descend rules
+      for (let i = 0; i < n; i += 1) {
+        const steps = nucleus.genRandomScaleSteps(
+          nucleus.raga.avroh,
+          random.integer(5, 8),
+        );
+        const MIDI = Array.from(steps, (step) => nucleus.tonic + step);
+        this.gats[i] = MIDI;
+      }
     },
 
-    motif() {
-      this.isImprovise = false;
+    getRandomGat() {
+      // Handle unbuilt gats
+      if (this.gats.length === 0) {
+        this.buildGats();
+      }
 
-      const gat = [
-        nucleus.genRandomScaleSteps(nucleus.raga.avroh, random.integer(5, 8)),
-        nucleus.genRandomScaleSteps(nucleus.raga.avroh, random.integer(5, 8)),
-        nucleus.genRandomScaleSteps(nucleus.raga.avroh, random.integer(5, 8)),
-      ];
-
-      const randomGat = gat[random.integer(0, gat.length - 1)];
-      this.pitch.arr = Array.from(randomGat, (step) => nucleus.tonic + step);
+      const randomGat = this.gats[random.integer(0, this.gats.length - 1)];
+      return randomGat;
     },
 
     scheduleNextPitch() {
-      // Improvise
-      if (this.isImprovise) {
-        this.pitch.setNextPitch(
-          random.bool() ? this.pitch.pos : random.integer(0, 4)
-        );
-
-        if (random.integer(0, 9) === 0) {
-          this.pitch.pos = 0;
-          this.motif();
-        }
+      // IF not improvising AND finished THEN prepare state for improvisation
+      if (!this.improvise && this.pitch.pos >= this.pitch.set.length - 1) {
+        this.improvise = true;
       }
 
-      // Motif
-      if (!this.isImprovise) {
-        this.pitch.setNextPitch(1);
+      // IF improvising AND should switch THEN prepare state for motif
+      if (this.improvise && !random.integer(0, 30)) {
+        this.improvise = false;
+        this.pitch.set = this.getRandomGat();
+        this.pitch.pos = -1; // So first note of pitch array is played
+      }
 
-        if (this.pitch.pos === this.pitch.arr.length - 1) {
-          this.improvise();
+      // IF not improvising THEN `motif.next`
+      if (!this.improvise) {
+        this.pitch.pos += 1;
+      }
+
+      // IF improvising THEN `improvise.next`
+      if (this.improvise) {
+        const delta = random.integer(-5, 5);
+        const n = this.pitch.pos + delta;
+
+        // TODO: Reduce `pitch.set` reassign frequency
+        // Set pitch array
+        if (delta > 0) {
+          // Ascending MIDI values
+          this.pitch.set = midi.fromPitchClass(
+            nucleus.raga.aaroh,
+            nucleus.tonic,
+            2,
+          );
+        } else if (delta < 0) {
+          // Descending MIDI values
+          this.pitch.set = midi.fromPitchClass(
+            nucleus.raga.avroh,
+            nucleus.tonic,
+            2,
+          );
+        }
+
+        // Handle position beyond array bounds
+        if (this.pitch.pos < 0) {
+          this.pitch.pos = 0;
+        } else if (this.pitch.pos > this.pitch.set.length - 1) {
+          this.pitch.pos = this.pitch.set.length - 1;
+        } else {
+          this.pitch.pos = n;
         }
       }
     },
@@ -116,7 +150,7 @@ const Bloom = () => {
       this.subdivision.newQuantizedToDownbeat(7);
       this.subdivision.newQuantizedToDownbeat(9);
 
-      if (random.integer(1, 100) % 2 === 0) {
+      if (random.integer(0, 1)) {
         this.subdivision.new();
       }
     },
@@ -145,7 +179,7 @@ const Bloom = () => {
       // carrier oscillator
       const osc1 = new SimpleOscillator(context, {
         connect: gain1,
-        frequency: midi.toFreq(this.pitch.getCurrentPitch()),
+        frequency: midi.toFreq(this.pitch.set[this.pitch.pos]),
       });
 
       const variableRelease = 60 / nucleus.tempo / this.subdivision.value;
@@ -167,10 +201,8 @@ const Bloom = () => {
   };
 
   const droneVoice = {
-    pitch: pitchClassSet,
-
     patch() {
-      const root = midi.toFreq(this.pitch.range[0]);
+      const root = midi.toFreq(nucleus.tonic);
 
       // voice vca
       const voiceGain = new SimpleGain(context, {
@@ -234,10 +266,6 @@ const Bloom = () => {
     melodyVoice.scheduler();
   };
 
-  const setMelodicVariables = () => {
-    melodyVoice.motif();
-  };
-
   const start = () => {
     synthEngine.play();
     context.resume();
@@ -254,7 +282,6 @@ const Bloom = () => {
 
   const init = () => {
     synthEngine.init(scheduler);
-    setMelodicVariables();
     effects.init();
   };
 
