@@ -15,7 +15,7 @@ const Player = () => {
     Patch.volume.setGain(initVolume);
     setRagaName(Patch.nucleus.raga.name);
     setIsPlaying(synthEngine.isPlaying);
-  });
+  }, []);
 
   const togglePlay = () => {
     if (isPlaying) {
