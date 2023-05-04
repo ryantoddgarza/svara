@@ -6,13 +6,14 @@ import {
   Subdivision,
   escapeIndex,
   midi,
-  random,
   synthEngine,
 } from 'svara-kriya';
+import { Random } from 'random-js';
 
 const Bloom = () => {
   const context = new AudioContext();
   const nucleus = new Composer({ tempo: 60 });
+  const random = new Random();
 
   const scheduleAheadTime = 0.1;
 

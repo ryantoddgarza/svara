@@ -16,9 +16,13 @@
   },
   "homepage": "https://github.com/ryantoddgarza/svara#readme",
   "dependencies": {
-    "@warbly/modules": "^0.4.2"
+    "@warbly/modules": "^0.4.2",
+    "random-js": "^2.1.0"
   },
   "bundledDependencies": [
+    "svara-kriya"
+  ],
+  "bundleDependencies": [
     "svara-kriya"
   ]
 }
