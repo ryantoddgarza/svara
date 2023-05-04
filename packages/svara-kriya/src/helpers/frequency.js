@@ -4,7 +4,7 @@ function Frequency() {
   const A = 440;
   const N_SEMITONES = 12;
 
-  for (let x = 0; x < 127; ++x) {
+  for (let x = 0; x < 127; x++) {
     const freq = 2 ** ((x - 69) / N_SEMITONES) * A;
     this.list.push(freq);
   }
