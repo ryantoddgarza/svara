@@ -1,4 +1,4 @@
-import { random } from '../helpers';
+import random from '../utils/random';
 import d from './defaults';
 
 function Subdivision(opts = {}) {

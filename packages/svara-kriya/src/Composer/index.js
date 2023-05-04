@@ -1,5 +1,5 @@
 import { getRagasByPrahar } from 'svara-raga-data';
-import { random } from '../helpers';
+import random from '../utils/random';
 import d from './defaults';
 
 function Composer(opts = {}) {
@@ -12,7 +12,7 @@ function Composer(opts = {}) {
 // TODO: This shouldn't be a Composer method
 Composer.prototype.genRandomScaleSteps = function generate(
   scale = [],
-  length = 1
+  length = 1,
 ) {
   const steps = [];
 
