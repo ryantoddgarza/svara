@@ -1,4 +1,7 @@
 module.exports = {
   root: true,
-  extends: ['airbnb'],
+  extends: ['airbnb-base'],
+  rules: {
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+  },
 };

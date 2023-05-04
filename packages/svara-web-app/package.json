@@ -59,5 +59,8 @@
     "svara-analyser-chakra",
     "svara-kriya",
     "svara-patch-bloom"
-  ]
+  ],
+  "devDependencies": {
+    "eslint-config-airbnb": "^19.0.4"
+  }
 }
