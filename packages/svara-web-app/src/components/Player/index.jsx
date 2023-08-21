@@ -10,7 +10,7 @@ const Player = () => {
 
   useEffect(() => {
     Patch.init();
-    setRagaName(Patch.nucleus.raga.name);
+    setRagaName(Patch.composer.raga.name);
     // TODO: Reimplement after patch & scheduler refactor
     // setIsPlaying(Patch.audioScheduler.isRunning);
   }, []);

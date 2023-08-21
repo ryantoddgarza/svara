@@ -16,7 +16,7 @@ import { Random } from 'random-js';
 
 const Bloom = () => {
   const context = new AudioContext();
-  const nucleus = new Composer({ tempo: 60 });
+  const composer = new Composer({ tempo: 60 });
   const random = new Random();
   let audioScheduler = null;
 
@@ -39,7 +39,7 @@ const Bloom = () => {
   reverb.connect(output);
 
   const melodyVoice = {
-    subdivision: new Subdivision({ meter: nucleus.meter }),
+    subdivision: new Subdivision({ meter: composer.meter }),
 
     pitch: {
       set: [],
@@ -59,11 +59,11 @@ const Bloom = () => {
     buildGats(n = 3) {
       // TODO: Should obey ascend/descend rules
       for (let i = 0; i < n; i += 1) {
-        const steps = nucleus.genRandomScaleSteps(
-          nucleus.raga.avroh,
+        const steps = composer.genRandomScaleSteps(
+          composer.raga.avroh,
           random.integer(5, 8),
         );
-        const MIDI = Array.from(steps, (step) => nucleus.tonic + step);
+        const MIDI = Array.from(steps, (step) => composer.tonic + step);
         this.gats[i] = MIDI;
       }
     },
@@ -106,15 +106,15 @@ const Bloom = () => {
         if (delta > 0) {
           // Ascending MIDI values
           this.pitch.set = midi.fromPitchClass(
-            nucleus.raga.aaroh,
-            nucleus.tonic,
+            composer.raga.aaroh,
+            composer.tonic,
             2,
           );
         } else if (delta < 0) {
           // Descending MIDI values
           this.pitch.set = midi.fromPitchClass(
-            nucleus.raga.avroh,
-            nucleus.tonic,
+            composer.raga.avroh,
+            composer.tonic,
             2,
           );
         }
@@ -125,7 +125,7 @@ const Bloom = () => {
     },
 
     setNextNoteTime() {
-      const secondsPerBeat = 60.0 / nucleus.tempo;
+      const secondsPerBeat = 60.0 / composer.tempo;
       this.nextNoteTime += (1 / this.subdivision.value) * secondsPerBeat;
     },
 
@@ -176,7 +176,7 @@ const Bloom = () => {
         frequency: midi.toFreq(this.pitch.set[this.pitch.pos]),
       });
 
-      const variableRelease = 60 / nucleus.tempo / this.subdivision.value;
+      const variableRelease = 60 / composer.tempo / this.subdivision.value;
 
       const envelope = new SimpleEnvelope(context, {
         attack: 0.1,
@@ -196,7 +196,7 @@ const Bloom = () => {
 
   const droneVoice = {
     patch() {
-      const root = midi.toFreq(nucleus.tonic);
+      const root = midi.toFreq(composer.tonic);
 
       // voice vca
       const voiceGain = new SimpleGain(context, {
@@ -278,7 +278,7 @@ const Bloom = () => {
     stop,
     audioContext: context,
     audioScheduler,
-    nucleus,
+    composer,
     output,
     volume,
   };
