@@ -1,7 +1,11 @@
 import random from '../utils/random';
-import d from './defaults';
 
 function Subdivision(opts = {}) {
+  const d = {
+    value: 1,
+    meter: 4,
+  };
+
   this.value = opts.value || d.value;
   this.current = 0;
   this.meter = opts.meter || d.meter;

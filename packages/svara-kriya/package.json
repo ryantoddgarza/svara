@@ -3,7 +3,7 @@
   "name": "svara-kriya",
   "description": "Creative music system",
   "version": "0.1.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
   "license": "ISC",
   "repository": {

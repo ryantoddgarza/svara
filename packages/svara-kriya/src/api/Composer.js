@@ -1,8 +1,19 @@
 import { getRagasByPrahar } from 'svara-raga-data';
 import random from '../utils/random';
-import d from './defaults';
 
 function Composer(opts = {}) {
+  const d = {
+    meter: {
+      min: 4,
+      max: 16,
+    },
+    tempo: {
+      min: 8,
+      max: 12,
+    },
+    tonic: 62,
+  };
+
   this.meter = opts.meter || random.integer(d.meter.min, d.meter.max);
   this.raga = opts.raga || getRagasByPrahar()[0];
   this.tempo = opts.tempo || random.integer(d.tempo.min, d.tempo.max);
