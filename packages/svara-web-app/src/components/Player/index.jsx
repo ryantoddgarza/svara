@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
-import { synthEngine } from 'svara-kriya';
 import Patch from 'svara-patch-bloom';
 
 const Player = () => {
@@ -14,7 +13,8 @@ const Player = () => {
     Patch.init();
     Patch.volume.setGain(initVolume);
     setRagaName(Patch.nucleus.raga.name);
-    setIsPlaying(synthEngine.isPlaying);
+    // TODO: Reimplement after patch & scheduler refactor
+    // setIsPlaying(Patch.audioScheduler.isRunning);
   }, []);
 
   const togglePlay = () => {

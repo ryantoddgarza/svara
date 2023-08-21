@@ -5,12 +5,12 @@ import {
   SimpleReverb,
 } from '@warbly/modules';
 import {
+  AudioScheduler,
   Composer,
   Queue,
   Subdivision,
   escapeIndex,
   midi,
-  synthEngine,
 } from 'svara-kriya';
 import { Random } from 'random-js';
 
@@ -18,6 +18,7 @@ const Bloom = () => {
   const context = new AudioContext();
   const nucleus = new Composer({ tempo: 60 });
   const random = new Random();
+  let audioScheduler = null;
 
   const scheduleAheadTime = 0.1;
 
@@ -268,21 +269,19 @@ const Bloom = () => {
   };
 
   const start = () => {
-    synthEngine.play();
+    audioScheduler.start();
     context.resume();
     droneVoice.patch();
     melodyVoice.nextNoteTime = context.currentTime;
-    synthEngine.timerWorker.postMessage('start');
   };
 
   const stop = () => {
-    synthEngine.play();
+    audioScheduler.stop();
     context.suspend();
-    synthEngine.timerWorker.postMessage('stop');
   };
 
   const init = () => {
-    synthEngine.init(scheduler);
+    audioScheduler = new AudioScheduler(scheduler);
     effects.init();
   };
 
@@ -291,6 +290,7 @@ const Bloom = () => {
     start,
     stop,
     context,
+    audioScheduler,
     nucleus,
     output,
     volume,
