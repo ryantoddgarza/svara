@@ -264,10 +264,6 @@ const Bloom = () => {
     },
   };
 
-  const scheduler = () => {
-    melodyVoice.scheduler();
-  };
-
   const start = () => {
     audioScheduler.start();
     context.resume();
@@ -281,7 +277,7 @@ const Bloom = () => {
   };
 
   const init = () => {
-    audioScheduler = new AudioScheduler(scheduler);
+    audioScheduler = new AudioScheduler(() => melodyVoice.scheduler());
     effects.init();
   };
 
