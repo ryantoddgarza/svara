@@ -37,7 +37,7 @@ const Visualizer = () => {
   };
 
   useEffect(() => {
-    Analyser.init(Patch.context);
+    Analyser.init(Patch.audioContext);
     connectAnalyzer();
 
     return function cleanup() {

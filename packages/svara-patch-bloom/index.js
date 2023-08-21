@@ -289,7 +289,7 @@ const Bloom = () => {
     init,
     start,
     stop,
-    context,
+    audioContext: context,
     audioScheduler,
     nucleus,
     output,
