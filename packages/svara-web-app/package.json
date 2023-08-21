@@ -48,12 +48,6 @@
     "webpack-dev-server": "^4.9.0",
     "webpack-merge": "^5.7.3"
   },
-  "bundledDependencies": [
-    "babel-preset-svara",
-    "svara-analyser-chakra",
-    "svara-kriya",
-    "svara-patch-bloom"
-  ],
   "bundleDependencies": [
     "babel-preset-svara",
     "svara-analyser-chakra",
