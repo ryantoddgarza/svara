@@ -20,8 +20,6 @@ const Bloom = () => {
   const random = new Random();
   let audioScheduler = null;
 
-  const scheduleAheadTime = 0.1;
-
   const volume = (() => {
     const gain = new SimpleGain(context);
 
@@ -32,20 +30,13 @@ const Bloom = () => {
     return { gain, setGain };
   })();
 
-  const output = {
-    gain: new SimpleGain(context, { connect: volume.gain }),
-  };
+  const output = new SimpleGain(context, { connect: volume.gain });
 
-  const effects = {
-    reverb: new SimpleReverb(context, {
-      seconds: 3,
-      decay: 2,
-    }),
-
-    init() {
-      this.reverb.connect(output.gain);
-    },
-  };
+  const reverb = new SimpleReverb(context, {
+    seconds: 3,
+    decay: 2,
+  });
+  reverb.connect(output);
 
   const melodyVoice = {
     subdivision: new Subdivision({ meter: nucleus.meter }),
@@ -78,7 +69,6 @@ const Bloom = () => {
     },
 
     getRandomGat() {
-      // Handle unbuilt gats
       if (this.gats.length === 0) {
         this.buildGats();
       }
@@ -158,6 +148,8 @@ const Bloom = () => {
     },
 
     scheduler() {
+      const scheduleAheadTime = 0.1;
+
       while (this.nextNoteTime < context.currentTime + scheduleAheadTime) {
         this.scheduleNextPitch();
         this.scheduleNextNote(this.subdivision.current, this.nextNoteTime);
@@ -167,10 +159,10 @@ const Bloom = () => {
     patch(time) {
       // voice vca
       const voiceGain = new SimpleGain(context, {
-        connect: output.gain,
+        connect: output,
         gain: 0.2,
       });
-      voiceGain.connect(effects.reverb.input);
+      voiceGain.connect(reverb.input);
 
       // carrier osc vca gated by envelope
       const gain1 = new SimpleGain(context, {
@@ -208,10 +200,10 @@ const Bloom = () => {
 
       // voice vca
       const voiceGain = new SimpleGain(context, {
-        connect: output.gain,
+        connect: output,
         gain: 0.1,
       });
-      voiceGain.connect(effects.reverb.input);
+      voiceGain.connect(reverb.input);
 
       // carrier/sub osc vca. amplitude modulated by amGain
       const gain1 = new SimpleGain(context, { connect: voiceGain });
@@ -264,22 +256,21 @@ const Bloom = () => {
     },
   };
 
-  const start = () => {
+  function start() {
     audioScheduler.start();
     context.resume();
     droneVoice.patch();
     melodyVoice.nextNoteTime = context.currentTime;
-  };
+  }
 
-  const stop = () => {
+  function stop() {
     audioScheduler.stop();
     context.suspend();
-  };
+  }
 
-  const init = () => {
+  function init() {
     audioScheduler = new AudioScheduler(() => melodyVoice.scheduler());
-    effects.init();
-  };
+  }
 
   return {
     init,

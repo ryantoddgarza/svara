@@ -3,11 +3,10 @@ import { MdPlayArrow, MdPause, MdVolumeUp } from 'react-icons/md';
 import Patch from 'svara-patch-bloom';
 
 const Player = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [ragaName, setRagaName] = useState('');
-
   const localVolume = localStorage.getItem('volume');
   const [volume, setVolume] = useState(localVolume || 1);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [ragaName, setRagaName] = useState('');
 
   useEffect(() => {
     Patch.init();

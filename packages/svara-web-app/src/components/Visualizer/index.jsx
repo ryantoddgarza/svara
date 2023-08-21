@@ -32,7 +32,7 @@ const Visualizer = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   const connectAnalyzer = () => {
-    Patch.output.gain.connect(Analyser.analyser);
+    Patch.output.connect(Analyser.analyser);
     setIsConnected(true);
   };
 
