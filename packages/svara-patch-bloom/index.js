@@ -1,8 +1,12 @@
-import { SimpleEnvelope, SimpleGain, SimpleOscillator } from '@warbly/modules';
+import {
+  SimpleEnvelope,
+  SimpleGain,
+  SimpleOscillator,
+  SimpleReverb,
+} from '@warbly/modules';
 import {
   Composer,
   Queue,
-  SimpleReverb,
   Subdivision,
   escapeIndex,
   midi,
@@ -182,15 +186,15 @@ const Bloom = () => {
       const variableRelease = 60 / nucleus.tempo / this.subdivision.value;
 
       const envelope = new SimpleEnvelope(context, {
-        connect: gain1.gain,
         attack: 0.1,
         release: variableRelease,
       });
+      envelope.connect(gain1.gain);
 
       function main() {
         envelope.trigger();
         osc1.start(time);
-        osc1.stop(time + envelope.getLength());
+        osc1.stop(time + envelope.length);
       }
 
       main();
