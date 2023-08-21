@@ -5,7 +5,7 @@ import Clock from '../Clock';
 
 const Visualizer = () => {
   const {
-    composer: {
+    metadata: {
       raga: { name, prahar, vadi, samvadi, thaat },
     },
   } = Patch;

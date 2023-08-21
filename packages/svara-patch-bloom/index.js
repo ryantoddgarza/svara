@@ -15,10 +15,23 @@ import {
 import { Random } from 'random-js';
 
 const Bloom = () => {
-  const context = new AudioContext();
   const composer = new Composer({ tempo: 60 });
-  const random = new Random();
+
+  const metadata = {
+    raga: {
+      name: composer.raga.name,
+      prahar: composer.raga.prahar,
+      vadi: composer.raga.vadi,
+      samvadi: composer.raga.samvadi,
+      thaat: {
+        name: composer.raga.thaat.name,
+      },
+    },
+  };
+
   let audioScheduler = null;
+  const context = new AudioContext();
+  const random = new Random();
 
   const volume = (() => {
     const gain = new SimpleGain(context);
@@ -278,9 +291,9 @@ const Bloom = () => {
     stop,
     audioContext: context,
     audioScheduler,
-    composer,
     output,
     volume,
+    metadata,
   };
 };
 
