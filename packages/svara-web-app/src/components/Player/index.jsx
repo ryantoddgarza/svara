@@ -6,16 +6,19 @@ const Player = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [ragaName, setRagaName] = useState('');
 
-  const getLocalVolume = () => localStorage.getItem('volume');
-  const initVolume = getLocalVolume() || 1;
+  const localVolume = localStorage.getItem('volume');
+  const [volume, setVolume] = useState(localVolume || 1);
 
   useEffect(() => {
     Patch.init();
-    Patch.volume.setGain(initVolume);
     setRagaName(Patch.nucleus.raga.name);
     // TODO: Reimplement after patch & scheduler refactor
     // setIsPlaying(Patch.audioScheduler.isRunning);
   }, []);
+
+  useEffect(() => {
+    Patch.volume.setGain(volume);
+  }, [volume]);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -28,7 +31,7 @@ const Player = () => {
   };
 
   const onVolumeChange = (e) => {
-    Patch.volume.setGain(e.target.value);
+    setVolume(e.target.value);
   };
 
   const onVolumeMouseUp = (e) => {
@@ -59,7 +62,7 @@ const Player = () => {
               <input
                 onChange={onVolumeChange}
                 onMouseUp={onVolumeMouseUp}
-                defaultValue={initVolume}
+                defaultValue={volume}
                 title="volume"
                 className="item control--volume"
                 type="range"
