@@ -2,7 +2,6 @@
   "private": true,
   "name": "svara-kriya",
   "description": "Creative music system",
-  "version": "0.1.0",
   "main": "src/index.js",
   "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
   "license": "ISC",
@@ -18,7 +17,7 @@
   "dependencies": {
     "random-js": "^2.1.0"
   },
-  "bundledDependencies": [
+  "bundleDependencies": [
     "svara-raga-data"
   ]
 }

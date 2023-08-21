@@ -2,7 +2,6 @@
   "private": true,
   "name": "svara-patch-bloom",
   "description": "Generative audio synthesis patch",
-  "version": "0.1.0",
   "main": "index.js",
   "author": "Ryan Todd Garza <ryantoddgarza@gmail.com>",
   "license": "ISC",
@@ -19,9 +18,6 @@
     "@warbly/modules": "^0.5.0",
     "random-js": "^2.1.0"
   },
-  "bundledDependencies": [
-    "svara-kriya"
-  ],
   "bundleDependencies": [
     "svara-kriya"
   ]
