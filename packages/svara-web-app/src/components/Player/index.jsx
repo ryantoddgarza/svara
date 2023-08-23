@@ -16,7 +16,7 @@ const Player = () => {
   }, []);
 
   useEffect(() => {
-    Patch.volume.setGain(volume);
+    Patch.volume.gain = volume;
   }, [volume]);
 
   const togglePlay = () => {

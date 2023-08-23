@@ -33,17 +33,11 @@ const Bloom = () => {
   const context = new AudioContext();
   const random = new Random();
 
-  const volume = (() => {
-    const gain = new SimpleGain(context);
+  const volume = new SimpleGain(context);
+  volume.connect(context.destination);
 
-    const setGain = (value) => {
-      gain.gain.value = value;
-    };
-
-    return { gain, setGain };
-  })();
-
-  const output = new SimpleGain(context, { connect: volume.gain });
+  const output = new SimpleGain(context);
+  output.connect(volume.input);
 
   const reverb = new SimpleReverb(context, {
     seconds: 3,
@@ -171,31 +165,28 @@ const Bloom = () => {
 
     patch(time) {
       // voice vca
-      const voiceGain = new SimpleGain(context, {
-        connect: output,
-        gain: 0.2,
-      });
+      const voiceGain = new SimpleGain(context);
+      voiceGain.gain = 0.2;
+      voiceGain.connect(output.input);
       voiceGain.connect(reverb.input);
 
       // carrier osc vca gated by envelope
-      const gain1 = new SimpleGain(context, {
-        connect: voiceGain,
-        gain: 0,
-      });
+      const gain1 = new SimpleGain(context);
+      gain1.gain = 0;
+      gain1.connect(voiceGain.input);
 
       // carrier oscillator
       const osc1 = new SimpleOscillator(context, {
-        connect: gain1,
+        connect: gain1.input,
         frequency: midi.toFreq(this.pitch.set[this.pitch.pos]),
       });
 
       const variableRelease = 60 / composer.tempo / this.subdivision.value;
 
-      const envelope = new SimpleEnvelope(context, {
-        attack: 0.1,
-        release: variableRelease,
-      });
-      envelope.connect(gain1.gain);
+      const envelope = new SimpleEnvelope(context);
+      envelope.attack = 0.1;
+      envelope.release = variableRelease;
+      envelope.connect(gain1.input.gain);
 
       function main() {
         envelope.trigger();
@@ -212,48 +203,49 @@ const Bloom = () => {
       const root = midi.toFreq(composer.tonic);
 
       // voice vca
-      const voiceGain = new SimpleGain(context, {
-        connect: output,
-        gain: 0.1,
-      });
+      const voiceGain = new SimpleGain(context);
+      voiceGain.gain = 0.1;
+      voiceGain.connect(output.input);
       voiceGain.connect(reverb.input);
 
       // carrier/sub osc vca. amplitude modulated by amGain
-      const gain1 = new SimpleGain(context, { connect: voiceGain });
+      const gain1 = new SimpleGain(context);
+      gain1.connect(voiceGain.input);
 
       // carrier osc
       const osc1 = new SimpleOscillator(context, {
-        connect: gain1,
+        connect: gain1.input,
         frequency: root,
       });
 
       // sub osc
       const subOsc = new SimpleOscillator(context, {
-        connect: gain1,
+        connect: gain1.input,
         frequency: root * 0.5,
         detune: 2,
       });
 
       // gain1 am osc attenuator
-      const amOscGain = new SimpleGain(context, { connect: gain1, gain: 0.5 });
+      const amOscGain = new SimpleGain(context);
+      amOscGain.gain = 0.5;
+      amOscGain.connect(gain1.input);
 
       // gain1 am osc
       const amOsc = new SimpleOscillator(context, {
-        connect: amOscGain,
+        connect: amOscGain.input,
         frequency: root * 0.5,
         detune: 5,
         type: 'triangle',
       });
 
       // voiceGain am osc slow trem attenuator
-      const gain2 = new SimpleGain(context, {
-        connect: voiceGain.gain,
-        gain: 0.06,
-      });
+      const gain2 = new SimpleGain(context);
+      gain2.gain = 0.06;
+      gain2.connect(voiceGain.input);
 
       // voiceGain am slow trem osc
       const osc2 = new SimpleOscillator(context, {
-        connect: gain2,
+        connect: gain2.input,
         frequency: 0.02,
         type: 'triangle',
       });
