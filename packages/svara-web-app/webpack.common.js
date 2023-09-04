@@ -8,6 +8,7 @@ const RemarkHTML = require('remark-html');
 module.exports = {
   entry: {
     app: './src/index.jsx',
+    audioSchedulerWorker: './src/workers/audioSchedulerWorker.js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -50,7 +51,15 @@ module.exports = {
     ],
   },
   output: {
-    filename: '[name].bundle.js',
+    filename: (data) => {
+      let filename = '[name].bundle.js';
+
+      if (data.chunk.name === 'audioSchedulerWorker') {
+        filename = 'audioScheduler.worker.js';
+      }
+
+      return filename;
+    },
     path: path.join(__dirname, 'build'),
     publicPath: '/',
   },
