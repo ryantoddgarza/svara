@@ -14,6 +14,7 @@
   "homepage": "https://github.com/ryantoddgarza/svara#readme",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
+    "clean": "rm -rf ./build",
     "develop": "webpack serve --config webpack.dev.js",
     "start": "npm run develop"
   },
