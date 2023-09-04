@@ -37,7 +37,7 @@ Subdivision.prototype.new = function newDivision(val) {
       case test >= 4: // Is fast
         return random.integer(2, 6);
       default:
-        return d.value;
+        return this.d.value;
     }
   };
 
