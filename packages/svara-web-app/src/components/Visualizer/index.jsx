@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Patch from 'svara-patch-bloom';
 import Analyser from 'svara-analyser-chakra';
 import Clock from '../Clock';
@@ -29,11 +29,8 @@ const Visualizer = () => {
     },
   };
 
-  const [isConnected, setIsConnected] = useState(false);
-
   const connectAnalyzer = () => {
     Patch.output.connect(Analyser.analyser);
-    setIsConnected(true);
   };
 
   useEffect(() => {
@@ -42,7 +39,6 @@ const Visualizer = () => {
 
     return function cleanup() {
       Analyser.stop();
-      setIsConnected(false);
     };
   }, []);
 
