@@ -164,100 +164,97 @@ const Bloom = () => {
     },
 
     patch(time) {
-      // voice vca
-      const voiceGain = new SimpleGain(context);
-      voiceGain.gain = 0.2;
-      voiceGain.connect(output.input);
-      voiceGain.connect(reverb.input);
+      const FREQUENCY = midi.toFreq(this.pitch.set[this.pitch.pos])?.toFixed(2);
 
-      // carrier osc vca gated by envelope
+      const outputGain = new SimpleGain(context);
+      outputGain.gain = 0.2;
+      outputGain.connect(output.input);
+      outputGain.connect(reverb.input);
+
+      // Carrier oscillator
+
       const gain1 = new SimpleGain(context);
       gain1.gain = 0;
-      gain1.connect(voiceGain.input);
+      gain1.connect(outputGain.input);
 
-      // carrier oscillator
-      const osc1 = new SimpleOscillator(context, {
-        connect: gain1.input,
-        frequency: midi.toFreq(this.pitch.set[this.pitch.pos]),
-      });
+      const osc1 = new SimpleOscillator(context);
+      osc1.frequency = FREQUENCY;
+      osc1.connect(gain1.input);
+
+      // Envelope
 
       const variableRelease = 60 / composer.tempo / this.subdivision.value;
-
       const envelope = new SimpleEnvelope(context);
       envelope.attack = 0.1;
       envelope.release = variableRelease;
       envelope.connect(gain1.input.gain);
 
-      function main() {
-        envelope.trigger();
-        osc1.start(time);
-        osc1.stop(time + envelope.length);
-      }
+      // Run
 
-      main();
+      osc1.output.start(time);
+      envelope.trigger();
+      osc1.output.stop(time + envelope.length);
     },
   };
 
   const droneVoice = {
     patch() {
-      const root = midi.toFreq(composer.tonic);
+      const TONIC_FREQUENCY = midi.toFreq(composer.tonic) * 0.5;
 
-      // voice vca
-      const voiceGain = new SimpleGain(context);
-      voiceGain.gain = 0.1;
-      voiceGain.connect(output.input);
-      voiceGain.connect(reverb.input);
+      const outputGain = new SimpleGain(context);
+      outputGain.gain = 0.2;
+      outputGain.connect(output.input);
+      outputGain.connect(reverb.input);
 
-      // carrier/sub osc vca. amplitude modulated by amGain
+      // Modulating oscillator: Amplitude modulates the output gain
+
       const gain1 = new SimpleGain(context);
-      gain1.connect(voiceGain.input);
+      gain1.gain = 0.1; // Additive to the value set in `outputGain.gain`
+      gain1.connect(outputGain.input.gain);
 
-      // carrier osc
-      const osc1 = new SimpleOscillator(context, {
-        connect: gain1.input,
-        frequency: root,
-      });
+      const osc1 = new SimpleOscillator(context);
+      osc1.type = 'triangle';
+      osc1.frequency = random.integer(1, 3) / random.integer(60, 120);
+      osc1.connect(gain1.input);
 
-      // sub osc
-      const subOsc = new SimpleOscillator(context, {
-        connect: gain1.input,
-        frequency: root * 0.5,
-        detune: 2,
-      });
+      // Carrier oscillator
 
-      // gain1 am osc attenuator
-      const amOscGain = new SimpleGain(context);
-      amOscGain.gain = 0.5;
-      amOscGain.connect(gain1.input);
-
-      // gain1 am osc
-      const amOsc = new SimpleOscillator(context, {
-        connect: amOscGain.input,
-        frequency: root * 0.5,
-        detune: 5,
-        type: 'triangle',
-      });
-
-      // voiceGain am osc slow trem attenuator
       const gain2 = new SimpleGain(context);
-      gain2.gain = 0.06;
-      gain2.connect(voiceGain.input);
+      gain2.connect(outputGain.input);
 
-      // voiceGain am slow trem osc
-      const osc2 = new SimpleOscillator(context, {
-        connect: gain2.input,
-        frequency: 0.02,
-        type: 'triangle',
-      });
+      const osc2 = new SimpleOscillator(context);
+      osc2.frequency = TONIC_FREQUENCY;
+      osc2.connect(gain2.input);
 
-      function main() {
-        osc1.start();
-        subOsc.start();
-        amOsc.start();
-        osc2.start();
-      }
+      // Modulating oscillator: Frequency modulates the carrier oscillator
 
-      main();
+      const gain3 = new SimpleGain(context);
+      gain3.gain = random.integer(0, 3) / 10;
+      gain3.connect(gain2.input.gain);
+
+      const osc3FrequencyMultiplier = random.integer(2, 6) / 10 + 1;
+      const osc3 = new SimpleOscillator(context);
+      osc3.type = 'triangle';
+      osc3.frequency = TONIC_FREQUENCY * osc3FrequencyMultiplier;
+      osc3.connect(gain3.input);
+
+      // Modulating oscillator: Amplitude modulates the FM oscillator
+
+      const gain4 = new SimpleGain(context);
+      gain4.gain = 0.15; // Additive to the value set in `gain3.gain`
+      gain4.connect(gain3.input.gain);
+
+      const osc4 = new SimpleOscillator(context);
+      osc4.type = 'triangle';
+      osc4.frequency = random.integer(1, 5) / random.integer(60, 120);
+      osc4.connect(gain4.input);
+
+      // Run
+
+      osc1.start();
+      osc2.start();
+      osc3.start();
+      osc4.start();
     },
   };
 
